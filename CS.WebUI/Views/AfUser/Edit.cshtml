@@ -1,0 +1,106 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.WebUI.Models.FW.UserModelsForEdit
+
+<form id="form" class="layui-form" action="" method="post">
+    <script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
+    <input type="hidden" id="DepartmentSelect" value="@ViewBag.DepartmentSelect" />
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <label class="layui-form-label">登录名</label>
+            <div class="layui-input-inline">
+                @if (Model.ID > 0)
+                {
+                    <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入登录名" autocomplete="off" class="layui-input layui-disabled" readonly="readonly">
+                }
+                else
+                {
+                    <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入登录名" autocomplete="off" class="layui-input">
+                }
+            </div>
+            <label class="layui-form-label">用户姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="FULL_NAME" value="@Model.FULL_NAME" placeholder="请输入用户姓名" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属部门</label>
+            <div class="layui-input-inline">
+                <input type="text" name="DEPT_ID" id="DEPT_ID" value="@Model.DEPT_ID">
+            </div>
+            <label class="layui-form-label">手机号码</label>
+            <div class="layui-input-inline">
+                <input type="tel" name="PHONE_NUMBER" value="@Model.PHONE_NUMBER" lay-verify="phone" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属角色</label>
+            <div class="layui-input-block">
+                @foreach (var item in ViewBag.DIC_ROLES)
+                {
+                    if (("," + Model.ROLE_IDS + ",").Contains("," + item.Key + ","))
+                    {
+                        <input type="checkbox" name="ROLES" value="@item.Key" lay-skin="primary" title="@item.Value" checked="checked">
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="ROLES" value="@item.Key" lay-skin="primary" title="@item.Value">
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">QQ号码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="QQ" value="@Model.QQ" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">邮箱地址</label>
+            <div class="layui-input-inline">
+                <input type="text" name="E_MAIL" value="@Model.E_MAIL" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备用标志1</label>
+            <div class="layui-input-inline">
+                <input type="text" name="FLAG_1" value="@Model.FLAG_1" autocomplete="off" class="layui-input" placeholder="填写整数，根据项目具体情况约定其作用">
+            </div>
+            <label class="layui-form-label">扩展字段1</label>
+            <div class="layui-input-inline">
+                <input type="text" name="EXTEND_1" value="@Model.EXTEND_1" autocomplete="off" class="layui-input" placeholder="填写文本，根据项目具体情况约定其作用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备用标志2</label>
+            <div class="layui-input-inline">
+                <input type="text" name="FLAG_2" value="@Model.FLAG_2" autocomplete="off" class="layui-input" placeholder="填写整数，根据项目具体情况约定其作用">
+            </div>
+            <label class="layui-form-label">扩展字段2</label>
+            <div class="layui-input-inline">
+                <input type="text" name="EXTEND_2" value="@Model.EXTEND_2" autocomplete="off" class="layui-input" placeholder="填写文本，根据项目具体情况约定其作用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备用标志3</label>
+            <div class="layui-input-inline">
+                <input type="text" name="FLAG_3" value="@Model.FLAG_3" autocomplete="off" class="layui-input" placeholder="填写整数，根据项目具体情况约定其作用">
+            </div>
+            <label class="layui-form-label">扩展字段3</label>
+            <div class="layui-input-inline">
+                <input type="text" name="EXTEND_3" value="@Model.EXTEND_3" autocomplete="off" class="layui-input" placeholder="填写文本，根据项目具体情况约定其作用">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-bottom-submit">
+        <input type="hidden" id="msg" value="@ViewBag.Message" />
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<script src="~/Views/AfUser/JS/Edit.js"></script>

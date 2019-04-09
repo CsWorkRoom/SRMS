@@ -1,0 +1,97 @@
+﻿@model CS.BLL.FW.BF_MENU.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" value="@ViewBag.DIC_MENUS" id='dicMenus' />
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单名称</label>
+            <input type="hidden" id="ID" name="ID" value="@Model.ID">
+            <div class="layui-input-inline">
+                <input type="text" id="NAME" name="NAME" value="@Model.NAME" required lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">上级菜单</label>
+            <div class="layui-input-inline">
+                <input type="text" id="PID" name="PID" value="@Model.PID">
+            </div>
+            <div class="layui-form-mid layui-word-aux">只支持3层</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单顺序</label>
+            <div class="layui-input-inline">
+                <input type="text" id="ORDER_NUM" name="ORDER_NUM" value="@Model.ORDER_NUM" required lay-verify="required" placeholder="请输入菜单顺序" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">菜单图标</label>
+            <div class="layui-input-inline">
+                <div class="MenuDiv" onclick="ShowHideSelectIconDiv();">
+                    <input type="hidden" id="ICON" name="ICON" value="@Model.ICON" />
+                    <div class="MenuDiv_input">
+                        <i id="iconSample" class="MenuDiv_i layui-icon @Model.ICON"></i>
+                    </div>
+                    <div class="MenuDiv_i_div">
+                        <i id="iconButton" class="layui-icon layui-icon-zhankai3"></i>
+                    </div>
+                </div>
+                <div id="divIconSelect" class="layui-select-mb MenuDiv_select">
+                </div>
+            </div>
+            <div class="layui-form-mid layui-word-aux">选择对应图标进行展示</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">显示在导航</label>
+            <div class="layui-input-inline">
+                @if (Model.IS_SHOW_NAV == 1)
+                {
+                    <input type="checkbox" name="IS_SHOW_NAV" id="IS_SHOW_NAV" value="1" lay-skin="switch" lay-text="是|否" checked>
+                }
+                else
+                {
+                    <input type="checkbox" name="IS_SHOW_NAV" id="IS_SHOW_NAV" value="1" lay-skin="switch" lay-text="是|否">
+                }
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">页面类型</label>
+            <div class="layui-input-inline">
+                <select name="REPORT_TYPE" id="REPORT_TYPE" lay-filter="REPORT_TYPE">
+                    @foreach (var item in ViewBag.DIC_REQUEST_TYPE)
+                    {
+                        if (Model.REPORT_TYPE == item.Key)
+                        {
+                            <option value="@item.Key" selected="selected">@item.Value</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                    }
+                </select>
+            </div>
+            <label class="layui-form-label report_one">选择项</label>
+            <div class="layui-input-inline report_one">
+                <select name="REPORT_ID" id="REPORT_ID" value="@Model.REPORT_ID" lay-filter="REPORT_ID" lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item report_two">
+            <label class="layui-form-label">URL地址</label>
+            <div class="layui-input-block">
+                <input type="text" id="URL" name="URL" value="@Model.URL" placeholder="请输入URL地址" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <input type="hidden" id="msg" value="@ViewBag.Message" />
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    @Html.Raw(ViewBag.LoadIconNames)
+</script>
+<script type="text/javascript" src="~/Content/FW/LayuiZtree.js"></script>
+<script type="text/javascript" src="~/Views/AfMenu/JS/Edit.js"></script>

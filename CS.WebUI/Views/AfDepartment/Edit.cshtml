@@ -1,0 +1,72 @@
+﻿
+@model CS.BLL.FW.BF_DEPARTMENT.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<form id="form" class="layui-form" action="" method="post">
+    <script src="~/Content/FW/LayuiZtree.js?v=20181225"></script>
+    <input type="hidden" id="DepartmentSelect" value="@ViewBag.DepartmentSelect" />
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">部门名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">部门编码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="DEPT_CODE" value="@Model.DEPT_CODE" placeholder="请输入编码" lay-verify="required|code" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">上级部门</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="P_CODE" id="P_CODE" value="@Model.P_CODE">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">部门层级</label>
+                <div class="layui-input-inline">
+                    <select name="DEPT_LEVEL" lay-filter="level">
+                        @foreach (var item in ViewBag.DIC_DEPT_LEVEL)
+                        {
+                            if (Model.DEPT_LEVEL == item.Key)
+                            {
+                                <option value="@item.Key" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门标志</label>
+            <div class="layui-input-inline">
+                <input type="text" name="DEPT_FLAG" id="DEPT_FLAG" value="@Model.DEPT_FLAG" placeholder="填写一个整数，默认为0" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">所填写的值由具体项目约定</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">部门说明</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入部门说明" name="REMARK" class="layui-textarea">@Model.REMARK</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfDepartment/JS/Edit.js"></script>

@@ -1,0 +1,143 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<script src="~/Content/FW/LayuiZtree.js"></script>
+<input type="hidden" id="StatusSelect" value="@ViewBag.RunStatusSelect" />
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline layui-form">
+        基准日期
+        <div class="layui-input-inline">
+            <input type="text" id="daterange" class="layui-input" value="@ViewBag.DATE_RANGE" style="width:180px;">
+        </div>
+        任务组名称
+        <div class="layui-input-inline">
+            <input type="text" id="FLOW_ID" name="FLOW_ID" class="layui-input search_input" placeholder="任务组名称">
+        </div>
+        任务名称
+        <div class="layui-input-inline">
+            <input type="text" id="NODE_ID" name="NODE_ID" class="layui-input search_input" placeholder="任务名称">
+        </div>
+        参数值
+        <div class="layui-input-inline">
+            <input type="text" id="PARAMETER" name="PARAMETER" class="layui-input search_input" placeholder="区分大小写">
+        </div>
+        运行状态
+        <div class="layui-input-inline">
+            <select name="RUN_STATUS" id="RUN_STATUS" class="layui-input search_input" placeholder="运行状态">
+                <option value="" selected="selected"></option>
+                @foreach (var item in ViewBag.Status)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </select>
+        </div>
+        是否成功
+        <div class="layui-input-inline">
+            <select name="IS_SUCCESS" id="IS_SUCCESS" class="layui-input search_input" placeholder="运行是否成功">
+                <option value="" selected="selected"></option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+            </select>
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+    </div>
+</blockquote>
+
+<!-- 枚举值-->
+<script type="text/javascript">
+    //运行状态
+    var Status = new Array();
+    @foreach (var item in ViewBag.Status)
+    {
+        <text>Status['@item.Key'] = "@item.Value";</text>
+    }
+</script>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfScriptTask/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', limit:20,even: true,initSort: {field:'ID', type:'desc'}}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 50, sort: true, fixed: 'left', align: 'center' }">ID</th>
+            <th lay-data="{ field: 'FLOWNAME', minWidth: 120, sort: true}">任务组名称</th>
+            <th lay-data="{ field: 'NODENAME', minWidth: 120, sort: true }">任务名称</th>
+            <th lay-data="{ field: 'IS_MANUAL', width: 70, sort: true, align: 'center',templet:'#tmpManual'}">是否手动</th>
+            <th lay-data="{ field: 'REFERENCE_DATE', width: 80, sort: true, align: 'center', templet: '#tmpReferenceDate'}">基准日期</th>
+            <th lay-data="{ field: 'BEGIN_DATE', width: 80, sort: true, align: 'center', templet: '#tmpBeginDate'}">起始日期</th>
+            <th lay-data="{ field: 'END_DATE', width: 80, sort: true, align: 'center', templet: '#tmpEndDate'}">截止日期</th>
+            <th lay-data="{ field: 'PARAMETER', align: 'center', width: 80}">参数值</th>
+            <th lay-data="{ field: 'RETRY_TIMES', align: 'center', width: 70}">重试次数</th>
+            <th lay-data="{ field: 'RUN_STATUS', width: 70, sort: true, align: 'center', templet: '#tmpStatus'}">运行状态</th>
+            <th lay-data="{ field: 'IS_SUCCESS', width: 70, sort: true, align: 'center',templet:'#tmpSuccess'}">是否成功</th>
+            <th lay-data="{ field: 'START_TIME', width: 135, sort: true, align: 'center',templet: '#tmpStartData'}">启动时间</th>
+            <th lay-data="{ field: 'FINISH_TIME', width: 135, sort: true, align: 'center',templet: '#tmpFinishData'}">完成时间</th>
+            <th lay-data="{ field: 'CREATE_TIME', width: 135, sort: true}">创建时间</th>
+            <th lay-data="{ width: 100, align: 'left', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 枚举值 -->
+<script type="text/html" id="tmpStatus">
+    <span>
+        {{ Status[d.RUN_STATUS] }}
+    </span>
+</script>
+<!--基准日期-->
+<script type="text/html" id="tmpReferenceDate">
+    <span>
+        {{ d.REFERENCE_DATE.substr(0,10) }}
+    </span>
+</script>
+<!--起始日期-->
+<script type="text/html" id="tmpBeginDate">
+    <span>
+        {{ d.BEGIN_DATE == null ? '-' : d.BEGIN_DATE.substr(0,10) }}
+    </span>
+</script>
+<!--截止日期-->
+<script type="text/html" id="tmpEndDate">
+    <span>
+        {{ d.END_DATE == null? '-':d.END_DATE.substr(0,10) }}
+    </span>
+</script>
+<!--模型化时间-->
+<script type="text/html" id="tmpStartData">
+    <span>
+        {{ d.START_TIME=='0001-01-01 00:00:00'||d.START_TIME==null ? '-':d.START_TIME }}
+    </span>
+</script>
+<script type="text/html" id="tmpFinishData">
+    <span>
+        {{ d.FINISH_TIME=='0001-01-01 00:00:00'||d.FINISH_TIME==null ? '-':d.FINISH_TIME }}
+    </span>
+</script>
+
+<!-- 操作-->
+<script type="text/html" id="operation">
+    {{# if (Status[d.RUN_STATUS] == '结束' && d.IS_SUCCESS == 0) { }}
+    <span class="layui-badge layui-bg-blue" lay-event="start">启动</span>
+    {{# } else if(Status[d.RUN_STATUS] == '等待') { }}
+    <span class="layui-badge layui-bg-cyan" lay-event="stop">停止</span>'
+    {{# } }}
+    <span class="layui-badge layui-bg-green" lay-event="TaskLog">查看</span>
+</script>
+<script type="text/html" id="tmpSuccess">
+    {{# if (Status[d.RUN_STATUS] == '结束') { }}
+    {{# if (d.IS_SUCCESS == 1) { }}
+    <span class="is_ok">是</span>
+    {{# } else { }}
+    <span class="is_error">否</span>
+    {{# } }}
+    {{# } else { }}
+    <span>-</span>
+    {{# } }}
+</script>
+<script type="text/html" id="tmpManual">
+    <span>
+        {{ d.IS_MANUAL==1 ? "是" : "否" }}
+    </span>
+</script>
+<!-- 表格事件-->
+<script src="~/Views/AfScriptTask/JS/Index.js?v=20190103"></script>

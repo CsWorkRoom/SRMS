@@ -1,0 +1,45 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        日期
+        <div class="layui-input-inline">
+            <input type="text" id="daterange" class="layui-input" value="@ViewBag.DATE_RANGE" style="width:180px;">
+        </div>
+        登录名
+        <div class="layui-input-inline">
+            <input type="text" id="userName" class="layui-input" value="" style="width:180px;" placeholder="登录名">
+        </div>
+        日志内容
+        <div class="layui-input-inline">
+            <input type="text" id="content" name="content" class="layui-input search_input" placeholder="日志内容">
+        </div>
+                
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+    </div>
+</blockquote>
+
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfOperationLog/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', limit:20,even: true,initSort: {field:'LOG_TIME', type:'DESC'}}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'LOG_TIME', width: 135, sort: true }">日志时间</th>
+            <th lay-data="{ field: 'LOG_LEVEL', width: 80, sort: true, align: 'center' }">等级</th>
+            <th lay-data="{ field: 'IS_SUCCESS', width: 80, sort: true, align: 'center' }">成功</th>
+            <th lay-data="{ field: 'SRC_IP', width: 100, sort: true }">源IP</th>
+            <th lay-data="{ field: 'USER_NAME', width: 100, sort: true }">登录名</th>
+            <th lay-data="{ field: 'CONTROLLER', width: 120, sort: true}">功能模块</th>
+            <th lay-data="{ field: 'ACTION', width: 120, sort: true }">操作</th>
+            <th lay-data="{ field: 'REQ_URL', width: 280, sort: true }">请求URL</th>
+            <th lay-data="{ field: 'CONTENT', minWidth: 150 }">日志内容</th>
+            <th lay-data="{ field: 'DETAIL', minWidth: 150 }">操作详情</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 表格事件-->
+<script src="~/Views/AfOperationLog/JS/Index.js?v=20180903"></script>

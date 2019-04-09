@@ -1,0 +1,153 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<input type="hidden" id="ID" name="ID" value="@ViewBag.ID" />
+<input type="hidden" id="QUERY_STRING" name="QUERY_STRING" value="@ViewBag.QUERY_STRING" />
+<script type="text/javascript">
+    var executeSQL = "";
+    var executeParam = "";
+    var advancedFilterHtml = "";
+</script>
+<div id="divTop" class="layui-form" data-mcs-theme="dark">
+   <blockquote class="layui-elem-quote"> 
+       <div class="layui-inline">
+           <!--默认搜索-->
+           @Html.Raw(ViewBag.DefaultFilterHtml)
+       </div>
+       <div class="layui-inline">
+           <!--日期筛选框-->
+           @Html.Raw(ViewBag.DatetimeFilterHtml)
+       </div>
+       <div class="layui-inline">
+           <!--顶部代码-->
+           @Html.Raw(ViewBag.TopCodeHtml)
+       </div>         
+            <div class="layui-inline">
+                <!--顶部按钮-->
+                @Html.Raw(ViewBag.TopButtonHtml)
+            </div>
+        </blockquote>
+  
+        <!--高级筛选-->
+        <div id="divAdvancedFilter" style="width:400px;height:350px; padding:8px; display:none;position:absolute;left:80px;border:1px solid #808080;background-color:#ffffff;z-index:99;">
+            <div style="height:310px;overflow:auto;">
+                @Html.Raw(ViewBag.AdvancedFilterHtml)
+            </div>
+            <div style="height:40px; text-align:right;">
+                <a class="layui-btn search_btn" onclick="Query(); HideAdvancedFilter();">查询</a>
+                <a class="layui-btn search_btn" onclick="HideAdvancedFilter();">关闭</a>
+            </div>
+        </div>
+</div>
+
+<!--表格-->
+<table id="reporttable" class="layui-table" lay-size="sm" lay-filter="reporttable"></table>
+
+<!--行事件-->
+@Html.Raw(ViewBag.EventHtml)
+
+<!--底部代码-->
+@Html.Raw(ViewBag.BottomCodeHtml)
+
+<!--导出文件-->
+<div style="display:none;">
+    <iframe id="iframeExport"></iframe>
+</div>
+<script type="text/javascript">
+
+    //当前页码
+    var pageindex = 1;
+    //记录总数
+    var rowscount = 0;
+    //排序
+    var sort = { field: "", type: null };
+    //筛选条件
+    var wherestring = "";
+    //自定义输入项
+    var inputstring = "";
+
+    var curtable;
+    var tableIns;
+    var loading;
+
+    layui.use(['element', 'table', 'form', 'jquery', 'layer'], function () {
+        var element = layui.element, table = layui.table, form = layui.form, $ = layui.jquery, layer = layui.layer;
+        var inputArray = new Array();
+        var index = 0;
+        loading = layer.msg("数据加载中，请稍候……");
+             
+        $.each($("#divTopCode").find("*"), function (i, j) {
+            var id = $(j).attr('id');
+            if (id != null) {
+                inputArray[index] = new Object();
+                inputArray[index].Name = id;
+                inputArray[index].Value = $(j).val();
+                index++;
+            }
+        });
+        inputstring = JSON.stringify(inputArray);
+
+        var filterArray = new Array();
+        index = 0;
+        $.each($('[filter]'), function (i, j) {
+            var value = null;
+            if ($(j).attr('type') == 'checkbox') {
+                value = $(j)[0].checked == true ? "1" : "0";
+            } else {
+                value = $(j).val();
+            }
+            if (value != null && value.length > 0 && value != "-999") {
+                filterArray[index] = new Object();
+                filterArray[index].Field = $(j).attr('filter');
+                filterArray[index].DataType = $(j).attr('datatype');
+                filterArray[index].Operator = $("#OP_" + $(j).attr('filter')).val();
+                filterArray[index].Value = value;
+                index++;
+            }
+        });
+        wherestring = JSON.stringify(filterArray);
+        //执行渲染
+        @Html.Raw(ViewBag.TableRender)
+
+        //表格排序
+        table.on('sort(reporttable)', function (obj) {
+            sort = obj;
+            Query();
+        });
+    });
+
+    $(window).resize(function () {
+        $('.layui-table-body').height($(window).height() - $('#divTop').height() - 96);
+    });
+
+    //高级筛选
+    function senior_find() {
+        layui.use(['jquery', 'layer', 'form'], function () {
+            var $ = layui.jquery, layer = layui.layer, form = layui.form;
+            //var html = "Html.Raw(ViewBag.AdvancedFilterHtml)";
+            var html = "input隐藏框获取HTML的值,问题：不执行HTML中的JS代码";
+            //使用后台方法获取HTML
+            var id = $("#ID").val();
+            layer.open({
+                type: 1
+                , area: ['600px', '400px']
+                , title: '高级筛选'
+                , content: html
+                , btn: ['查询', '取消']
+                , yes: function (index, layero) {
+                    Query();
+                    layer.close(index);
+                }
+                , btn2: function (index, layero) {
+                    layer.close();
+                }
+            });
+
+        });
+
+    }
+
+</script>
+<script type="text/javascript" src="~/Content/FW/LayuiZtree.js"></script>
+<script src="~/Views/AfTableReport/JS/Show.js?v=20190313"></script>

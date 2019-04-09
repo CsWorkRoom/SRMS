@@ -1,0 +1,154 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<link href="~/Views/Home/CSS/manager.css?20190220" rel="stylesheet" />
+<!-- 引入 ECharts 文件 -->
+<script type="text/javascript" src="~/Echart/vendors/echarts/echarts-all-3.js?_v_=15105857922"></script>
+<input type="hidden" value="@ViewBag.jjFee" id="jjfxEchart" />
+<input type="hidden" value="@ViewBag.qpFee" id="qpfxEchart" />
+<input type="hidden" value="@ViewBag.fxFee" id="fxfxEchart" />
+<div class="larry-container animated fadeIn larry-bg-gray layui-form" style="margin-left: 3px;">
+    <!-- 快捷导航 -->
+    <div class="layui-row larry-shortcut layui-col-space15 topDiv" id="shortcut">
+        <div class="topLeft">
+            <div style="font-size:19px;text-align:left">@ViewBag.SumTitle<span style="font-size:20px;color:red">@ViewBag.sumFee</span>(万元)</div>
+            <div id="sumMony" style="height:180px;"></div>
+        </div>
+        <div class="topCenter">
+            <div>
+                <div><i class="layui-icon layui-icon-jifen"></i>@ViewBag.sumYearTitle<br /><span style="font-size:26px;color:red">@ViewBag.sumYearFee</span>(万元)</div>
+                <div><i class="layui-icon layui-icon layui-icon-fl-baobiao"></i>本年酬金总额<br />同比：<span style="font-size:25px;color:red">@ViewBag.sumYearMony_tb %</span></div>
+                <div><i class="layui-icon layui-icon-msnui-pie-chart"></i>本年酬金总额<br />环比：<span style="font-size:25px;color:red">@ViewBag.sumYearMony_hb %</span></div>
+            </div>
+        </div>
+        <div class="topRight">
+            <div>
+                <button class="layui-btn layui-btn-normal layui-btn-radius" style="float:left"><i class="layui-icon layui-icon-jifen"></i>经理积分</button>
+                <button class="layui-btn layui-btn-normal layui-btn-radius"><i class="layui-icon layui-icon-904caidan_chuku"></i>指标信息</button>
+                <button class="layui-btn layui-btn-normal layui-btn-radius" style="float:right"><i class="layui-icon layui-icon-msnui-pie-chart"></i>综合报表</button>
+            </div>
+            <div style="margin-left:10px">
+                <button class="layui-btn layui-btn-warm layui-btn-radius" style="float:left"><i class="layui-icon layui-icon-bianji"></i>计件薪酬</button>
+                <button class="layui-btn layui-btn-warm layui-btn-radius"><i class="layui-icon layui-icon-caidanlanchaoren"></i>抢盘薪酬</button>
+                <button class="layui-btn layui-btn-warm layui-btn-radius" style="float:right"><i class="layui-icon layui-icon-share"></i>分享薪酬</button>
+            </div>
+            <div style="margin-left:10px">
+                <button class="layui-btn layui-btn-danger layui-btn-radius" style="float:left"><i class="layui-icon layui-icon-account"></i>客户经理</button>
+                <button class="layui-btn layui-btn-danger layui-btn-radius"><i class="layui-icon  layui-icon-dollar"></i>经理酬金</button>
+                <button class="layui-btn layui-btn-danger layui-btn-radius" style="float:right"><i class="layui-icon layui-icon-910caidan_dingdan"></i>分享合同</button>
+            </div>
+        </div>
+        <div class="topNotice">
+            <!-- 滚动代码开始 -->
+            <div class="noticeTile"><span id="noticeMore"><i class="layui-icon layui-icon-laba2"></i> 公告</span></div>
+            <div class="list_lh">
+                <ul>
+                    @Html.Raw(ViewBag.noticeList)
+                </ul>
+            </div>
+            <!-- 滚动代码结束 -->
+        </div>
+    </div>
+    <!-- 报表 -->
+    <div class="middleDiv">
+        <table border="0" cellspacing="0" class="flowTable">
+            <tr valign="middle">
+                <td rowspan="3" style="text-align:right; vertical-align:middle"><img src="~/Views/Home/img/jianxinchou.png" width="210" /></td>
+                <td>@Html.Raw(ViewBag.qiangpanImg)</td>
+                <td><img src="~/Views/Home/img/xiaojiantou.png" class="minJiantou" /></td>
+                <td>@Html.Raw(ViewBag.zhibiaoImg)</td>
+                <td><img src="~/Views/Home/img/xiaojiantou.png" class="minJiantou" /></td>
+                <td>@Html.Raw(ViewBag.guoluImg)</td>
+                <td><img src="~/Views/Home/img/xiaojiantou.png" class="minJiantou" /></td>
+                <td>@Html.Raw(ViewBag.biaoqianImg)</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr valign="middle">
+                <td>@Html.Raw(ViewBag.jijianImg)</td>
+                <td valign="top"><img src="~/Views/Home/img/xiejiantou.png" style="width: 80px;" /></td>
+                <td></td>
+                <td></td>
+                <td style="text-align:right">@Html.Raw(ViewBag.waidaoImg)</td>
+                <td colspan="2" class="fenjiantou"><img src="~/Views/Home/img/fenxianjiantou.png" /></td>
+                <td>@Html.Raw(ViewBag.renwuImg)</td>
+            </tr>
+            <tr valign="top">
+                <td>@Html.Raw(ViewBag.fenxiangImg)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+        <div id="qiangpanMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.qiangpanMenu)
+                <li class="layui-nav-item" onclick="AddTab('抢盘帮助','')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+        <div id="jijianMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.jijianMenu)
+                <li class="layui-nav-item" onclick="AddTab('计件帮助','')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+        <div id="fenxiangMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.fenxiangMenu)
+                <li class="layui-nav-item" onclick="AddTab('获取分享帮助', '')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+        <div id="zhibiaoMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.zhibiaoMenu)
+                <li class="layui-nav-item" onclick="AddTab('指标帮助', '')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+        <div id="guoluMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.guoluMenu)
+                <li class="layui-nav-item" onclick="AddTab('过滤帮助', '')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+        <div id="biaoqianMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.biaoqianMenu)
+                <li class="layui-nav-item" onclick="AddTab('标签帮助', '')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+        <div id="renwuMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.renwuMenu)
+                <li class="layui-nav-item" onclick="AddTab('任务帮助', '')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+        <div id="waidaoMenu" class="menuDiv">
+            <ul class="layui-nav layui-nav-tree layui-inline" style="margin-right: 10px;">
+                @Html.Raw(ViewBag.waidaoMenu)
+                <li class="layui-nav-item" onclick="AddTab('外导帮助', '')"><i class="layui-icon layui-icon-903caidan_bangzhu"></i> 帮助</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="bottom" class="bottom">
+
+        <div style="width:50%">
+            被查数据日期为：
+            <div class="layui-input-inline" style="width:90px">
+                <select id="YYYYMM" name="YYYYMM" lay-filter="YYYYMM" lay-search>
+                    @Html.Raw(ViewBag.yyyymmOption)
+                </select>
+            </div>
+        </div>
+        <div class="bottomLeft" id="bottomLeft"></div>
+        <div class="bottomRight" id="bottomRight"></div>
+    </div>
+</div>
+
+<script type="text/javascript" src="~/Views/Home/JS/manager.js?201903131"></script>
+<script type="text/javascript" src="~/Views/Home/JS/flow.js?201902"></script>

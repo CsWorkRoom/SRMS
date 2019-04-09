@@ -1,0 +1,64 @@
+﻿@model  CS.WebUI.Models.FileMsg
+<input type="hidden" id="pathName" value="@Model.PathName" /> <!--文件所在目录-->
+<div style="padding:10px;">
+<table class="layui-table" lay-size="sm">
+    <thead>
+        <tr>
+            <th>文件名</th>
+            <th>上传者</th>
+            <th>上传日期</th>
+            <th>文件大小</th>
+            <th>下载</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
+        {
+            var fileArr = Model.FILES.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            if (fileArr != null && fileArr.Length > 0)
+            {
+                foreach (var f in fileArr)
+                {
+                    //"{0}-{1}-{2}_{3}"  样本：20181106-104216-admin-4286_&&_favicon.ico
+                    int index = Math.Max(0, f.IndexOf("_&&_"));
+                    string fileName = f.Substring(index + 4);
+                    string preStr = f.Substring(0, index);  //前缀串
+                    index = preStr.LastIndexOf('-');
+                    int fileLength = Convert.ToInt32(preStr.Substring(index + 1));
+                    string userName = preStr.Substring(16, (index - 16));
+                    string dateTime = preStr.Substring(0, 4) + "年" + preStr.Substring(4, 2) + "月" + preStr.Substring(6, 2) + "日";
+                    string fileSize = fileLength + "B";
+                    if (fileLength >= 1024 * 1024)
+                    {
+                        fileSize = (fileLength / 1024.0 / 1024).ToString("0.00") + "MB";
+                    }
+                    else if (fileLength >= 1024)
+                    {
+                        fileSize = (fileLength / 1024.0).ToString("0.00") + "KB";
+                    }
+                    <tr>
+                        <td>@fileName</td>
+                        <td>@userName</td>
+                        <td>@dateTime</td>
+                        <td>@fileSize</td>
+                        <td>
+                            <a href="#" onclick="down('@f');">下载</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+</div>
+
+<script type="text/javascript">
+    //下载文件
+    function down(fileName) {
+        var pathName = $("#pathName").val();
+        url = "../ShowFile/Download?pathName=" + encodeURI(pathName) + "&fileName=" + encodeURIComponent(fileName);
+        //window.location = url;
+        window.open(url, "_blank");
+    }
+</script>
+

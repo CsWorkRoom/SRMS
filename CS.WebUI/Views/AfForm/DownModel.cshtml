@@ -1,0 +1,119 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<div class="form-top-content" style="height:70%">
+    <input type="hidden" id="xlId" value="@ViewBag.xlId" />
+    <input type="hidden" id="duofx" value="@ViewBag.duofx" />
+    <input type="hidden" id="treexl" value="@ViewBag.treexl" />
+
+    <div class="layui-tab layui-tab-brief layui-form" lay-filter="selectTab" style="height:100%">
+        <ul class="layui-tab-title">
+            <li lay-id="t1"><input type="radio" id="t1" name="tab" value="枚举模式" title="枚举模式"></li>
+            <li lay-id="t2"><input type="radio" id="t2" name="tab" value="查询模式" title="查询模式"></li>
+            <li lay-id="t3"><input type="radio" id="t3" name="tab" value="SQL模式" title="SQL模式"></li>
+        </ul>
+        <div class="layui-tab-content" style="padding: 5px;height:100%">
+            <div class="layui-tab-item" style="height:100%">
+                <div class="layui-form-item" style="height:100%">
+                    <label class="layui-form-label">枚举配置<span class="imust">*</span></label>
+                    <div class="layui-input-block" style="height:100%">
+                        <textarea id="Enumjson" class="layui-textarea" style="height:90%" placeholder="请输入下拉选项，输入方式：每行一个选项（包含值和显示名称），值和显示名称之间用逗号分隔，如：&#13;&#10;1,类型A&#13;&#10;2,类型B&#13;&#10;3,类型C"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item layui-show" style="height:100%">
+                <form id="form" action="" method="post" style="margin-top: 15px;height: 100%;">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">数据库<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select lay-search id="DB_ID" name="DB_ID" lay-filter="DB_ID">
+                                    <option value="">请选择数据库</option>
+
+                                    @foreach (var item in ViewBag.DIC_DBS)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">据库表名<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select lay-search id="TABLE_NAME" name="TABLE_NAME" lay-filter="TABLE_NAME"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">值字段<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select lay-search id="VALUE_FIELD" name="VALUE_FIELD" lay-filter="VALUE_FIELD"></select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">名称字段<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select lay-search id="NAME_FIELD" name="NAME_FIELD" lay-filter="NAME_FIELD"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" id="pidDiv" style="display:none">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">父级字段<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select lay-search id="PID_FIELD" name="PID_FIELD" lay-filter="PID_FIELD"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">WHERE条件</label>
+                        <div class="layui-input-block">
+                            <span class="layui-badge layui-bg-green showSqlHelp_a" onclick="ShowSqlHelp();" style="cursor: help;">Help</span>
+                            <textarea id="WHERE" name="WHERE" class="layui-input reportH" placeholder="查询表的WHERE子句（不加WHERE关键字），如：&#13;&#10;IS_ENABLE=1 AND IS_DELETE=0"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="layui-tab-item" style="height:100%">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">数据库<span class="imust">*</span></label>
+                        <div class="layui-input-inline">
+                            <select lay-search id="SQL_DBID" name="SQL_DBID" lay-filter="SQL_DBID">
+                                <option value="">请选择数据库</option>
+                                @foreach (var item in ViewBag.DIC_DBS)
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item" style="height:100%">
+                    <label class="layui-form-label">SQL配置<span class="imust">*</span></label>
+                    <div class="layui-input-block" style="height:100%">
+                        <span class="layui-badge layui-bg-green showSqlHelp_a" onclick="ShowSqlHelp();" style="cursor: help;">Help</span>
+                        <textarea id="sqlText" class="layui-textarea" style="height:80%" placeholder="请输入SQL语句，SQL字段别名值为V，名为K。如：&#13;&#10;SELECT A V,B k FROM TABLE"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-bottom-submit" style="text-align:right;">
+    <div style="float:left;color:red;margin-top: 15px;">*提示：保存此页面后，请注意保存字段编辑页，否则视为放弃保存！</div>
+    <input type="hidden" id="msg" value="@ViewBag.Message" />
+    <div class="layui-inline">
+        <button type="button" class="layui-btn" onclick="save();">确定</button>
+    </div>
+</div>
+
+@Html.Raw(ViewBag.tempSelectType)
+<script src="~/Views/AfForm/JS/DownMode.js"></script>

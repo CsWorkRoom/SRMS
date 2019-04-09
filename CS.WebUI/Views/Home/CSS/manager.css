@@ -1,0 +1,283 @@
+﻿.layui-nav-tree .layui-nav-item {
+    line-height: 28px;
+    padding: 0px 6px;
+    cursor: pointer;
+}
+
+.layui-layer-title {
+    font-weight: bold;
+    padding: 0 10px;
+}
+
+.larry-container {
+    margin: 2px 0px;
+}
+
+.layui-btn {
+    padding: 0 1px;
+}
+
+.topDiv {
+    font-size: 14px;
+    text-align: center;
+    margin-left: 0px;
+    border-bottom: 1px solid #ead1d1;
+}
+
+.topLeft {
+    width: 36%;
+    float: left;
+    height: 200px;
+    background-color: #fff;
+    border-left: 1px solid #eee;
+    font-weight: bold;
+}
+
+.topCenter {
+    width: 16%;
+    float: left;
+    border-left: 1px solid #eee;
+    background-color: #fff;
+    background-color: #fff;
+    font-size: 13px;
+    text-align: left;
+    height: 200px;
+    font-weight: bold;
+}
+
+    .topCenter div {
+        padding: 0px 5px;
+    }
+
+        .topCenter div div {
+            padding: 6px 5px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .topCenter div i {
+            font-size: 20px;
+            color: #819cf6;
+            margin-right: 5px;
+        }
+
+.topRight {
+    width: 33%;
+    float: left;
+    border-left: 1px solid #eee;
+    background-color: #fff;
+    background-color: #fff;
+    border-right: 1px solid #eee;
+    font-size: 20px;
+    text-align: center;
+    height: 200px;
+}
+
+    .topRight div {
+        margin: 15px 10px 5px 10px;
+    }
+
+    .topRight button {
+        width: 100px;
+        height: 50px;
+        margin: 0px !important;
+    }
+
+.topNotice {
+    float: right;
+    border-left: 1px solid #eee;
+    background-color: #fff;
+    background-color: #fff;
+    border-right: 1px solid #eee;
+    font-size: 12px;
+    text-align: left;
+    width: 14.4%;
+    height: 200px;
+}
+.middleDiv{
+    width:100%;
+    background-color:#fff;
+    border-top: 2px solid #eee;
+}
+.bottom {
+    height: 480px;
+    height: 480px;
+    border-top: 2px solid #eee;
+    background-color:#fff;
+}
+
+.bottomLeft {
+    width: 50%;
+    float: left;
+    height: 420px;
+    background-color: #fff;
+    margin: 5px 5px 5px 0px;
+}
+
+.bottomCenter {
+    width: 32%;
+    float: left;
+    height: 420px;
+    background-color: #fff;
+    margin: 5px 5px 5px 13px;
+}
+
+.bottomRight {
+    width: 45%;
+    float: left;
+    height: 420px;
+    background-color: #fff;
+    margin: 5px 5px 5px 13px;
+}
+
+.layui-col-space15 > * {
+    padding: 0px;
+}
+
+.layui-col-space15 {
+    margin: 0px;
+}
+
+.flowTable {
+    height: 360px;
+    margin-left: 30px;
+}
+
+.jdtubiao {
+    width: 120px;
+}
+
+.minJiantou {
+    width: 80px;
+    height: 17px;
+}
+
+.fenjiantou {
+    vertical-align: top;
+    text-align: center;
+}
+
+    .fenjiantou img {
+        width: 187px;
+        height: 56px;
+    }
+
+.menuDiv {
+    position: fixed;
+    display: none;
+    width: 150px;
+}
+
+.layui-nav-tree {
+    width: 150px;
+    padding: 0;
+}
+
+.layui-nav .layui-nav-item a {
+    padding: 0 10px;
+}
+
+.layui-nav-tree .layui-nav-item a {
+    height: 25px;
+    line-height: 25px;
+}
+
+/*滚动相关的样式*/
+.noticeTile {
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: #eee;
+}
+
+    .noticeTile span {
+        cursor: pointer;
+    }
+
+ul, li, dl, ol {
+    list-style: none;
+}
+
+a {
+    color: #666;
+    text-decoration: none;
+}
+
+.box {
+    margin: 0 auto;
+}
+
+.bcon {
+    border: 1px solid #eee;
+    margin: 30px auto;
+}
+
+    .bcon h1 {
+        border-bottom: 1px solid #eee;
+        padding: 0 10px;
+    }
+
+        .bcon h1 b {
+            font: bold 14px/40px '宋体';
+            border-top: 2px solid #3492D1;
+            padding: 0 8px;
+            margin-top: -1px;
+            display: inline-block;
+        }
+
+.list_lh {
+    height: 182px;
+    overflow: hidden;
+}
+
+    .list_lh li {
+        padding: 5px;
+    }
+
+        .list_lh li.lieven {
+            background: #c5e6f7;
+        }
+
+        .list_lh li p {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+            .list_lh li p em {
+                width: 80px;
+                font: normal 12px/24px Arial;
+                color: #FF3300;
+                float: right;
+                display: inline-block;
+            }
+
+            .list_lh li p span {
+                color: #999;
+                cursor: pointer;
+            }
+
+            .list_lh li p a.btn_lh {
+                background: #28BD19;
+                height: 17px;
+                line-height: 17px;
+                color: #fff;
+                padding: 0 5px;
+                margin-top: 4px;
+                display: inline-block;
+                float: right;
+            }
+
+.btn_lh:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.btm p {
+    font: normal 12px/24px 'Microsoft YaHei';
+    text-align: center;
+}
+/*END滚动相关的样式*/

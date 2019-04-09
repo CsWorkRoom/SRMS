@@ -1,0 +1,391 @@
+form, html, body {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", 微软雅黑, Tahoma, Arial, sans-serif;
+    font-size: 14px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%
+}
+
+ul, ol {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    display: block;
+    list-style: none;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", 微软雅黑, Tahoma, Arial, sans-serif;
+    color: #000;
+}
+
+img {
+    vertical-align: middle;
+}
+
+.w {
+    width: 100%;
+    margin: 0 auto;
+    height: 95%;
+}
+
+.clearfix:before, .clearfix:after { /*清楚浮动*/
+    content: "";
+    display: table;
+}
+
+.clearfix:after, .clearfix:before {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1; /*IE/7/6*/
+}
+/*公共部分结束*/
+/*top栏开始*/
+.top {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ccc;
+    position: absolute
+}
+/*菜单 栏*/
+.menu {
+    height: 36px;
+    line-height: 36px;
+    border-bottom: 1px solid #f5f5f5;
+    position: relative;
+}
+
+    .menu ul li {
+        float: left;
+        padding: 0 18px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+.menu-btn li:hover {
+    border-bottom: 2px solid #009688;
+    height: 34px
+}
+
+.menu-btn li:active {
+    border-bottom: 2px solid #009688;
+    height: 34px
+}
+
+.menu-btn li.active {
+    border-bottom: 2px solid #009688;
+    height: 34px
+}
+/*图标部分*/
+.menu li i {
+    margin-right: 5px;
+}
+
+.menu .layui-icon-renwu {
+    color: #17a05d;
+}
+
+.menu .layui-icon-xinxi {
+    color: #f7b824;
+}
+
+.menu .layui-icon-msnui-save-bold {
+    color: #4a8af4;
+}
+
+.menu .layui-icon-piliangxiugaizuocedaohang {
+    color: #2bcbf8;
+}
+
+.menu .layui-icon-shanchu {
+    color: #d84c29;
+}
+
+.menu .layui-icon-cancel {
+    color: #8eb0e9;
+}
+
+.menu .layui-icon-bangzhu {
+    color: #83d944;
+}
+
+.menu .icon-tushi {
+    font-size: 12px;
+    color: #009688;
+}
+/*图例部分*/
+.menu .legend li {
+    float: right;
+    padding: 0 10px;
+    font-size: 12px;
+    line-height: 50px;
+}
+
+    .menu .legend li:hover {
+        border: none;
+        cursor: default;
+    }
+.menu .layui-icon-tushi {
+    background-color: #009688;
+}
+.menu .icon-tushi-fail {
+    color: #FF5722;
+}
+
+.menu .icon-tushi-work {
+    color: #1E9FFF;
+}
+
+.menu .icon-tushi-wait {
+    color: #FFB800;
+}
+
+
+/*top栏开始*/
+.Middle {
+    margin-top: 40px;
+}
+
+    .Middle .all {
+        width: 100%
+    }
+
+/*左侧边栏*/
+.left, .right {
+    float: left;
+    padding-left: 10px
+}
+
+.left {
+    width:260px;
+    height: 90%;
+    border: 1px solid #F2F2F2;
+    background-color: #fafafa;
+    /*position: fixed;*/
+    overflow:auto;
+    margin-right: 2px;
+    position: absolute;
+}
+
+.hide {
+    display:none;
+}
+
+.layui-form-label {
+    width: auto;
+    padding: 9px 5px;
+}
+.layui-input-inline {
+    width: 160px;
+}
+
+/*滚动条组成*/
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+    width: 8px;
+    background-color: #F5F5F5;
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 6px;
+    background-color: #999;
+}
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #eee;
+}
+
+
+
+/*右边部分*/
+.right {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #F2F2F2;
+    background-color: #fff;
+}
+
+
+
+/*.node {
+    width: 100px;
+    height: 60px;
+    text-align: center;
+    display:table;
+    color: #333;
+    float: left;
+    margin-right: 2px;
+    cursor: pointer;
+    font-size:12px;
+    background-color: rgba(15, 107, 169, 0.2);
+    border-radius:10px;
+    border:1px solid #8ca8f1;
+}*/
+.node {
+    width: 92px;
+    height: 52px;
+    background-color: #009688;
+    color: #fff;
+    border-radius: 6px;
+    padding: 4px;
+    text-align: left;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.nodewiat {
+    background-color: #FFB800;
+}
+
+.nodeHavein {
+    background-color: #1E9FFF;
+}
+
+.nodeEndSuccess {
+    background-color: #009688;
+}
+
+.nodeEndFail {
+    background-color: #FF5722;
+}
+
+    .nodeEndFail .daily {
+        display: inline-block;
+        padding: 0 6px;
+        font-size: 12px;
+        text-align: center;
+        background-color: #FF5722;
+        color: #fff;
+        border-radius: 2px;
+        margin-left: 3px;
+        cursor: default
+    }
+/*日志按钮*/
+.daily {
+    display: inline-block;
+    padding: 0 6px;
+    font-size: 12px;
+    text-align: center;
+    /*background-color: #FF5722;*/
+    background-color: #fff;
+    /*color: #fff;*/
+    color: #000;
+    border-radius: 2px;
+    margin-left: 3px;
+    cursor: default
+}
+
+    .daily:active {
+        /*box-shadow: 0 0 5px 2px rgba(255,255,255,.5) inset;*/
+        box-shadow: 0 0 5px 2px rgba(0,0,0,.3) inset;
+    }
+
+.nodeEndFail .daily {
+    display: inline-block;
+    padding: 0 6px;
+    font-size: 12px;
+    text-align: center;
+    background-color: #fff;
+    color: #000;
+    border-radius: 2px;
+    margin-left: 3px;
+    cursor: default
+}
+
+    .nodeEndFail .daily:active {
+        box-shadow: 0 0 5px 2px rgba(0,0,0,.3) inset;
+    }
+
+
+.right .active {
+    /*border:2px solid rgb(240, 173, 78);*/
+    /*background-color: rgba(15, 107, 169,0.5);
+    color: #fff;*/
+    background-color: rgba(0,150,136,.2);
+    border: 1px solid rgba(0,150,136,.6);
+    color: #000;
+    cursor: pointer;
+}
+
+.ztree li span.button.zclose_ico_close {
+    margin-right: 2px;
+    background-position: -110px 0;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.zclose_ico_open {
+    margin-right: 2px;
+    background-position: -110px -16px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.zclose_ico_docu {
+    margin-right: 2px;
+    background-position: -110px 0;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.zdocu_ico_docu {
+    margin-right: 2px;
+    background-position: -110px -32px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.zdocu_ico_open {
+    margin-right: 2px;
+    background-position: -110px -32px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+.ztree li span.button.zdocu_ico_close {
+    margin-right: 2px;
+    background-position: -110px -32px;
+    vertical-align: top;
+    *vertical-align: middle
+}
+
+/*帮助样式*/
+
+.left .Help-word p {
+    line-height: 30px;
+    border-bottom: 1px dashed #ddd;
+    position: relative;
+}
+
+.Help-word .layui-icon-jiantou {
+    color: #8eb0e9;
+}
+
+.left .Help-word p:hover {
+    background-color: #f5f5f5;
+}
+
+.copy-date {
+    background-color: rgba(58,53,67,.8);
+    width: 236px;
+    height: 100%;
+    color: #fff;
+    font-size: 14px;
+    padding-left: 6px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+}
+
+.Help-word .copy-date:hover {
+    color: #ed5f5f;
+    cursor: pointer;
+}

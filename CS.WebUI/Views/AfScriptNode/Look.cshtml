@@ -1,0 +1,142 @@
+﻿
+
+@model CS.BLL.FW.BF_ST_NODE.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<script>
+    //用户名称
+    var UserName = new Array();
+    UserName[0] = "-";
+    @foreach (var item in ViewBag.UserName)
+    {
+        <text>UserName['@item.Key'] = "@item.Value";</text>
+    }
+    //运行状态
+    var Status = new Array();
+    @foreach (var item in ViewBag.Status)
+    {
+        <text>Status['@item.Key'] = "@item.Value";</text>
+    }
+   
+</script>
+<form class="layui-form" action="" method="post" style="margin-top:20px">
+    <script src="~/Content/FW/LayuiZtree.js"></script>
+    <input type="hidden" id="ScriptTypeSelect" value="@ViewBag.ScriptTypeSelect" />
+    <input type="hidden" id="DatabaseSelect" value="@ViewBag.DatabaseSelect" />
+    <div class="form-top-content">
+        <fieldset class="layui-elem-field" style="margin-left: 10px;">
+            <legend>基础信息</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">任务名称</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="节点名称" autocomplete="off" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">类别</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="TYPE_ID" id="TYPE_ID" value="@Model.TYPE_ID" lay-verify="typeId" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">数据库</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="DB_ID" value="@Model.DB_ID" id="DB_ID" lay-verify="required|dbId" >
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">节点说明</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <textarea placeholder="请输入类型说明" style="min-height:55px;height:55px" name="REMARK" class="layui-textarea" >@Model.REMARK</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-elem-field" style="margin-left: 10px;">
+            <legend>更新记录</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">创建者</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="CREATE_UID" value="@Model.CREATE_UID" id="CREATE_UID" placeholder="创建者" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">创建时间</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="CREATE_TIME" value="@Model.CREATE_TIME" id="CREATE_TIME" placeholder="创建时间" class="layui-input" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">更新者</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="UPDATE_UID" value="@Model.UPDATE_UID" id="UPDATE_UID" placeholder="更新者" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">更新时间</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="UPDATE_TIME" value="@Model.UPDATE_TIME" id="UPDATE_TIME" placeholder="更新时间" class="layui-input"  >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field" style="margin-left: 10px;">
+            <legend>运行情况</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">运行状态</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="RUN_STATUS" value="@Model.RUN_STATUS" id="RUN_STATUS" placeholder="运行状态" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">最新任务是否成功</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="LAST_TASK_IS" value="@Model.LAST_TASK_IS" id="LAST_TASK_IS" placeholder="最新任务是否成功" class="layui-input" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">开始时间</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="LAST_TASK_ST" value="@Model.LAST_TASK_ST" id="LAST_TASK_ST" placeholder="最新任务开始时间" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">完成时间</label>
+                        <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                            <input type="text" name="LAST_TASK_FT" value="@Model.LAST_TASK_FT" id="LAST_TASK_FT" placeholder="最新任务完成时间" class="layui-input" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field" style="margin-left: 10px;">
+            <legend>任务内容</legend>
+            <div class="layui-field-box">
+                <div class="layui-form-item">
+                    <div class="layui-col-md12 layui-col-sm12 layui-col-xs12">
+                        <textarea placeholder="请输入脚本内容" rows="15" style="width:100%" lay-verify="required|content" name="CONTENT" class="layui-textarea" >@Model.CONTENT</textarea>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>
+
+<script src="~/Views/AfScriptNode/JS/Look.js"></script>

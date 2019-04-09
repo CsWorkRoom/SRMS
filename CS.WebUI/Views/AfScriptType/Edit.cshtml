@@ -1,0 +1,47 @@
+﻿
+
+@model CS.BLL.FW.BF_ST_TYPE.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<form id="form" class="layui-form" action="" method="post" style="margin-top:20px">
+    <script src="~/Content/FW/LayuiZtree.js"></script>
+    <input type="hidden" id="ScriptSelect" value="@ViewBag.ScriptSelect" />
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">类别名称</label>
+                <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                    <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <label class="layui-form-label layui-col-md4 layui-col-sm4 layui-col-xs4">上级类别</label>
+                <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                    <input type="text" name="PID" id="PID" value="@Model.PID">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+
+            <div class="layui-col-md12 layui-col-sm12 layui-col-xs12">
+                <label class="layui-form-label  layui-col-md4 layui-col-sm4 layui-col-xs4">类别说明</label>
+                <div class="layui-inline  layui-col-md8 layui-col-sm8 layui-col-xs8">
+                    <textarea placeholder="请输入类型说明" name="REMARK" class="layui-textarea">@Model.REMARK</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit" style="text-align:right;">
+        <input type="hidden" id="msg" value="@ViewBag.Message" />
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<script src="~/Views/AfScriptType/JS/Edit.js"></script>

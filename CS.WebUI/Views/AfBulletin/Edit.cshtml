@@ -1,0 +1,103 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.FW.BF_BULLETIN.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+
+    <input type="hidden" id="DepartmentSelect" value="@ViewBag.DepartmentSelect" />
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题<span class="imust">*</span></label>
+            <div class="layui-input-block">
+
+                <input type="text" id="title" name="title" value="@Model.TITLE" lay-verify="title" placeholder="请输入标题" autocomplete="off" class="layui-input">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">摘要<span class="imust">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" name="summary" value="@Model.SUMMARY" lay-verify="summary" placeholder="摘要" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">指定部门</label>
+            <div class="layui-input-block" style="height:200px;overflow: scroll;">
+                <input id="RECV_DEPT_IDS" name="RECV_DEPT_IDS" type="hidden" value="@Model.RECV_DEPT_IDS" />
+                <ul id="ztreeId" class="ztree"></ul>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">指定角色</label>
+            <div class="layui-input-block" style="height:200px;overflow: scroll;">
+                @foreach (var item in ViewBag.DIC_ROLES)
+                {
+                    if (("," + Model.RECV_ROLE_IDS + ",").Contains("," + item.Key + ","))
+                    {
+                        <input type="checkbox" name="ROLES" value="@item.Key" lay-skin="primary" title="@item.Value" checked="checked">
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="ROLES" value="@item.Key" lay-skin="primary" title="@item.Value">
+                    }
+                }
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公告内容<span class="imust">*</span></label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入公告内容" rows="8" style="width:100%" lay-verify="content" name="CONTENT" class="layui-textarea">@Model.CONTENT</textarea>
+            </div>
+        </div>
+
+        <div style="padding:10px;">
+            <div class="layui-upload">
+                <button type="button" class="layui-btn layui-btn-normal" id="testList">
+                    <i class="layui-icon layui-icon-icon-import"></i>选择文件（可多选）
+                </button>
+                <div class="layui-upload-list">
+                    <table class="layui-table" lay-size="sm">
+                        <thead>
+                            <tr>
+                                <th>文件名</th>
+                                <th>大小</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            @foreach (var item in ViewBag.FileList)
+                            {
+                                <tr>
+                                    <th><a href="@item.FILE_PATH" download="@item.FILE_NAME">@item.FILE_NAME</a></th>
+                                    <th>未知</th>
+                                    <th>上传成功</th>
+                                    <th>
+                                        <button type="button" class="layui-btn" onclick="deleteFile(@item.ID,@item.FILE_PATH);">删除</button>
+                                    </th>
+                                </tr>
+                            }
+                        </thead>
+                        <tbody id="fileList"></tbody>
+                    </table>
+                </div>
+                <button type="button" class="layui-btn" id="testListAction">
+                    <i class="layui-icon layui-icon-uploading"></i>开始上传
+                </button>
+            </div>
+            <input type="hidden" id="FileId" name="FileId" value="@ViewBag.FileId" placeholder="上传文件路径以,号隔开" autocomplete="off" class="layui-input">
+        </div>
+
+
+
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="~/Views/AfBulletin/JS/Upload.js"></script>
+<script src="~/Views/AfBulletin/JS/Edit.js?v=201903"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20180927"></script>

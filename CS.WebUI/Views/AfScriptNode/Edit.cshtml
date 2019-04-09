@@ -1,0 +1,82 @@
+﻿
+
+@model CS.BLL.FW.BF_ST_NODE.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<script>
+    //用户名称
+    var UserName = new Array();
+    UserName[0] = "-";
+    @foreach (var item in ViewBag.UserName)
+    {
+        <text>UserName['@item.Key'] = "@item.Value";</text>
+    }
+    //运行状态
+    var Status = new Array();
+    @foreach (var item in ViewBag.Status)
+    {
+        <text>Status['@item.Key'] = "@item.Value";</text>
+    }
+
+</script>
+<form id="form" class="layui-form" action="" method="post" style="margin-top:20px">
+    <script src="~/Content/FW/LayuiZtree.js"></script>
+    <input type="hidden" id="ScriptTypeSelect" value="@ViewBag.ScriptTypeSelect" />
+    <input type="hidden" id="DatabaseSelect" value="@ViewBag.DatabaseSelect" />
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">任务名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">类别</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="TYPE_ID" id="TYPE_ID" value="@Model.TYPE_ID" lay-verify="typeId">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">数据库<span class="imust">*</span></label>
+                <div class="layui-input-inline">
+                    <select id="DB_ID" name="DB_ID" lay-filter="DB_ID" lay-verify="required|dbId">
+                        <option value="">请选择数据库</option>
+                        @foreach (var item in ViewBag.DIC_DBS)
+                        {
+                            if (Model.DB_ID == item.Key)
+                            {
+                                <option value="@item.Key" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div style="padding-left:10px;padding-right:10px;">
+            <label class="layui-form-label">任务内容
+            <a href="~/Views/AfScriptNode/Help.html" target="_blank" title="点击查看帮助">
+                帮助<i class='layui-icon iconfont layui-icon-bangzhu' id='sHelp'></i>
+             </a>
+            </label>
+            <textarea placeholder="请输入任务内容" rows="12" style="width:100%" lay-verify="required|content" name="CONTENT" class="layui-textarea">@Model.CONTENT</textarea>
+            <label class="layui-form-label">任务说明</label>
+            <textarea placeholder="请输入任务说明" style="height:40px;width:100%;" name="REMARK">@Model.REMARK</textarea>
+        </div>
+    </div>
+
+    <div class="form-bottom-submit" style="text-align:right;">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfScriptNode/JS/Edit.js"></script>

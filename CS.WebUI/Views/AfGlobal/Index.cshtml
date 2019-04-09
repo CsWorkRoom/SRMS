@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<table id="tableConfig" class="layui-table" lay-size="sm"></table>
+
+@Html.Raw(ViewBag.Config)
+
+<div class="layui-form">
+    <div class="form-bottom-submit" style="text-align:right;">
+        <label class="" style="color:#808080;">更新配置后重新登录生效</label>
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">
+                <i class="layui-icon layui-icon-msnui-save-bold"></i>点击保存
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Views/AfGlobal/JS/Index.js"></script>

@@ -1,0 +1,251 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<!--变量定义-->
+
+<div class="form-top-content">
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">字段设置</li>
+            <li>筛选设置</li>
+            <li>事件设置</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <table id="tableField" class="layui-table" lay-size="sm"></table>
+                注：只有文本型字段才可以设置加密显示（用小星星代替部分文本）
+            </div>
+            <div class="layui-tab-item">
+                <table id="tableFilter" class="layui-table" lay-size="sm"></table>
+                <div id="divFilterAdd" style="text-align:center;"></div>
+                <blockquote class="layui-elem-quote">
+                    默认值可以是固定值，也可以调用JS函数(内置的或自定义的均可)，使用JS时，需要在首尾使用{}，如：{GetFirstDateOfMonth(0)}、{GetFirstDateOfMonth(-1) + ' - '+ GetLastDateOfMonth(-1)}，目前内置的JS函数有：<br />
+                    GetFirstDateOfMonth(n)：获取月份第一天的日期，参数n表示相当于当前日期往前或往后推的月份数<br />
+                    GetLastDateOfMonth(n)：获取月份最后一天的日期，参数n表示相当于当前日期往前或往后推的月份数
+                </blockquote>
+            </div>
+            <div class="layui-tab-item">
+                <table id="tableEvent" class="layui-table" lay-size="sm"></table>
+                <div id="divEventAdd" style="text-align:center;"></div>
+                <blockquote class="layui-elem-quote">
+                    事件URL可以带参数，参数可以是固定值，也可以引用记录某一字段值，字段名加方括号，如：Edit?id=[ID]<br />
+                    窗口尺寸：为0时，表示自适应尺寸；为-1时，表示完全100%全屏；<br />
+                    使用表单编辑的页面，常用路径为：/AfForm/Template?formId=41&op=2&rowkey=[ID]，<br />
+                    其中formId:表单ID，op：表示类型（0为新增，1为编辑，2为删除），rowkey：表示关键字段（一般为主键）；
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="ID" name="ID" value="@ViewBag.ID" />
+    <input type="hidden" id="FIELD_CONFIG" name="FIELD_CONFIG" />
+    <input type="hidden" id="FILTER_CONFIG" name="FILTER_CONFIG" />
+    <input type="hidden" id="EVENT_CONFIG" name="EVENT_CONFIG" />
+    <input type="hidden" id="xlId" value="@ViewBag.xlId" />
+    <input type="hidden" id="treexl" value="@ViewBag.treexl" />
+    <div class="form-bottom-submit" style="text-align:right;">
+        <input type="hidden" id="msg" value="@ViewBag.Message" />
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    //-----变量定义-----
+    var fieldDataType = new Array();
+    var inputQueryType = new Array();
+    var fieldData = new Array(), filterData = new Array(), eventData = new Array();
+    //var filterOperator = new Array("等于", "包含", "区间");
+    var requestMode = new Array();
+    var styleType = new Array();
+</script>
+
+<!--字段数据类型-->
+@Html.Raw(ViewBag.FieldDataType)
+
+<!--输入框类型-->
+@Html.Raw(ViewBag.InputQueryType)
+
+<!--请求模式-->
+@Html.Raw(ViewBag.RequestMode)
+
+<!--字段信息-->
+@Html.Raw(ViewBag.FieldData)
+
+<!--筛选信息-->
+@Html.Raw(ViewBag.FilterData)
+
+<!--事件信息-->
+@Html.Raw(ViewBag.EventData)
+
+<!--事件样式内容-->
+<script>
+    @Html.Raw(ViewBag.LoadIconNames)
+</script>
+
+<script type="text/html" id="fieldDataType">
+    {{ fieldDataType[d.FIELD_DATA_TYPE] }}
+</script>
+<script type="text/html" id="checkboxShow">
+    <input type="checkbox" name="IS_SHOW" value="{{d.LAY_TABLE_INDEX}}" title="显示" lay-filter="fltShow" {{ d.IS_SHOW == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="checkboxFixed">
+    <input type="checkbox" name="IS_FIXED" value="{{d.LAY_TABLE_INDEX}}" title="冻结" lay-filter="fltFixed" {{ d.IS_FIXED == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="checkboxSort">
+    <input type="checkbox" name="IS_SORT" value="{{d.LAY_TABLE_INDEX}}" title="排序" lay-filter="fltSort" {{ d.IS_SORT == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="checkboxEncrypt">
+    <input type="checkbox" name="IS_ENCRYPT" value="{{d.LAY_TABLE_INDEX}}" title="加密" lay-filter="fltEncrypt" {{ d.IS_ENCRYPT == 1 ? 'checked' : '' }}>
+</script>
+
+<!----------------------------------------筛选配置------------------------------------------>
+<script type="text/html" id="switchType">
+    <input type="checkbox" name="FILTER_TYPE" value="{{d.LAY_TABLE_INDEX}}" lay-skin="switch" lay-text="默认|高级" lay-filter="filterType" {{ d.FILTER_TYPE == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="selectField">
+    <select name="select" lay-filter="selectDemo" onchange="changeFieldName({{d.LAY_TABLE_INDEX}}, this);" lay-ignore>
+        {{# for(var i=0; i< fieldData.length; i++) { }}
+        <option value="{{ fieldData[i]['EN_NAME'] }}" {{ d.FIELD_NAME == fieldData[i]['EN_NAME'] ? 'selected' : '' }}>{{ fieldData[i]['CN_NAME'] }}</option>
+        {{# } }}
+    </select>
+</script>
+<script type="text/html" id="selectQueryType">
+    <select name="select" lay-filter="selectDemo" onchange="changeOperator({{d.LAY_TABLE_INDEX}}, this);" lay-ignore>
+        {{# for(var i=1; i< inputQueryType.length; i++) { }}
+        <option value="{{ i }}" {{ d.FORM_QUERY_TYPE == i ? 'selected' : '' }}>{{ inputQueryType[i] }}</option>
+        {{# } }}
+    </select>
+    {{# if(d.FORM_QUERY_TYPE==$("#xlId").val()||d.FORM_QUERY_TYPE==$("#treexl").val()) { }}
+    <a href="#" onclick="setSelectDetail({{ d.LAY_TABLE_INDEX }},{{ d.FORM_QUERY_TYPE }});">设置</a>
+    {{# } }}
+</script>
+<script type="text/html" id="addordel">
+    <span class="layui-badge layui-bg-green" href="#" onclick="addFilter({{d.LAY_TABLE_INDEX + 1}});">+</span>
+    <span class="layui-badge layui-bg-green" href="#" onclick="deleteFiletr({{d.LAY_TABLE_INDEX}});">-</span>
+</script>
+
+<div id="divthis"></div>
+
+<div id="divSelectDetail" style="display:none;width:600px;height:350px;border:1px solid #808080;">
+    <div class='layui-form'>
+        下拉框中选项的数据来源方式：
+        <input type="radio" id="selectSoruceType" name="selectSoruceType" value="1" title="枚举值" lay-filter="selectSoruceType" checked="">
+        <input type="radio" id="selectSoruceType333" name="selectSoruceType" value="2" title="查询表" lay-filter="selectSoruceType">
+        <input type="radio" id="selectSoruceType444" name="selectSoruceType" value="3" title="SQL查询" lay-filter="selectSoruceType">
+        <div id="divSelectTypeEnum">
+            <span class="layui-badge layui-bg-green" onclick="AlertSqlHelp();" style="cursor: help;">Help</span>
+            <textarea id="selectEnumOptions" placeholder="请输入下拉选项，输入方式：每行一个选项（包含值和显示名），值和显示名之间用逗号分隔，如：&#13;&#10;1,类型A&#13;&#10;2,类型B&#13;&#10;3,类型C" class="layui-textarea textareaBox"></textarea>
+        </div>
+        <div id="divSelectTypeQuery" style="display:none;">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">数据库</label>
+                    <div class="layui-input-inline">
+                        <select id="selectDbID" lay-filter="selectDbID">
+                            <option value="-1">请选择数据库</option>
+
+                            @foreach (var item in ViewBag.DIC_DBS)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">据库表名</label>
+                    <div class="layui-input-inline">
+                        <select id="selectTableName" lay-filter="selectTableName"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">值字段</label>
+                    <div class="layui-input-inline">
+                        <select id="selectValueField" name="selectValueField"></select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称字段</label>
+                    <div class="layui-input-inline">
+                        <select id="selectTextField" name="selectTextField"></select>
+                    </div>
+                </div>
+
+                <div class="layui-inline" id="parentDiv">
+                    <label class="layui-form-label">父级字段</label>
+                    <div class="layui-input-inline">
+                        <select id="selectParentField" name="selectParentField"></select>
+                    </div>
+                </div>
+            </div>
+            <label class="layui-form-label">过滤条件</label>
+            <div class="layui-input-block">
+                <span class="layui-badge layui-bg-green" onclick="AlertSqlHelp();" style="cursor: help;">Help</span>
+                <textarea id="selectWhere" placeholder="查询表的WHERE子句（不加WHERE关键字），如：&#13;&#10;IS_ENABLE=1 AND IS_DELETE=0" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div id="divSelectTypeSql" style="display:none;">
+            <div class="layui-form-item" style="margin-bottom: 0px;">
+                <div class="layui-inline">
+                    <label class="layui-form-label aotuWidth">数据库</label>
+                    <div class="layui-input-inline">
+                        <select id="selectTreaDbID" lay-filter="selectTreaDbID">
+                            <option value="-1">请选择数据库</option>
+
+                            @foreach (var item in ViewBag.DIC_DBS)
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <span class="layui-badge layui-bg-green" onclick="AlertSqlHelp();" style="cursor: help;">Help</span>
+            <textarea id="selectSql" placeholder="请输入SQL语句，SQL字段别名值为V，名为K。如：&#13;&#10;SELECT A V,B k FROM TABLE" class="layui-textarea textareaBox"></textarea>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------事件配置------------------------------------------>
+<script type="text/html" id="switchEventType">
+    <input type="checkbox" name="EVENT_TYPE" value="{{d.LAY_TABLE_INDEX}}" lay-skin="switch" lay-text="表头|行" lay-filter="eventType" {{ d.EVENT_TYPE == 1 ? 'checked' : '' }}>
+</script>
+
+<!--样式类型-->
+<script type="text/html" id="selectRequestMode">
+    <select name="select" lay-filter="selectDemo" onchange="changeRequestMode({{d.LAY_TABLE_INDEX}}, this);" lay-ignore>
+        {{# for(var i=0; i< requestMode.length; i++) { }}
+        <option value="{{ requestMode[i]['Key'] }}" {{ d.REQUEST_MODE == requestMode[i]['Key'] ? 'selected' : '' }}>{{ requestMode[i]['Value'] }}</option>
+        {{# } }}
+    </select>
+</script>
+
+<script type="text/html" id="tempStyleType">
+    <button id="set" onclick="SetDiv({{d.LAY_TABLE_INDEX}})">设置</button>
+    <span id="rowYulan{{d.LAY_TABLE_INDEX}}">
+        {{# if(d.BUTTON_STYLE == null || d.BUTTON_STYLE == "") { }}
+        <button class="layui-btn layui-btn-xs">按钮</button>
+        {{# }else }}
+        {{# if(d.BUTTON_STYLE == null || d.BUTTON_STYLE == "") { }}
+        <i class="layui-icon {{d.BUTTON_ICON}}"></i>
+        {{# } else{ }}
+        <button class="layui-btn layui-btn-xs {{d.BUTTON_STYLE}}"><i class="layui-icon {{d.BUTTON_ICON}}"></i>按钮</button>
+        {{# } }}
+    </span>
+</script>
+
+<script type="text/html" id="addDelEvent">
+    <span class="layui-badge layui-bg-green" href="#" onclick="addEvent({{d.LAY_TABLE_INDEX + 1}});">+</span>
+    <span class="layui-badge layui-bg-green" href="#" onclick="deleteEvent({{d.LAY_TABLE_INDEX}});">-</span>
+</script>
+<link href="~/Views/AfTableReport/CSS/Configure.css?v=20190122" rel="stylesheet" />
+<script src="~/Views/AfTableReport/JS/Configure.js?v=20190122"></script>

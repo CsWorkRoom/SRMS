@@ -1,0 +1,154 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+@model CS.BLL.FW.BF_IMPORT.Entity
+
+<div class="form-top-content">
+    <div class="layui-tab layui-tab-brief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基本设置</li>
+            <li>字段设置</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form id="form" class="layui-form" action="" method="post" onclick="hideFieldsDiv();">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">外导名称</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name="ID" value="@Model.ID" />
+                                <input type="text" id="NAME" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">数据库</label>
+                            <div class="layui-input-inline">
+                                <select id="DB_ID" name="DB_ID" lay-filter="DB_ID">
+                                    <option value="-1">请选择数据库</option>
+                                    @if (Model.DB_ID == 0)
+                                    {
+                                        <option value="0" selected="selected">本地默认数据库</option>
+                                    }
+                                    else
+                                    {
+                                        
+                                    }
+
+                                    @foreach (var item in ViewBag.DIC_DBS)
+                                    {
+                                        if (Model.DB_ID == item.Key)
+                                        {
+                                            <option value="@item.Key" selected="selected">@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">据库表名</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" id="TABLE_NAME" name="TABLE_NAME" value="@Model.TABLE_NAME" />
+                                <input type="hidden" id="FIELDS" name="FIELDS" value="@Model.FIELDS" />
+                                <select id="S_TABLE_NAME" name="S_TABLE_NAME" lay-filter="S_TABLE_NAME" lay-search=""></select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">建表模式</label>
+                            <div class="layui-input-inline">
+                                <select id="CREATE_TABLE_MODE" name="CREATE_TABLE_MODE">
+                                    @foreach (var item in ViewBag.DIC_CREATE_TABLE_MODE)
+                                    {
+                                        if (Model.CREATE_TABLE_MODE == item.Key)
+                                        {
+                                            <option value="@item.Key" selected="selected">@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">更新数据</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" id="IS_ALLOW_UPDATE" name="IS_ALLOW_UPDATE" value="@Model.IS_ALLOW_UPDATE" />
+
+                                @if (Model.IS_ALLOW_UPDATE == 1)
+                                {
+                                    <input type="checkbox" checked="checked" lay-skin="switch" lay-filter="switchCheckbox" lay-text="允许|关">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" lay-skin="switch" lay-filter="switchCheckbox" lay-text="允许|关">
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="REMARK" name="REMARK" value="@Model.REMARK" class="layui-input" />
+                        </div>
+                    </div>
+
+                    <pre>1、选择的表建议包含字段：IMPORT_UID、IMPORT_TIME，以便记录导入者ID及导入时间
+2、“唯一约束”中不需要勾选自增长字段
+3、如果是指定表导入，在导入数据时，系统将不会创建新表，该表的自增长字段请提前建好
+4、如果需要审批导入的数据，除了必须包含字段IMPORT_UID、IMPORT_TIME外，每一级审批还需要四个字段：APPROVAL_{n}(整数0或1，默认0)、APPROVAL_{n}_UID（整数，默认0）、APPROVAL_{n}_TIME（时间）、APPROVAL_{n}_MSG（字符串），分别记录审批结果、审批人、审批时间、审批意见。
+其中的{n}为数字，比如，一级审批为：APPROVAL_1、APPROVAL_1_UID、APPROVAL_1_TIME、APPROVAL_1_MSG，二级审批为：APPROVAL_2、APPROVAL_2_UID、APPROVAL_2_TIME、APPROVAL_2_MSG，根据需要可以添加一级或多级审批。
+审批的数据展示页面，可以配置数据报表实现，比如：一级审批的数据为SELECT * FROM T WHERE APPROVAL_1_UID < 1,二级审批SELECT * FROM T WHERE APPROVAL_1=1 AND APPROVAL_2_UID < 1
+审批的处理页面，URL构成方式为：/ImportApproval/Approval?id=XXX&level=XXX&tableName=XXX&importUID=XXX&importTime=XXX，其中各参数分别为：
+id:导入配置的ID
+level:第几级审批，一级审批为1，二级审批为2……
+tableName:表名，如果是动态表，需要包含后缀
+importUID:数据导入者ID
+importTime:数据导入时间
+为了确保权限控制准确，请为每个导入的每级审批分别配置菜单，菜单URL为：/ImportApproval/Approval?id=XXX&level=XXX
+比如，对于导入配置1，或有两级审批，则分别设置一级审批的菜单为：/ImportApproval/Approval?id=1&level=1，二级审批为：/ImportApproval/Approval?id=1&level=2
+        </pre>
+
+                </form>
+            </div>
+            <div class="layui-tab-item">
+                <table id="tableField" class="layui-table" lay-size="sm"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-bottom-submit" style="text-align:right;">
+    <input type="hidden" id="msg" value="@ViewBag.Message" />
+    <div class="layui-inline">
+        <button type="button" class="layui-btn" onclick="save();">确定</button>
+        <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+    </div>
+</div>
+
+<script type="text/html" id="checkboxAuto">
+    <input type="checkbox" name="IS_AUTO_INCREMENT" value="{{d.LAY_TABLE_INDEX}}" title="自增" lay-filter="fltAuto" {{ d.IS_AUTO_INCREMENT == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="checkboxImport">
+    {{# if(d.EN_NAME == "IMPORT_UID" || d.EN_NAME == "IMPORT_TIME") { }}
+        <input type="checkbox" name="IS_IMPORT" value="{{d.LAY_TABLE_INDEX}}" title="导入" lay-filter="fltImport" checked="" disabled="">
+    {{# } else { }}
+        <input type="checkbox" name="IS_IMPORT" value="{{d.LAY_TABLE_INDEX}}" title="导入" lay-filter="fltImport" {{ d.IS_IMPORT == 1 ? 'checked' : '' }}>
+    {{# } }}
+</script>
+
+<script type="text/html" id="checkboxUnique">
+    <input type="checkbox" name="IS_UNIQUE" value="{{d.LAY_TABLE_INDEX}}" title="唯一" lay-filter="fltUnique" {{ d.IS_UNIQUE == 1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/javascript" src="~/Views/AfImport/JS/Edit.js?v=20180928"></script>

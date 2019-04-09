@@ -1,0 +1,47 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline layui-form">
+        日志内容
+        <div class="layui-input-inline">
+            <input type="text" id="MESSAGE" name="MESSAGE" class="layui-input search_input" placeholder="日志内容">
+        </div>
+        SQL内容
+        <div class="layui-input-inline">
+            <input type="text" id="SQL" name="SQL" class="layui-input search_input" placeholder="SQL内容">
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ShowCode();"><i class="layui-icon layui-icon-category"></i>代码</button>
+    </div>
+</blockquote>
+
+<input type="hidden" value="@ViewBag.taskId" id="taskId" name="taskId" />
+<input type="hidden" value="@ViewBag.nodeId" id="nodeId" name="nodeId" />
+<input type="hidden" value="@ViewBag.CODE" id="code" />
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfScriptTaskFlowNodeLog/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', limit:20, where: {nodeId:@ViewBag.nodeId,TaskId:@ViewBag.taskId},even: true,initSort: {field:'ID', type:'DESC'}}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 60, sort: true, fixed: 'left' }">ID</th>
+            <th lay-data="{ field: 'FLOWNAME', minWidth: 150, sort: true }">任务名称</th>
+            <th lay-data="{ field: 'LOG_TIME', width: 135, sort: true,align: 'center' }">日志时间</th>
+            <th lay-data="{ field: 'LOG_LEVEL', width: 60, sort: true, align: 'center' }">等级</th>
+            <th lay-data="{ field: 'MESSAGE',minWidth: 200, templet: '#tmpmsg'}">日志内容</th>
+            <th lay-data="{ field: 'SQL',minWidth: 150, templet: '#tmpsql' }">SQL内容</th>
+        </tr>
+    </thead>
+</table>
+
+<script type="text/html" id="tmpmsg">
+    {{ d.MESSAGE.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\r\n/g,"<br/>") }}
+</script>
+
+<script type="text/html" id="tmpsql">
+    {{# if (d.SQL != null) {  }}
+    {{ d.SQL.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\r\n/g,"<br/>") }}
+    {{# } }}
+</script>
+
+<script src="~/Views/AfScriptTaskFlowNodeLog/JS/index.js"></script>

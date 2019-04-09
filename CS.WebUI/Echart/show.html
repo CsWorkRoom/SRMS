@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./vendors/bootstrap/css/bootstrap.css"><!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries-->
+    <!--[if lt IE 9]>
+     <script src="../Common/Scripts/html5shiv.min.js"></script>
+     <script src="../Common/Scripts/respond.min.js"></script>
+     <![endif]-->
+    <link rel="stylesheet" type="text/css" href="./stylesheets/main.css?_v_=1510583857922">
+    <title>ECharts Demo</title>
+    <script type="text/javascript">
+        window.EC_DEMO_LANG = 'cn';
+    </script>
+</head>
+<body>
+    <div class="right-container">
+        <div id="chart-panel" class="right-panel">
+        </div>
+    </div>
+    <input id="endCode" type="text" style="display:none" />
+    <input id="seachData" type="text" style="display:none" />
+    <button id="SearchBtn" onclick="clickBtn()"></button>
+    <script type="text/javascript" src="../Content/plugins/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="./vendors/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="./vendors/lodash.js"></script>
+    <script type="text/javascript" src="./vendors/dat.gui.min.js"></script>
+    <script type="text/javascript" src="./vendors/echarts/echarts-all-3.js?_v_=15105857922"></script>
+    <script type="text/javascript" src="./vendors/echarts-stat/ecStat.min.js?_v_=15105857922"></script>
+    <!--<script type="text/javascript" src="./vendors/echarts/map/js/china.js?_v_=15105857922"></script>
+    <script type="text/javascript" src="./vendors/echarts/map/js/world.js?_v_=15105857922" async="async"></script>-->
+    <script type="text/javascript" src="./vendors/echarts/extension/dataTool.js"></script>
+    <!--<script type="text/javascript" src="./vendors/echarts/extension/bmap.js"></script>
+    <script type="text/javascript" src="./javascripts/api.map.js"></script>
+    <script type="text/javascript" src="./vendors/echarts/extension/bmap.js?_v_=15105857922"></script>-->
+    <script type="text/javascript" src="./vendors/ace/src/ace.js"></script>
+    <script type="text/javascript" src="./vendors/ace/src/ext-language_tools.js"></script>
+    <script type="text/javascript" src="../Content/FW/aes.js"></script>
+    <script type="text/javascript" src="./javascripts/chartShow.js"></script>
+    <script type="text/javascript" id="chartJsCode">
+        var app = {};
+        var option = {};
+        var dataArr = [];//从后端返回的数据json对象集合,用户可以直接在编辑时使用
+
+        $(window).resize(function () {
+            $('.right-container').css('width', '100%').css('left', '0%');
+            echarts.init($('#chart-panel')[0]).resize();//重新绘制图表
+        });
+        $(document).ready(function () {
+            loadChart();
+            //点空白，取消显示外置事件的标签
+            $("body").click(function () {
+                //parent.$('.popover-hide').popover('destroy');
+            });
+        });
+
+        //点击查询按钮后的处理
+        function clickBtn() {
+            var searchDat = $("#seachData").val();//获取后台数据
+            if (searchDat != null && searchDat != "" && searchDat.length > 0) {
+                dataArr = $.parseJSON($("#seachData").val());
+            }
+            var code = Decrypt($("#endCode").val());
+            eval(code);
+
+
+            loadChart();
+        }
+
+        function loadChart() {
+            $('.right-container').css('width', '100%').css('left', '0%');
+            //初始化echarts实例
+            var myChart = echarts.init(document.getElementById('chart-panel'));
+            //使用制定的配置项和数据显示图表
+            myChart.setOption(option);
+        }
+
+    </script>
+</body>
+</html>

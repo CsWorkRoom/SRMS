@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        名称
+        <div class="layui-input-inline">
+            <input type="text" id="NAME" name="NAME" value="" placeholder="" class="layui-input search_input">
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+        <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+    </div>
+</blockquote>
+<!-- 枚举值-->
+<script type="text/javascript">
+    var dbname = new Array();
+    dbname[0] = "本地默认数据库";
+    @foreach (var item in ViewBag.DIC_DBS)
+    {
+        <text>
+            dbname['@item.Key'] = "@item.Value";
+        </text>
+    }
+    var createTableMode = new Array();
+    @foreach (var item in ViewBag.DIC_CREATE_TABLE_MODE)
+    {
+        <text>
+            createTableMode['@item.Key'] = "@item.Value";
+        </text>
+    }
+</script>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{id:'datatable', height: 'full-73', url:'../AfFile/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', even: true}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ checkbox: true, fixed: 'left' }"></th>
+            <th lay-data="{ field: 'ID', width: 60, sort: true }">ID</th>
+            <th lay-data="{ field: 'NAME', minWidth: 120, sort: true }">外导名称</th>
+            <th lay-data="{ field: 'IS_ENABLE', width: 100, sort: true, templet: '#tmpenable'}">启用状态</th>
+            <th lay-data="{ field: 'DB_ID', width: 120, sort: true, templet: '#tmpdbname' }">数据库</th>
+            <th lay-data="{ field: 'TABLE_NAME', width: 120, sort: true }">数据库表名</th>
+            <th lay-data="{ field: 'CREATE_TABLE_MODE', width: 120, sort: true, templet:'#tmpmode' }">建表模式</th>
+            <th lay-data="{ field: 'CREATE_TIME', width: 135, sort: true }">创建时间</th>
+            <th lay-data="{ field: 'UPDATE_TIME', width: 135, sort: true }">更新时间</th>
+            <th lay-data="{ width: 160, align: 'left', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 枚举值 -->
+<script type="text/html" id="tmpdbname">
+    {{ dbname[d.DB_ID] }}
+</script>
+<script type="text/html" id="tmpmode">
+    {{ createTableMode[d.CREATE_TABLE_MODE] }}
+</script>
+<script type="text/html" id="tmpenable">
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="Start_color">启用</span>
+    {{#  } else { }}
+    <span class="Stop_color">停用</span>
+    {{#  } }}
+</script>
+<!-- 操作-->
+<script type="text/html" id="operation">
+    <span class="layui-badge layui-bg-green" lay-event="edit">编辑</span>
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="layui-badge layui-bg-cyan" lay-event="disable">停用</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-blue" lay-event="enable">启用</span>
+    {{#  } }}
+    <span class="layui-badge" lay-event="del">删除</span>
+</script>
+
+<script type="text/javascript" src="~/Views/AfFile/JS/Index.js?v=20181214" as></script>

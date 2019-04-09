@@ -1,0 +1,19 @@
+﻿
+.layui-tab {
+    margin: 0px;
+}
+
+.layui-badge{
+    margin:2px 2px 0px 5px;cursor:pointer
+}
+
+.layui-table-view{
+    margin-top:2px
+}
+.layui-tab-content{
+    padding-top:1px;
+}
+.layui-elem-quote {
+margin-bottom:0px;
+padding: 2px;
+}

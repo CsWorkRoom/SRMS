@@ -1,0 +1,30 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<input type="hidden" id="TaskId" value="@ViewBag.TaskId" />
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        日志内容
+        <div class="layui-input-inline">
+            <input type="text" id="MESSAGE" name="MESSAGE" class="layui-input search_input" placeholder="日志内容">
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+    </div>
+</blockquote>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfScriptTaskLog/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', limit:20, where: {TaskId:@ViewBag.TaskId},even: true,initSort: {field:'ID', type:'DESC'}}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 60, sort: true, fixed: 'left' }">ID</th>
+            <th lay-data="{ field: 'LOG_TIME', width: 135, sort: true }">日志时间</th>
+            <th lay-data="{ field: 'LOG_LEVEL', minWidth: 85, sort: true, align: 'center' }">等级</th>
+            <th lay-data="{ field: 'MESSAGE' }">日志内容</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 表格事件-->
+<script src="~/Views/AfScriptTaskLog/JS/Index.js"></script>

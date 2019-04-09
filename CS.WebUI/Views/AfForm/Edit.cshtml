@@ -1,0 +1,154 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.FW.BF_FORM.Entity
+<div class="form-top-content" style="margin-top: 0px">
+    <div class="layui-tab layui-tab-brief" style="margin:0px">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基本设置</li>
+            <li>字段设置</li>
+        </ul>
+        <div class="layui-tab-content" style="padding: 0px;">
+            <div class="layui-tab-item layui-show">
+                <form id="form" class="layui-form" action="" method="post">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">表单名称<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name="ID" value="@Model.ID" />
+                                <input type="text" id="NAME" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">数据库<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select id="DB_ID" name="DB_ID" lay-filter="DB_ID">
+                                    <option value="-1">请选择数据库</option>
+                                    @foreach (var item in ViewBag.DIC_DBS)
+                                    {
+                                        if (Model.DB_ID == item.Key)
+                                        {
+                                            <option value="@item.Key" selected="selected">@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">据库表名<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" id="TABLE_NAME" name="TABLE_NAME" value="@Model.TABLE_NAME" />
+                                <input type="hidden" id="FIELDS" name="FIELDS" value="@Model.FIELDS" />
+                                <select id="S_TABLE_NAME" name="S_TABLE_NAME" lay-filter="S_TABLE_NAME" lay-search=""></select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">建表模式<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select id="CREATE_TABLE_MODE" name="CREATE_TABLE_MODE">
+                                    @foreach (var item in ViewBag.tmpTMode)
+                                    {
+                                        if (Model.CREATE_TABLE_MODE == item.Key)
+                                        {
+                                            <option value="@item.Key" selected="selected">@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="REMARK" name="REMARK" value="@Model.REMARK" lay-verify="required|name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">HTML代码</label>
+                        <div class="layui-input-block">
+                            <textarea id="JS_CODE" name="JS_CODE" placeholder="请输入HTML代码" class="layui-input formCode">@Model.JS_CODE</textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="layui-tab-item" style="margin-bottom:50px">
+                <blockquote class="layui-elem-quote">
+                    <span class="layui-badge layui-bg-green" style="margin-left:5px" onclick="showSqlHelp()">帮助</span>
+                    <span style="color:red"> * 注意：当字段设“新增”、“更新”且“不显示”时一定要给出默认值。</span>
+                </blockquote>
+                <table id="tableField" lay-filter="tableField" style="margin-top: -18px;" class="layui-table" lay-data="{height: 'full',skin: 'row', even: true}" lay-size="sm"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-bottom-submit">
+    <input type="hidden" id="msg" value="@ViewBag.Message" />
+    <input type="hidden" id="xlId" value="@ViewBag.xlId" />
+    <input type="hidden" id="duofx" value="@ViewBag.duofx" />
+    <input type="hidden" id="treexl" value="@ViewBag.treexl" />
+
+    <div class="layui-inline">
+        <button type="button" class="layui-btn" onclick="save();">保存</button>
+        <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+    </div>
+</div>
+@Html.Raw(ViewBag.tempInputType)
+@Html.Raw(ViewBag.tempSelectType)
+<script type="text/javascript">
+    var tempDataType = new Array();
+    @foreach (var item in ViewBag.tempDataType)
+    {
+        <text>
+    tempDataType['@item.Value'] = "@item.Key";
+    </text>
+    }
+</script>
+<script type="text/html" id="tempDataType">
+    <span>
+        {{ tempDataType[d.FIELD_DATA_TYPE] }}
+    </span>
+</script>
+<script type="text/html" id="tempKey">
+    <input type="checkbox" name="IS_KEY_FIELD" value="{{d.LAY_TABLE_INDEX}}" title="主键" lay-filter="fltKey" {{ d.IS_KEY_FIELD == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="tempAdd">
+    <input type="checkbox" name="IS_INSERT" value="{{d.LAY_TABLE_INDEX}}" title="新增" lay-filter="fltAdd" {{ d.IS_INSERT == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="tempUp">
+    <input type="checkbox" name="IS_UPDATE" value="{{d.LAY_TABLE_INDEX}}" title="更新" lay-filter="fltUp" {{ d.IS_UPDATE == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="tempReadOnly">
+    <input type="checkbox" name="IS_READONLY" value="{{d.LAY_TABLE_INDEX}}" title="只读" lay-filter="fltReadOnly" {{ d.IS_READONLY == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="tempNull">
+    <input type="checkbox" name="IS_NOT_NULL" value="{{d.LAY_TABLE_INDEX}}" title="不为空" lay-filter="fltNull" {{ d.IS_NOT_NULL == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="tempAuto">
+    <input type="checkbox" name="IS_AUTO_INCREMENT" value="{{d.LAY_TABLE_INDEX}}" title="自增" lay-filter="fltAuto" {{ d.IS_AUTO_INCREMENT == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="tempUnique">
+    <input type="checkbox" name="IS_UNIQUE" value="{{d.LAY_TABLE_INDEX}}" title="唯一" lay-filter="fltUnique" {{ d.IS_UNIQUE == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="tempInputType">
+    <select name="INPUT_TYPE" class="customSelect" onchange="ChangeField({{d.LAY_TABLE_INDEX}},'INPUT_TYPE', this);" lay-ignore>
+        {{# for(var i=0; i< tempInputType.length; i++) { }}
+        <option value="{{ tempInputType[i]['Key'] }}" {{ d.INPUT_TYPE == tempInputType[i]['Key'] ? 'selected' : '' }}>{{ tempInputType[i]['Value'] }}</option>
+        {{# } }}
+    </select>
+    {{# if(d.INPUT_TYPE==$("#xlId").val()||d.INPUT_TYPE==$("#duofx").val()||d.INPUT_TYPE==$("#treexl").val()){ }}
+    <button name="setSelect" id="but{{d.LAY_TABLE_INDEX}}" class="layui-btn layui-btn-sm layui-btn-normal" onclick="SetField({{d.LAY_TABLE_INDEX}},'INPUT_TYPE');">设置</button>
+    {{# } }}
+</script>
+<link href="~/Views/AfForm/CSS/Edit.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Views/AfForm/JS/Edit.js?201903061709"></script>

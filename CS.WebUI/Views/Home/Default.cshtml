@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<script src="~/Content/plugins/jquery-3.2.1.min.js"></script>
+<link href="~/Views/Home/CSS/default.css" rel="stylesheet" />
+
+<div class="larry-container animated fadeIn larry-bg-gray layui-form" style="margin-left: 3px;">
+    <!-- 快捷导航 -->
+    <div class="layui-row larry-shortcut layui-col-space15 topDiv" id="shortcut">
+        <!--<div class="layui-col-xs6 layui-col-sm6 layui-col-md4 layui-col-lg2 larry-col">-->
+        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-friends"></i>口径任务</button>
+        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-shouye4"></i>客户经理</button>
+        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-Calculator"></i>抢盘计算</button>
+
+        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-good"></i>经理积分</button>
+        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-iconfontstop"></i>经理薪酬</button>
+        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-dollar"></i>集团收入</button>
+
+        <button class="layui-btn layui-btn-danger topBut"><i class="layui-icon layui-icon-caidanshejishi"></i>用户管理</button>
+        <button class="layui-btn layui-btn-danger topBut"><i class="layui-icon layui-icon-laba2"></i>通知公告</button>
+        <button class="layui-btn layui-btn-danger topBut"><i class="layui-icon layui-icon-903caidan_bangzhu"></i>帮助说明</button>
+
+    </div>
+    <!-- 面板 -->
+    <div class="layui-row layui-col-space15">
+        <!-- 待处理工单统计 区县-->
+        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <section class="larry-panel" style="width:100%;text-align:center">
+                <img id="FlowChart" src="~/Views/Home/img/Flow.png" usemap="#flowMap" style="width:90%" />
+                <map name="flowMap" id="flowMap">
+                    <area shape="rect" coords="272,18,388,78" href="~/aftablereport/show?id=87" alt="计件管理" />
+                </map>
+            </section>
+        </div>
+        <!-- 不合格工单统计 区县-->
+
+    </div>
+    <!-- 报表 -->
+    <div id="container" style="height: 300px"></div>
+</div>
+<!-- 引入 ECharts 文件 -->
+<script type="text/javascript" src="~/Echart/vendors/echarts/echarts-all-3.js?_v_=15105857922"></script>
+<script type="text/javascript" src="~/Views/Home/JS/Default.js?2019"></script>

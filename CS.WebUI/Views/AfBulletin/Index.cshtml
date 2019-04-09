@@ -1,0 +1,61 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        标题
+        <div class="layui-input-inline">
+            <input type="text" id="TITLE" name="TITLE" value="" placeholder="" class="layui-input search_input">
+        </div>
+        摘要
+        <div class="layui-input-inline">
+            <input type="text" id="SUMMARY" name="SUMMARY" value="" placeholder="" class="layui-input search_input">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+            <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+            <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+        </div>
+    </div>
+</blockquote>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfBulletin/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', even: true}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 60, sort: true, fixed: 'left' }">ID</th>
+            <th lay-data="{ field: 'TITLE', width: 200, sort: true }">标题</th>
+            <th lay-data="{ field: 'SUMMARY', width: 400, sort: true }">摘要</th>
+            <th lay-data="{ field: 'IS_ENABLE', width: 80, sort: true, templet: '#tmpenable', align:'center'}">启用状态</th>
+            <th lay-data="{ field: 'CREATE_UID_NAME', width: 80, sort: true}">创建人</th>
+            <th lay-data="{ field: 'CREATE_TIME', width: 130, sort: true}">创建时间</th>
+            <th lay-data="{ minWidth: 120, align: 'left', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 枚举值 -->
+<script type="text/html" id="tmpenable">
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="Start_color">启用</span>
+    {{#  } else { }}
+    <span class="Stop_color">停用</span>
+    {{#  } }}
+</script>
+
+<!-- 操作-->
+<script type="text/html" id="operation">
+    <span class="layui-badge layui-bg-green" lay-event="show">查看</span>
+    <span class="layui-badge layui-bg-green" lay-event="edit">编辑</span>
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="layui-badge layui-bg-cyan" lay-event="disable">停用</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-blue" lay-event="enable">启用</span>
+    {{#  } }}
+    <span class="layui-badge" lay-event="del">删除</span>
+
+</script>
+
+<!-- 表格事件-->
+<script src="~/Views/AfBulletin/JS/Index.js"></script>

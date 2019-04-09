@@ -1,0 +1,112 @@
+----注意：如果表中有初始数据，则seq的起始值需要调整为下一个值----------------------
+
+---------公告表seq-------------------
+CREATE SEQUENCE SQ_BF_BULLETIN;
+
+---------公告表附件seq-------------------
+CREATE SEQUENCE SQ_BF_BULLETIN_ATTACH;
+
+---------公告表阅读记录seq-------------------
+CREATE SEQUENCE SQ_BF_BULLETIN_USER;
+
+---------图形报表seq-------------------
+CREATE SEQUENCE SQ_BF_CHART_REPORT;
+
+---------图形报表筛选seq-------------------
+CREATE SEQUENCE SQ_BF_CHART_REPORT_FILTER;
+
+---------数据库管理seq-------------------
+CREATE SEQUENCE SQ_BF_DATABASE;
+
+---------组织机构管理seq-------------------
+CREATE SEQUENCE SQ_BF_DEPARTMENT
+  START WITH 2
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+---------公共字段seq-------------------
+CREATE SEQUENCE SQ_BF_FIELD
+  START WITH 6
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+---------文件seq-------------------
+CREATE SEQUENCE SQ_BF_FILE;
+
+---------表单seq-------------------
+CREATE SEQUENCE SQ_BF_FORM;
+
+---------外导seq-------------------
+CREATE SEQUENCE SQ_BF_IMPORT;
+
+---------菜单seq-------------------
+CREATE SEQUENCE SQ_BF_MENU
+  START WITH 173
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+---------操作日志seq-------------------
+CREATE SEQUENCE SQ_BF_OP_LOG;
+
+---------角色seq-------------------
+CREATE SEQUENCE SQ_BF_ROLE
+  START WITH 2
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+
+---------脚本流程seq-------------------
+CREATE SEQUENCE SQ_BF_ST_FLOW;
+
+---------脚本流程节点seq-------------------
+CREATE SEQUENCE SQ_BF_ST_FLOW_NODE;
+
+---------脚本节点seq-------------------
+CREATE SEQUENCE SQ_BF_ST_NODE;
+
+---------脚本任务seq-------------------
+CREATE SEQUENCE SQ_BF_ST_TASK;
+
+---------脚本任务流程节点seq-------------------
+CREATE SEQUENCE SQ_BF_ST_TASK_FLOW_NODE;
+
+---------脚本任务流程节点日志seq-------------------
+CREATE SEQUENCE SQ_BF_ST_TASK_FLOW_NODE_LOG;
+
+---------脚本任务日志seq-------------------
+CREATE SEQUENCE SQ_BF_ST_TASK_LOG;
+
+---------脚本类型seq-------------------
+CREATE SEQUENCE SQ_BF_ST_TYPE;
+
+---------系统全局配置seq-------------------
+CREATE SEQUENCE SQ_BF_SYS_CONFIG;
+
+---------表格报表seq-------------------
+CREATE SEQUENCE SQ_BF_TB_REPORT;
+
+---------表格报表事件seq-------------------
+CREATE SEQUENCE SQ_BF_TB_REPORT_EVENT;
+
+---------表格报表筛选seq-------------------
+CREATE SEQUENCE SQ_BF_TB_REPORT_FILTER;
+
+---------用户seq-------------------
+CREATE SEQUENCE SQ_BF_USER
+  START WITH 2
+  MAXVALUE 9999999999999999999999999999
+  MINVALUE 1
+  NOCYCLE
+  CACHE 20
+  NOORDER;

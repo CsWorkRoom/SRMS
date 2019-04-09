@@ -1,0 +1,42 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        名称
+        <div class="layui-input-inline">
+            <input type="text" id="name" name="name" class="layui-input search_input" placeholder="名称">
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+        <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+    </div>
+</blockquote>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfChartReport/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', limit:20,even: true,initSort: {field:'ID', type:'DESC'}}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 100, sort: true }">ID</th>
+            <th lay-data="{ field: 'NAME', minWidth: 120, sort: true }">报表名称</th>
+            <th lay-data="{ field: 'DBNAME', minWidth: 120, sort: true ,templet: '#tmpDB'}">数据库名称</th>
+            <th lay-data="{ field: 'IS_ENABLE', width: 90, sort: true, align: 'center'}">启用状态</th>
+            <th lay-data="{ field: 'CREATE_TIME', width: 135, align: 'center', sort: true }">创建时间</th>
+            <th lay-data="{ field: 'UPDATE_TIME', width: 135, align: 'center', sort: true }">更新时间</th>
+            <th lay-data="{ width: 130, align: 'center', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+<!-- 操作-->
+<script type="text/html" id="operation">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="tmpDB">
+    <span>
+        {{ ( d.DBNAME==null || d.DBNAME=="" ? '本地默认数据库' : d.DBNAME) }}
+    </span>
+</script>
+<!-- 表格事件-->
+<script src="~/Views/AfChartReport/JS/Index.js"></script>

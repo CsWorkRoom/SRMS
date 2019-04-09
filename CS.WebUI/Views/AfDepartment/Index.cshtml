@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<script src="~/Content/FW/LayuiZtree.js"></script>
+<input type="hidden" id="DepartmentSelect" value="@ViewBag.DepartmentSelect" />
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        上级部门
+        <div class="layui-input-inline">
+            <input type="text" id="P_CODE" name="P_CODE" value="0">
+        </div>
+        部门名称
+        <div class="layui-input-inline">
+            <input type="text" id="NAME" name="NAME" value="" placeholder="" class="layui-input search_input">
+        </div>
+        部门编码
+        <div class="layui-input-inline">
+            <input type="text" id="CODE" name="CODE" value="" placeholder="" class="layui-input search_input">
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+        <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+    </div>
+</blockquote>
+
+<!-- 枚举值-->
+<script type="text/javascript">
+    var deptname = new Array();
+    deptname[0] = "-";
+    @foreach (var item in ViewBag.DIC_DEPT_NAME)
+    {
+        <text>
+        deptname['@item.Key'] = "@item.Value";
+        </text>
+    }
+    var deptlevel = new Array();
+    deptlevel[0] = "-";
+    @foreach (var item in ViewBag.DIC_DEPT_LEVEL)
+    {
+        <text>
+        deptlevel['@item.Key'] = "@item.Value";
+        </text>
+    }
+</script>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfDepartment/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row',limit:20, even: true}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 60, sort: true, fixed: 'left' }">ID</th>
+            <th lay-data="{ field: 'NAME', minWidth: 120, sort: true }">部门名称</th>
+            <th lay-data="{ field: 'DEPT_CODE', minWidth: 120, sort: true }">部门编码</th>
+            <th lay-data="{ field: 'DEPT_LEVEL', width: 90, sort: true, align:'center', templet: '#tmpdeptlevel' }">部门层级</th>
+            <th lay-data="{ field: 'P_CODE', minWidth: 120, sort: true, templet: '#tmpdeptname' }">上级部门</th>
+            <th lay-data="{ field: 'DEPT_FLAG', minWidth: 120, sort: true }">部门标志</th>
+            <th lay-data="{ field: 'CREATE_TIME', minWidth: 135, sort: true }">创建时间</th>
+            <th lay-data="{ field: 'UPDATE_TIME', minWidth: 135, sort: true }">最后更新时间</th>
+            <th lay-data="{ minWidth: 130, align: 'left', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 枚举值 -->
+<script type="text/html" id="tmpdeptlevel">
+    <span>
+        {{ deptlevel[d.DEPT_LEVEL] }}
+    </span>
+</script>
+
+<script type="text/html" id="tmpdeptname">
+    <span>
+        {{ deptname[d.P_CODE] }}
+    </span>
+</script>
+
+<!-- 操作-->
+<script type="text/html" id="operation">
+    <span class="layui-badge layui-bg-green" lay-event="edit">编辑</span>
+    <span class="layui-badge" lay-event="del">删除</span>
+</script>
+
+<!-- 表格事件-->
+<script src="~/Views/AfDepartment/JS/Index.js"></script>

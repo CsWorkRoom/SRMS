@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<input type="hidden" id="ID" value="@ViewBag.ID" />
+<input type="hidden" id="CREATE_TABLE_MODE" value="@ViewBag.CREATE_TABLE_MODE" />
+<blockquote class="layui-elem-quote">
+    @if (ViewBag.IS_SHOW_BASE_DATE == true)
+    {
+        <label class="layui-form-label">选择基准日期</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="baseDate" placeholder="yyyy-MM-dd">
+        </div>
+        <div class="layui-input-inline">
+            <label>（数据将导入到基准日期所在的表）</label>
+        </div>
+    }
+    <button id="download" class="layui-btn layui-btn-normal" onclick="DownloadFile()">
+        <i class="layui-icon layui-icon-xiazaihuancun"></i>下载模板文件
+    </button>
+    <button id="upload" class="layui-btn layui-btn-warm">
+        <i class="layui-icon layui-icon-uploading"></i>上传文件并导入数据
+    </button>
+</blockquote>
+<div>
+    <div id="divSelectBaseDate" style="display:none;">
+    </div>
+    <blockquote class="layui-elem-quote layui-quote-nm">
+        <ul>
+            <li>
+                <span class="layui-badge layui-bg-orange">
+                    使用说明
+                </span>
+            </li>
+            <li><span> 1、先下载模板文件，在模板文件中按格式编辑数据再上传导入，数据将被导入到表：@ViewBag.TABLE_NAME</span></li>
+            <li><span> 2、请不要添加/删除工作表，不要修改列的顺序，不要添加/删除列，不要合并单元格</span></li>
+            <li><span> 3、数据一经导入，无法修改，请在Excel中仔细核对数据正确后再导入系统。</span></li>
+            @if (ViewBag.IS_SHOW_BASE_DATE == true)
+            {
+                <li><span> 4、目标表为按日期建表（按年份、年月、年月日），在导入时需要选择“基准日期”，系统将根据这一基准日期将数据导入到该日志对应的表中</span></li>
+            }
+        </ul>
+    </blockquote>
+</div>
+<script type="text/javascript" src="~/Views/AfImport/JS/Import.js"></script>

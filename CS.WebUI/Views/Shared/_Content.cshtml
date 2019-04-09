@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    @RenderSection("Styles", false)
+    <link rel="stylesheet" type="text/css" href="~/Content/layui/css/layui.css?v=20181218" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/animate.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/main.css?v=20181018">
+    <link rel="stylesheet" type="text/css" href="~/Content/zTree/zTreeStyle.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/fw.css?v=20181214" />
+    <script type="text/javascript" src="~/Content/plugins/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="~/Content/layui/layui.js"></script>
+    <script type="text/javascript" src="~/Content/zTree/jquery.ztree.all.min.js"></script>
+    @*<script type="text/javascript" src="~/Content/FW/aes.js"></script>
+    <script type="text/javascript" src="~/Content/FW/rootUrl.js"></script>*@
+    <script type="text/javascript" src="~/Content/FW/fw.js?2017"></script>
+    @RenderSection("Scripts", false)
+</head>
+<body class="larry-bg-white">
+    <div class="layui-fluid" style="padding-right:3px; height:100%;overflow: auto">
+        @RenderBody()
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    // 当前系统名
+    var sysName = "@MvcApplication.SystemName";
+
+    // 当前UserName
+    var userName = "@MvcApplication.UserName";
+
+    // 当前发布网站的虚拟目录
+    var applicationPath = "@MvcApplication.ApplicationPath";
+</script>
+
+<script src="~/Content/FW/bootBack.js"></script>

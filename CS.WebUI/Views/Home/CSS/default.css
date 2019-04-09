@@ -1,0 +1,25 @@
+﻿.topDiv {
+    text-align: center;
+    padding: 5px 0px;
+}
+.topDiv button{
+    padding: 0px;
+}
+
+.topBut {
+    height: 50px;
+    width: 9.8%;
+    font-size: 16px;
+}
+
+    .topBut i {
+        font-size: 18px !important;
+    }
+
+layui-btn {
+    padding: 0px;
+}
+
+.layui-col-space15 {
+    margin: 0px;
+}

@@ -1,0 +1,57 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+#dir
+packages/
+logs/
+bin/
+obj/
+tmp/
+log/
+ExportFile/
+UpFiles/
+PublishProfiles/
+
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+*.suo
+*.user
+
+
+# Executables
+*.out
+*.app
+.vs/EasyMan/v14/.suo
+.vs/config/applicationhost.config
+Easyman.Web/PlugIns/Easyman.FwWeb.dll
+Easyman.Web/PlugIns/Easyman.FwWeb.pdb
+Easyman.Web/PlugIns/Easyman.FwWeb.dll.config
+/Easyman.Web/Content/bootstrap.min.css
+Em.Project.Web/Properties/PublishProfiles/websit.pubxml.user
+Em.Project.Web/Properties/PublishProfiles/websit.pubxml
+Em.Project.Web/UpFiles/Bg/2.jpg
+Em.Project.Web/Properties/PublishProfiles/abp.pubxml
+Em.Project.Web/Properties/PublishProfiles/abp.pubxml.user
+Em.Project.Web/Properties/PublishProfiles/easyman.pubxml.user
+Em.Project.Web/Properties/PublishProfiles/easyman.pubxml
+Em.Project.Web/Properties/PublishProfiles/Easyma3Temp_HTML.pubxml.user
+Em.Project.Web/Properties/PublishProfiles/Easyma3Temp_HTML.pubxml
+Em.Project.Web/Properties/PublishProfiles/gps.pubxml.user
+.vs/BEFT/v14/.suo
+BEFT.WebUI/log/*
+Easyman.WebUI/Content/layui/css/layui.css.rej
+Easyman.WebUI/Views/AfMenu/JS/Edit.js
+Easyman.WebUI/Views/AfMenu/Index.cshtml.rej
+Easyman.WebUI/Content/layui/font/font.zip
+Easyman.Common/StringHelper.cs

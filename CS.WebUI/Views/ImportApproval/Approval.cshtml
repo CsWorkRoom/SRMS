@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<form id="form" class="layui-form" action="" method="post">
+    <div class="form-top-content">
+        <input type="hidden" id="ID" value="@ViewBag.ID" />
+        <input type="hidden" id="LEVEL" value="@ViewBag.LEVEL" />
+        <input type="hidden" id="TABLE_NAME" name="tableName" value="@ViewBag.TABLE_NAME" />
+        <input type="hidden" id="IMPORT_UID" name="importUID" value="@ViewBag.IMPORT_UID" />
+        <input type="hidden" id="IMPORT_TIME" name="importTime" value="@ViewBag.IMPORT_TIME" />
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">记录条数</label>
+                <div class="layui-input-inline">
+                    <label class="layui-form-label-info">@ViewBag.COUNT</label>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">审批结果</label>
+            <div class="layui-input-inline">
+                <select id="IS_APPROVAL" name="isApproval">
+                    <option value="1">通过</option>
+                    <option value="0">不通过</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">审批意见</label>
+            <div class="layui-input-block">
+                <textarea id="MESSAGE" name="message" class="layui-input" placeholder="如果审批不通过，请在这里填写不通过的原因。"></textarea>
+            </div>
+        </div>
+        <blockquote class="layui-elem-quote layui-quote-nm">
+            <ul>
+                <li>
+                    <span class="layui-badge layui-bg-orange">
+                        审批说明
+                    </span>
+                </li>
+                <li><span>1、如果审批不通过，请在“审批意见”处填写不通过的原因。</span></li>
+            </ul>
+        </blockquote>
+    </div>
+    <div class="form-bottom-submit" style="text-align:right;">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<!-- JS-->
+<script src="~/Views/ImportApproval/JS/Approval.js"></script>

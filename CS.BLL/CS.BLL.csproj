@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE45DF20-7F90-48F6-A22C-A3F136CA068A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CS.BLL</RootNamespace>
+    <AssemblyName>CS.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CS.Base">
+      <HintPath>..\CS.Common\Include\CS.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="CS.Library">
+      <HintPath>..\CS.Common\Include\CS.Library.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CS.Common\Include\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CS.Common\Include\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CS.Common\Include\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CS.Common\Include\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CS.Common\Include\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CS.Common\Include\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CS.Common\Include\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExcelCalculator.cs" />
+    <Compile Include="FW\BF_BULLETIN.cs" />
+    <Compile Include="FW\BF_BULLETIN_ATTACH.cs" />
+    <Compile Include="FW\BF_BULLETIN_USER.cs" />
+    <Compile Include="FW\BF_FILE.cs" />
+    <Compile Include="FW\BF_FORM.cs" />
+    <Compile Include="FW\BF_IMPORT.cs" />
+    <Compile Include="FW\BF_CHART_REPORT.cs" />
+    <Compile Include="FW\BF_CHART_REPORT_FILTER.cs" />
+    <Compile Include="FW\BF_OP_LOG.cs" />
+    <Compile Include="FW\BF_ST_FLOW_NODE.cs" />
+    <Compile Include="FW\BF_ST_TASK_FLOW_NODE.cs" />
+    <Compile Include="FW\BF_ST_NODE.cs" />
+    <Compile Include="FW\BF_ST_TASK.cs" />
+    <Compile Include="FW\BF_ST_TASK_FLOW_NODE_LOG.cs" />
+    <Compile Include="FW\BF_ST_TASK_LOG.cs" />
+    <Compile Include="FW\BF_ST_TYPE.cs" />
+    <Compile Include="FW\BF_ST_FLOW.cs" />
+    <Compile Include="FW\BF_SYS_CONFIG.cs" />
+    <Compile Include="FW\BF_TB_REPORT.cs" />
+    <Compile Include="FW\BF_DATABASE.cs" />
+    <Compile Include="FW\BF_DEPARTMENT.cs" />
+    <Compile Include="FW\BF_MENU.cs" />
+    <Compile Include="FW\BF_ROLE.cs" />
+    <Compile Include="FW\BF_TB_REPORT_EVENT.cs" />
+    <Compile Include="FW\BF_TB_REPORT_FILTER.cs" />
+    <Compile Include="FW\BF_USER.cs" />
+    <Compile Include="FW\BF_FIELD.cs" />
+    <Compile Include="FW\SystemSession.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CS.Common\CS.Common.csproj">
+      <Project>{a9d2bc7f-c16f-4ffa-aac0-408e879570f5}</Project>
+      <Name>CS.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

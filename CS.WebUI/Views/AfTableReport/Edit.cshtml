@@ -1,0 +1,124 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.FW.BF_TB_REPORT.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <div class="form-top-content">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">基本信息</li>
+                <li>SQL语句</li>
+                <li>自定义代码</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">报表名称</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+                                <input type="hidden" id="DEFAULT_INPUT_VALUES" name="DEFAULT_INPUT_VALUES" value="@Model.DEFAULT_INPUT_VALUES" />
+                                <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入报表名称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">数据库</label>
+                            <div class="layui-input-inline">
+                                <select id="DB_ID" name="DB_ID" lay-filter="aihao">
+
+                                    @foreach (var item in ViewBag.DIC_DBS)
+                                    {
+                                        if (Model.DB_ID == item.Key)
+                                        {
+                                            <option value="@item.Key" selected="selected">@item.Value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Key">@item.Value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">数据导出</label>
+                                <div class="layui-input-block">
+                                    <input type="hidden" id="IS_SHOW_EXPORT" name="IS_SHOW_EXPORT" value="@Model.IS_SHOW_EXPORT" />
+
+                                    @if (Model.IS_SHOW_EXPORT == 1)
+                                    {
+                                        <input type="checkbox" checked="checked" lay-skin="switch" lay-filter="switchExport" lay-text="开|关">
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" lay-skin="switch" lay-filter="switchExport" lay-text="开|关">
+                                    }
+                                </div>
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">页面调试</label>
+                                <div class="layui-input-block">
+                                    <input type="hidden" id="IS_SHOW_DEBUG" name="IS_SHOW_DEBUG" value="@Model.IS_SHOW_DEBUG" />
+
+                                    @if (Model.IS_SHOW_DEBUG == 1)
+                                    {
+                                        <input type="checkbox" checked="checked" lay-skin="switch" lay-filter="switchDebug" lay-text="开|关">
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" lay-skin="switch" lay-filter="switchDebug" lay-text="开|关">
+                                    }
+                                </div>
+                            </div>
+                            <div class="layui-input-inline">
+                                <label class="layui-form-label">复选框</label>
+                                <div class="layui-input-block">
+                                    <input type="hidden" id="IS_SHOW_CHECKBOX" name="IS_SHOW_CHECKBOX" value="@Model.IS_SHOW_CHECKBOX" />
+
+                                    @if (Model.IS_SHOW_CHECKBOX == 1)
+                                    {
+                                        <input type="checkbox" checked="checked" lay-skin="switch" lay-filter="switchCheckbox" lay-text="显示|关">
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" lay-skin="switch" lay-filter="switchCheckbox" lay-text="显示|关">
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <textarea name="REMARK" class="layui-input reportH" placeholder="">@Model.REMARK</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    <span href="#"  class="layui-badge layui-bg-green showSqlHelp_a" onclick="showSqlHelp();">Help</span>
+                    <span href="#" class="layui-badge showSqlHelp_a" id="aTestSql" onclick="testSql();">分析SQL语句</span>
+                    <textarea id="SQL_CODE" name="SQL_CODE" class="layui-input reportH" placeholder="输入查询报表的SQL语句（不包含分页）">@Model.SQL_CODE</textarea>
+                </div>
+                <div class="layui-tab-item">
+                    <label class="layui-form-label showSqlHelp_a">表格上方代码</label>
+                    <textarea id="TOP_CODE" name="TOP_CODE" class="layui-input reportH" placeholder="表格上方的代码，可以是HTML、CSS或JS(非必填)">@Model.TOP_CODE</textarea>
+                    <label class="layui-form-label showSqlHelp_a">表格下方代码</label>
+                    <textarea name="BOTTOM_CODE" class="layui-input reportH" placeholder="表格下方的代码，可以是HTML、CSS或JS(非必填)">@Model.BOTTOM_CODE</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="form-bottom-submit" style="text-align:right;">
+    <div class="layui-inline">
+        <button type="button" class="layui-btn" onclick="save();">确定</button>
+        <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+    </div>
+</div>
+
+<script src="~/Views/AfTableReport/JS/Edit.js?v=20181226"></script>

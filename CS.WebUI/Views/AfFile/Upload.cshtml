@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<div style="padding:10px;">
+    <input type="hidden" id="ID" value="@ViewBag.ID" />
+    <input type="hidden" id="ROW_KEY" value="@ViewBag.ROW_KEY" />
+    <input type="hidden" id="YYYYMMDD" value="@ViewBag.YYYYMMDD" />
+    <input type="hidden" id="MIME_TYPES" value="@ViewBag.MIME_TYPES" />
+    <input type="hidden" id="EXT_NAMES" value="@ViewBag.EXT_NAMES" />
+    <div class="layui-upload">
+        <button type="button" class="layui-btn layui-btn-normal" id="testList">
+            <i class="layui-icon layui-icon-icon-import"></i>选择文件（可多选）
+        </button>
+        <div class="layui-upload-list">
+            <table class="layui-table" lay-size="sm">
+                <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="fileList"></tbody>
+            </table>
+        </div>
+        <button type="button" class="layui-btn" id="testListAction">
+            <i class="layui-icon layui-icon-uploading"></i>开始上传
+        </button>
+    </div>
+</div>
+<script type="text/javascript" src="~/Views/AfFile/JS/Upload.js"></script>

@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<input type="hidden" id="ID" value="@ViewBag.ID" />
+<input type="hidden" id="ROW_KEY" value="@ViewBag.ROW_KEY" />
+<input type="hidden" id="YYYYMMDD" value="@ViewBag.YYYYMMDD" />
+<input type="hidden" id="FILES" value="@ViewBag.FILE_JSON" />
+<table id="datatable" class="layui-table" lay-size="sm" lay-filter="tablefilter"></table>
+
+<!-- 操作-->
+<script type="text/html" id="operation">
+    <a class="layui-btn layui-btn-xs" lay-event="down">下载</a>
+    {{#  if(d.是否本人 == true){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    {{#  } }}
+</script>
+
+<script type="text/javascript" src="~/Views/AfFile/JS/Download.js"></script>

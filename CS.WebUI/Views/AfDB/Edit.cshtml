@@ -1,0 +1,89 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.FW.BF_DATABASE.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">数据库名称</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="ID" value="@Model.ID" />
+                    <input type="text" name="NAME" value="@Model.NAME" lay-verify="required|name" placeholder="请输入数据库名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">数据库类型</label>
+                <div class="layui-input-inline">
+                    <select name="DB_TYPE" lay-filter="aihao">
+                        @foreach (var item in ViewBag.DIC_DB_TYPE)
+                        {
+                            if (Model.DB_TYPE == item.Key)
+                            {
+                                <option value="@item.Key" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">数据库IP地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="IP" value="@Model.IP" placeholder="请输入IP地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">端口号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="PORT" value="@Model.PORT" placeholder="请输入端口号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input type="tel" name="USER_NAME" value="@Model.USER_NAME" placeholder="请输入用户名" lay-verify="phone" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" name="PASSWORD" value="@Model.PASSWORD" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">实例名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="DB_NAME" value="@Model.DB_NAME" placeholder="请输入实例名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-inline">
+                    <textarea name="REMARK" class="layui-input" >@Model.REMARK</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit" style="text-align:right;">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<script src="~/Views/AfDB/JS/Edit.js"></script>

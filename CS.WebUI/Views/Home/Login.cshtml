@@ -1,0 +1,88 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@MvcApplication.SystemName 登录</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/login.css" media="all">
+    <script type="text/javascript">
+        var parentUrl = window.parent.location.href.toLowerCase();
+        var reg = new RegExp("home/login");
+        if (reg.test(parentUrl) == false) {
+            window.parent.location.href = "../Home/Login";
+        }
+    </script>
+</head>
+<body class="layui-layout-body">  
+    <div id="LAY_app">
+        <div class="leoweather1">
+        <span class="login_img"><!--<i class="layui-icon layui-icon-ChinaMobile"></i>--></span>
+        <span class="login_top_right">
+          <a href="#">加入收藏</a>&nbsp;
+          <a href="#" target="_blank">联系我们</a>
+        </span>
+        </div>
+        <div class="layadmin-user-login" id="LAY-user-login">
+            <div class="layadmin-user-login-system">
+                <p class="system-info">成都市第三人民医院</p><br />
+                <p class="system-name">@MvcApplication.SystemName</p>
+            </div>
+            <div class="layadmin-user-login-main login-animated">
+                <div class="layadmin-user-login-box layadmin-user-login-header">
+                    <p>密码登录</p>
+                    @*增加二维码按钮*@
+                    <a href="javascript:;"><i class="layui-icon layui-icon-erweima" id="animation_btn"></i></a>
+                </div>
+                <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                    <form class="layui-form" id="login" method="post">
+                        <div class="layui-form-item">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-yonghuming" for="LAY-user-login-username"></label>
+                            <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="用户名:" class="layui-input">
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-Password" for="LAY-user-login-password"></label>
+                            <input type="password" id="password" name="password" lay-verify="required" autocomplete="off" placeholder="密码:" class="layui-input">
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layadmin-user-login-icon layui-icon layui-icon-yanzhengma2" for="LAY-user-login-password"></label>
+                            <input type="text" value="开发期间不输" name="captcha" lay-verify="required" autocomplete="off" placeholder="验证码" class="layui-input add-yanzhenma2" >
+                            <img class="login-verification-code add-yanzhenma2-img" src="../Home/SecurityCode" alt="验证码" onclick="this.src=this.src+'?'" />
+                        </div>
+                        <div class="layui-form-item">
+                            <!--
+                            <input type="checkbox" lay-skin="primary" title="记住账号" name="remember" value="1">
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                                <span>记住账号?</span><i class="layui-icon"></i>
+                            </div>
+                            -->
+                            <a href="http://down.tech.sina.com.cn/page/40975.html"><img style="width:20px;height:20px;" src="~/Content/images/chrome.gif" title="Chrome浏览器" /></a>
+                            <a href="https://www.google.cn/chrome" target="_blank" title="点击下载Chrome浏览器">一款快速、简单且安全的浏览器，你值得下载</a><br />
+                            <label class="error">@ViewBag.ErrorMessage</label>
+                        </div>
+                        <div class="layui-form-item">
+                            <button class="layui-btn" lay-submit="" lay-filter="login">登录</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="layadmin-user-login-main ewm-code">
+                <div class="layadmin-user-login-box layadmin-user-login-header">
+                    <p>扫码下载APP</p>
+                </div>
+                <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+                    <img src="~/Content/images/erweima.jpg">
+                    <a class="pwd-login-btn">密码登录</a>
+                </div>
+            </div>
+            <div class="leoweather2"><a href="#" target="_blank">版权所有：四川网管家信息技术有限公司 &nbsp;</a></div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="~/Content/layui/layui.js"></script>
+<script src="~/Views/Home/JS/Login.js?v=20180816"></script>

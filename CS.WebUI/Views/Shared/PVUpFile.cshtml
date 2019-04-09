@@ -1,0 +1,177 @@
+﻿
+@model  CS.WebUI.Models.FileMsg
+
+<input type="hidden" id="pathName" value="@Model.PathName" /> <!--文件所在目录-->
+<div style="padding:10px;">
+    <div class="layui-upload">
+        <button type="button" class="layui-btn layui-btn-normal" id="testList">
+            <i class="layui-icon layui-icon-icon-import"></i>选择文件（可多选）
+            @if (Model.IsRequire)
+            {
+            <span class="imust">*</span>
+            }
+        </button>
+        <button type="button" class="layui-btn" id="testListAction">
+            <i class="layui-icon layui-icon-uploading"></i>开始上传
+        </button>
+        <div class="layui-upload-list">
+            <table class="layui-table" lay-size="sm">
+                <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
+                    {
+                        List<CS.WebUI.Models.FilesModel> list = new List<CS.WebUI.Models.FilesModel>();//附件类
+
+                        var fileArr = Model.FILES.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (fileArr != null && fileArr.Length > 0)
+                        {
+                            foreach (var f in fileArr)
+                            {
+                                //"{0}-{1}-{2}_{3}"
+                                var preStr = f.Substring(0, f.IndexOf("_&&_"));//前缀串
+                                list.Add(new CS.WebUI.Models.FilesModel
+                                {
+                                    FILE_NAME = f.Substring(f.IndexOf("_&&_") + 4),
+                                    FILE_PATH = CS.Base.Config.BConfig.GetConfigToString(Model.PathName) + "\\" + f,
+                                    FILE_SIZE = Convert.ToInt32(preStr.Substring(preStr.LastIndexOf('-') + 1)),
+                                    REAL_FILE_NAME = f
+                                });
+                            }
+                        }
+                        foreach (var item in list)
+                        {
+                            <tr>
+                                <th><a href="@item.FILE_PATH" download="@item.FILE_NAME">@item.FILE_NAME</a></th>
+                                <th>
+                                    @Math.Round((Double)item.FILE_SIZE / 1024, 1)
+                                    KB
+                                </th>
+                                <th><span style="color: #5FB878;">已上传</span></th>
+                                <th>
+                                    <input type="hidden" class="demo-real-name" value="@item.REAL_FILE_NAME" />
+                                    <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="upfile.deleteFile(this);">删除</button>
+                                </th>
+                            </tr>
+                        }
+                    }
+                </thead>
+                <tbody id="fileList"></tbody>
+            </table>
+        </div>
+       
+    </div>
+    @if (Model.IsRequire)
+    {
+        <input type="hidden" id="FILES" name="FILES" value="@Model.FILES" lay-verify="fileValidate" placeholder="上传文件路径以,号隔开" autocomplete="off" class="layui-input">
+    }
+    else
+    {
+        <input type="hidden" id="FILES" name="FILES" value="@Model.FILES" placeholder="上传文件路径以,号隔开" autocomplete="off" class="layui-input">
+    }
+</div>
+
+<script type="text/javascript" >
+    //多文件列表示例
+    layui.use(['form', 'upload', 'jquery'], function () {
+        var form = layui.form; $ = layui.jquery, upload = layui.upload;
+        //自定义验证规则
+        form.verify({
+            fileValidate: function (value) {
+                if (value == null || value.length == 0) {
+                    return '请上传附件';
+                }
+            }
+        });
+
+        var url = "../UpFile/Upload";
+        var fileListView = $('#fileList');
+        var uploadListIns = upload.render({
+            elem: '#testList'
+          , url: url
+          , data: { pathName: $('#pathName').val() }
+          , field: 'file'
+          , method: 'post'
+          , accept: 'file'
+          , multiple: true
+          , auto: false
+          , bindAction: '#testListAction'
+          , choose: function (obj) {
+              var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+              //读取本地文件
+              obj.preview(function (index, file, result) {
+                  var tr = $(['<tr id="upload-' + index + '">'
+                    , '<td>' + file.name + '</td>'
+                    , '<td>' + (file.size / 1024).toFixed(1) + 'KB</td>'
+                    , '<td>等待上传</td>'
+                    , '<td>'
+                    , '<button class="layui-btn layui-btn-mini demo-reload layui-hide">重传</button>'
+                    , '<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+                    , '</td>'
+                    , '</tr>'].join(''));
+
+                  //单个重传
+                  tr.find('.demo-reload').on('click', function () {
+                      obj.upload(index, file);
+                  });
+
+                  //删除
+                  tr.find('.demo-delete').on('click', function () {
+                      delete files[index]; //删除对应的文件
+                      tr.remove();
+                      uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                  });
+
+                  fileListView.append(tr);
+              });
+          }
+          , done: function (res, index, upload) {
+              if (res.IsSuccess == true) { //上传成功
+                  var tr = fileListView.find('tr#upload-' + index), tds = tr.children();
+                  tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                  //tds.eq(3).html(''); //清空操作
+                  var opHt = '<input type="hidden" class="demo-real-name" value="' + res.Message + '" />';
+                  opHt += '<button class="layui-btn layui-btn-mini layui-btn-danger" onclick="upfile.deleteFile(this);">删除</button>';
+                  tds.eq(3).html(opHt); //调整操作区（为删除）
+                  //res.Message;
+                  var files = $("#FILES").val();//获取已上传文件(以逗号隔开)
+                  files = files + "," + res.Message;
+                  $("#FILES").val(files);
+                  return delete this.files[index]; //删除文件队列已经上传成功的文件
+              }
+              this.error(index, upload);
+          }
+          , error: function (index, upload) {
+              var tr = fileListView.find('tr#upload-' + index)
+              , tds = tr.children();
+              tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+              tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+          }
+        });
+
+    });
+
+    var upfile = {
+        //删除上传附件
+        deleteFile: function (curCtr) {
+            //删除tr，同时删除Files中的值
+            var realFileName = $(curCtr).prev().val();//真实名
+            var $tr = $(curCtr).parent().parent();
+            $tr.remove();
+            if (realFileName != null && realFileName.length > 0) {
+                var files = $("#FILES").val();
+                var reg = new RegExp(","+realFileName,"g");
+                files = files.replace(reg,'');
+                $("#FILES").val(files);
+            }
+        }
+    }
+    
+
+</script>

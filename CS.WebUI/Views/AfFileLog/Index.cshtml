@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<style type="text/css">
+    #divFileList li{
+        line-height:23px;
+    }
+    #divFileList li a:hover {
+        background-color:#009688;
+        color: #ffffff;
+    }
+</style>
+
+<div id="divLeft" style="overflow:auto;width:250px;min-height:400px;float:left;padding:10px;">
+    <div class="layui-input-inline">
+        <input type="text" id="daterange" class="layui-input" value="@ViewBag.DATE_RANGE" style="width:180px;">
+    </div>
+    <div class="layui-input-inline">
+        <a class="layui-btn search_btn" onclick="QueryFile();"><i class="layui-icon layui-icon-search"></i></a>
+    </div>
+    <div id="divFileList" style="overflow:auto;"></div>
+</div>
+
+<div id="divRight" style="min-height:400px; margin-left:250px; overflow:auto;">
+    <pre class="layui-code" id="divFileContent">
+    </pre>
+</div>
+
+<script type="text/javascript" src="~/Views/AfFileLog/JS/Index.js?v=20180807"></script>

@@ -1,0 +1,58 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        <label class="layui-form-label">角色名称</label>
+        <div class="layui-input-inline">
+            <input type="text" id="NAME" name="NAME" value="" placeholder="" class="layui-input search_input">
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+        <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+    </div>
+
+
+</blockquote>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfRole/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', even: true}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ checkbox: true, fixed: 'left' }"></th>
+            <th lay-data="{ field: 'ID', width:60, fixed: 'left', sort: true }">ID</th>
+            <th lay-data="{ field: 'NAME', width: 120, sort: true }">角色名称</th>
+            <th lay-data="{ field: 'IS_ENABLE', width: 90, sort: true, templet: '#tmpenable', align: 'center'}">启用状态</th>
+            <th lay-data="{ field: 'CREATE_TIME', width: 135, sort: true}">创建时间</th>
+            <th lay-data="{ field: 'UPDATE_TIME', width: 135, sort: true}">最后更新时间</th>
+            <th lay-data="{ field: 'REMARK', minWidth:120}">角色说明</th>
+            <th lay-data="{ width: 150, align: 'center', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 枚举值 -->
+<script type="text/html" id="tmpenable">
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="Start_color">启用</span>
+    {{#  } else { }}
+    <span class="Stop_color">停用</span>
+    {{#  } }}
+</script>
+
+<!-- 操作-->
+<script type="text/html" id="operation">
+    {{#  if(d.ID > 1){ }}
+    <span class="layui-badge layui-bg-green" lay-event="edit">编辑</span>
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="layui-badge layui-bg-cyan" lay-event="disable">停用</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-blue" lay-event="enable">启用</span>
+    {{#  } }}
+    <span class="layui-badge" lay-event="del">删除</span>
+    {{#  } }}
+</script>
+
+<!-- 表格事件-->
+<script src="~/Views/AfRole/JS/Index.js?v=20181214"></script>

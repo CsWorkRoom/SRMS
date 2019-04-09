@@ -1,0 +1,112 @@
+﻿@model CS.BLL.FW.BF_ST_FLOW.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<!--引用第三方插件-->
+<script type="text/javascript" src="~/Content/jquery-ui/jquery-ui-1.11.4.js"></script>
+<script type="text/javascript" src="~/Content/jsPlumb/jquery.jsPlumb-1.7.2.js"></script>
+<script type="text/javascript" src="~/Content/FW/ztree_fuzzysearch.js"></script>
+<script type="text/javascript" src="~/Content/zTree/jquery.ztree.exhide.js"></script>
+<!--引用本身样式-->
+<link type="text/css" href="~/Views/AfScriptFlow/Css/ScriptFlow.css?v=20181107" rel="stylesheet" />
+<!--jsplums-->
+<script type="text/javascript" src="~/Content/FW/jsPlumbNode.js?Verison=V1"></script>
+<script type="text/javascript" src="~/Content/FW/LayuiZtree.js"></script>
+<input hidden="hidden" id="dictype" value="@ViewBag.ScriptTypeSelect" />
+<form class="layui-form" id="Flowform" action="">
+    <input hidden="hidden"  id="ID" name="ID" value="@Model.ID" />
+    <input hidden="hidden"  id="dicFlowNode" name="dicFlowNode" value="@ViewBag.ScriptFlowNode" />
+    <div class="top">
+        <div class="w menu">
+            <ul class="menu-btn">
+                <li data-info="list"><i class="layui-icon iconfont layui-icon-renwu"></i>任务列表</li>
+                <li data-info="sriptFlow"><i class="layui-icon iconfont layui-icon-xinxi"></i>任务组信息</li>
+                <li data-info="save"><i class="layui-icon iconfont layui-icon-msnui-save-bold"></i>保存</li>
+                <li data-info="batch"><i class="layui-icon iconfont layui-icon-piliangxiugaizuocedaohang"></i>批量处理</li>
+                <li data-info="Help"><i class="layui-icon iconfont layui-icon-bangzhu"></i>帮助</li>
+            </ul>
+        </div>
+    </div>
+    <div class="w clearfix Middle">
+        <div class="left hide">
+        </div>
+        <div class="right all" id="nodePanel">
+            <div>
+            </div>
+        </div>
+    </div>
+    <div id="TopPanelHide" class="hide">
+        <!--列表任务-->
+        <div id="list">
+            <div class="layui-inline" style="margin-top: 10px">
+                <div class="">
+                    <input type="text" id="search" name="search" placeholder="模糊搜索任务" autocomplete="off" class="layui-input">
+                </div>
+                <div id="ztree" class="ztree scrollbar" style="margin-top: 0;"></div>
+            </div>
+        </div>
+        <!--任务组信息-->
+        <div id="sriptFlow">
+            <div class="layui-inline" style="margin-top: 2px">
+                <label class="layui-form-label">任务组名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="NAME" name="NAME" value="@Model.NAME" placeholder="请输入任务组名称" autocomplete="off" class="layui-input" lay-verify="required|name">
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 2px">
+                <label class="layui-form-label">任务组类型</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="TYPE_ID" name="TYPE_ID" value="@Model.TYPE_ID" required>
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 2px">
+                <label class="layui-form-label">时间表达式</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="CRON" name="CRON" value="@Model.CRON" placeholder="请输入时间表达式" autocomplete="off" class="layui-input" lay-verify="required|cron">
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 2px">
+                <label class="layui-form-label">日期偏移量</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="OFFSET" name="OFFSET" value="@Model.OFFSET" placeholder="日期偏移量（天数或月数）" autocomplete="off" class="layui-input">
+                </div>
+                <a href="#" onclick="offsetHelp();">?</a>
+            </div>
+            <div class="layui-inline" style="margin-top: 2px">
+                <label class="layui-form-label">失败重试次数</label>
+                <div class="layui-input-inline" style="width: 145px;">
+                    <input type="text" id="RETRY_TIMES" name="RETRY_TIMES" value="@Model.RETRY_TIMES" placeholder="请输入失败重试次数" autocomplete="off" class="layui-input" lay-verify="required|retry_time">
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 2px">
+                <label class="layui-form-label">任务组参数</label>
+                <div class="layui-input-inline">
+                    <textarea id="PARAMETERS" name="PARAMETERS" placeholder="没有参数不用输入；多个参数逗号分隔；多组参数分号分隔。" class="layui-textarea">@Model.PARAMETERS</textarea>
+                </div>
+            </div>
+
+            <div class="layui-inline" style="margin-top: 2px">
+                <label class="layui-form-label">任务组备注</label>
+                <div class="layui-input-inline">
+                    <textarea id="REMARK" name="REMARK" placeholder="请输入备注信息" class="layui-textarea">@Model.REMARK</textarea>
+                </div>
+            </div>
+        </div>
+        <!--帮助-->
+        <div id="Help" class="Help-word">
+            <p>0 0 12 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 每天中午12点整触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 ? * * <span class="layui-icon iconfont layui-icon-jiantou"></span> 每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> * 每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 2017 2017年的每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 * 14 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到下午2:59期间的每1分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 0/5 14 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到下午2:55期间的每5分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 0/5 14,18 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 0-5 14 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到下午2:05期间的每1分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 ? * <span class="layui-icon iconfont layui-icon-jiantou"></span> MON-FRI 周一至周五的上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 10,30 14 ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 3 WED 每年三月的星期三的下午2:10和2:30触发;<span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>更多帮助，请见帮助文档：<a href="~/Views/AfScriptNode/Help.html" target="_blank" title="点击查看帮助">帮助文档</a></p>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfScriptFlow/JS/Edit.js?version=V20181011"></script>

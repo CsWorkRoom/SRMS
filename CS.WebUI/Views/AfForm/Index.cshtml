@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        名称
+        <div class="layui-input-inline">
+            <input type="text" id="name" name="name" class="layui-input search_input" placeholder="名称">
+        </div>        
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+        <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+    </div>
+</blockquote>
+<!-- 枚举值-->
+<script type="text/javascript">
+    //运行状态
+    var tmpTMode = new Array();
+    @foreach (var item in ViewBag.tmpTMode)
+    {
+        <text>tmpTMode['@item.Key'] = "@item.Value";</text>
+    }
+</script>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfForm/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', limit:20,even: true,initSort: {field:'ID', type:'DESC'}}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 60, sort: true, fixed: 'left' }">ID</th>
+            <th lay-data="{ field: 'NAME', width: 120, sort: true }">名称</th>
+            <th lay-data="{ field: 'DBNAME', width: 120, sort: true }">数据库名称</th>
+            <th lay-data="{ field: 'TABLE_NAME', width:  120, sort: true }">表名</th>
+            <th lay-data="{ field: 'CREATE_TABLE_MODE', width: 80, sort: true, templet: '#tmpTMode' }">建表模式</th>
+            <th lay-data="{ field: 'IS_ALLOW_DELETE', width: 90, sort: true, align: 'center' }">允许删除</th>
+            <th lay-data="{ field: 'IS_ENABLE', width: 90, sort: true, align: 'center' }">启用状态</th>
+            <th lay-data="{ field: 'UPDATE_TIME', width: 135,sort: true, align: 'center'}">更新时间</th>
+            <th lay-data="{ field: 'REMARK', minWidth:100 }">备注</th>            
+            <th lay-data="{ width: 100, align: 'left', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+<!-- 操作-->
+<script type="text/html" id="operation">
+    <span class="layui-badge layui-bg-green" lay-event="edit">编辑</span>
+    <span class="layui-badge" lay-event="del">删除</span>
+</script>
+<script type="text/html" id="tmpTMode">
+    <span>
+        {{ tmpTMode[d.CREATE_TABLE_MODE] }}
+    </span>
+</script>
+<!-- 表格事件-->
+<script src="~/Views/AfForm/JS/Index.js?v=20181101"></script>

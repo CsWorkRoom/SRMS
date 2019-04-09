@@ -1,0 +1,21 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<form id="form" class="layui-form" action="" method="post" style="margin-top:20px">
+    <div class="form-top-content">
+                @Html.Raw(ViewBag.formHtml)
+                @Html.Raw(ViewBag.js_Code)
+        <div class="form-bottom-submit" style="text-align:right;">
+            <input type="hidden" id="msg" value="@ViewBag.Message" />
+            <div class="layui-inline">
+                <button type="button" id="submit" class="layui-btn" lay-submit lay-filter="submit">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="~/Content/FW/LayuiZtree.js"></script>
+<script src="~/Views/AfForm/JS/Template.js?20180918"></script>

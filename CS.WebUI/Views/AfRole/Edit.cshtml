@@ -1,0 +1,41 @@
+﻿@model CS.BLL.FW.BF_ROLE.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<form id="form" class="layui-form" action="" method="post">
+    <div class="form-top-content">
+        <input type="hidden" id="dicMenus" value="@ViewBag.DIC_MENUS" />
+        <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="NAME" name="NAME" value="@Model.NAME" required lay-verify="required" placeholder="角色名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色权限</label>
+            <div class="layui-input-block">
+                
+                <input id="MENU_IDS" name="MENU_IDS" type="hidden" value="@Model.MENU_IDS" />
+                <ul id="ztreeId" class="ztree"></ul>
+            </div>
+
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">系统备注</label>
+            <div class="layui-input-block">
+                <input type="text" id="REMARK" name="REMARK" value="@Model.REMARK" placeholder="角色备注" class="layui-input" />
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit" style="text-align: right;">
+        <input type="hidden" id="msg" value="@ViewBag.Message" />
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<script src="~/Views/AfRole/JS/Edit.js?v=20190308"></script>

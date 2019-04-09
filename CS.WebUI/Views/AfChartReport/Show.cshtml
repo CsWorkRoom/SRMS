@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<style>
+    .layui-fluid {
+        overflow: hidden !important;
+    }
+
+    .divContent {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        padding: 0px 5px 5px 0px;
+    }
+
+    .ifm {
+        width: 100%;
+        height: 100%;
+        border: 0px;
+    }
+
+    .topCode {
+        background-color: #f3f3f3;
+        text-align: left;
+        padding: 2px;
+    }
+</style>
+<div class="divContent" id="divContent">
+    <input id="DB_ID" type="text" style="display:none" value="@ViewBag.DB_ID" />
+    <input id="SQL_CODE" type="text" style="display:none" value="@ViewBag.SQL_CODE" />
+    <input id="CHART_CODE" type="text" style="display:none" value="@ViewBag.CHART_CODE" />
+    <div class="topCode" id="topCode">@Html.Raw(ViewBag.TOP_CODE)</div>
+    <iframe class="ifm" id="ifm" src="~/Echart/show.html"></iframe>
+    <div class="topCode" id="botCode">@Html.Raw(ViewBag.BOTTOM_CODE)</div>
+</div>
+
+<!----------------------------------------图表配置代码------------------------------------------>
+<script src="~/Echart/javascripts/chartShow.js"></script>
+<script type="text/javascript" src="~/Content/FW/aes.js"></script>
+<script src="~/Views/AfChartReport/JS/Show.js"></script>

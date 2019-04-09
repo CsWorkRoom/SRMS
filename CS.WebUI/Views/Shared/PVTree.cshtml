@@ -1,0 +1,42 @@
+﻿
+@model  CS.WebUI.Models.TreeMsg
+
+@if (Model.IsRequire)
+{
+    <input type="text" name="@Model.ControlName" id="@Model.ControlName" lay-verify="PvTreeRequire" value="@Model.ControlValue">
+
+}
+else
+{
+    <input type="text" name="@Model.ControlName" id="@Model.ControlName" value="@Model.ControlValue">
+}
+
+<script src="~/Content/FW/LayuiZtree.js?v=20180927"></script>
+<script type="text/javascript">
+    //下拉非空验证
+    layui.use(['form', 'jquery'], function () {
+        var form = layui.form; $ = layui.jquery;
+        //自定义验证规则
+        form.verify({
+            PvTreeRequire: function (value) {
+                if (value == null || value == 0) {
+                    return '请选择下拉树';
+                }
+            }
+        });
+    });
+
+    $(function () {
+        $.ajax({
+            url:"@Model.Url" ,
+            type: "POST",
+            success: function (data) {
+                var contrName="@Model.ControlName";
+                $.comboztree(contrName, { ztreenode: data });//绑定下拉给树
+            },
+            error: function () {
+                alert("获取连接失败！");
+            }
+        });
+    });
+</script>

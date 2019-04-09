@@ -1,0 +1,116 @@
+﻿@model CS.BLL.FW.BF_FIELD.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<form id="form" class="layui-form" action="" method="post">
+    <div class="form-top-content">
+        <input type="hidden" id="dicMenus" value="@ViewBag.DIC_MENUS" />
+        <input type="hidden" id="IS_DEFAULT"value="@Model.IS_DEFAULT" />
+        <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">字段英文名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="EN_NAME" name="EN_NAME" value="@Model.EN_NAME" required lay-verify="required" placeholder="字段英文名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">字段中文名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="CN_NAME" name="CN_NAME" value="@Model.CN_NAME" required lay-verify="required" placeholder="字段中文名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否显示</label>
+                <div class="layui-input-inline">
+                    @if (Model.IS_SHOW == 1)
+                    {
+                        <input type="checkbox" name="IS_SHOW" id="IS_SHOW" value="1" lay-filter="IS_SHOW" lay-skin="switch" lay-text="是|否" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="IS_SHOW" id="IS_SHOW" value="1" lay-filter="IS_SHOW" lay-skin="switch" lay-text="是|否">
+                    }
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否冻结</label>
+                <div class="layui-input-inline">
+                    @if (Model.IS_FIXED == 1)
+                    {
+                        <input type="checkbox" name="IS_FIXED" id="IS_FIXED" value="1" lay-skin="switch" lay-text="是|否" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="IS_FIXED" id="IS_FIXED" value="1" lay-skin="switch" lay-text="是|否">
+                    }
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">是否排序</label>
+                <div class="layui-input-inline">
+                    @if (Model.IS_SORT == 1)
+                    {
+                        <input type="checkbox" name="IS_SORT" id="IS_SORT" value="1" lay-skin="switch" lay-text="是|否" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="IS_SORT" id="IS_SORT" value="1" lay-skin="switch" lay-text="是|否">
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">字段类型</label>
+                <div class="layui-input-inline">
+                    <select name="FIELD_DATA_TYPE" id="FIELD_DATA_TYPE" lay-filter="FIELD_DATA_TYPE" onchange="changeDataType();">
+                        @foreach (var item in ViewBag.DIC_FIELD_DATA_TYPE)
+                        {
+                            if (Model.FIELD_DATA_TYPE == item.Key)
+                            {
+                                <option value="@item.Key" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Key">@item.Value</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">显示宽度</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" id="SHOW_LENGTH" name="SHOW_LENGTH" value="@Model.SHOW_LENGTH" required lay-verify="required" placeholder="字段显示长度(像素)" autocomplete="off" class="layui-input">
+                    <input type="text" id="SHOW_WIDTH" name="SHOW_WIDTH" value="@Model.SHOW_WIDTH" required lay-verify="required" placeholder="字段显示宽度(像素)" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <input type="text" id="REMARK" name="REMARK" value="@Model.REMARK" placeholder="备注" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label id="lbInfo" style="color:red;font-weight:bold;"></label>
+        </div>
+    </div>
+    <div class="form-bottom-submit" style="text-align: right;">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" onclick="save();">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfFieldDisplay/JS/Edit.js"></script>
+<script>
+    var dicTypeWith = new Array();
+    @foreach (var item in ViewBag.DIC_FIELD_WITH)
+    {
+        <text>dicTypeWith['@item.Key'] = "@item.Value";</text>
+    }
+</script>

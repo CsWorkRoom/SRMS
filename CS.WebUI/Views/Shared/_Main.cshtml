@@ -1,0 +1,344 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@MvcApplication.SystemName</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="~/Content/layui/css/layui.css?201902" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/global.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Content/css/larryms.css?201903" media="all">
+</head>
+
+<body>
+    <div class="layui-layout layui-layout-admin layui-fluid larryms-layout" id="larry_layout" style="overflow: hidden;">
+        <!-- 顶部导航 -->
+        <div class="layui-header larryms-header" id="larry_head">
+            <div class="larryms-topbar-left" id="topbarL">
+                <span class="mini-logo">
+                    <!--<i class="layui-icon layui-icon-ChinaMobile"></i>-->
+                </span>
+                <a class="layui-logo larryms-logo">@MvcApplication.SystemName</a>
+                <span class="larryms-switch larryms-icon-fold" id="menufold"><i class="icon_logo layui-icon layui-icon-zhankai5"></i></span>
+                <div class="larryms-mobile-menu" id="larrymsMobileMenu"><i class="layui-icon layui-icon-zhankai5"></i></div>
+            </div>
+            <div class="larryms-extend">
+                <!-- 左侧菜单 -->
+                <div class="larryms-topbar-menu larryms-hide-xs clearfix" style="display:none">
+                    <ul class="larryms-nav clearfix fl" id="larryms_top_menu" lay-filter='TopMenu'>
+                        <!-- 若开启顶部菜单，此处动态生成 -->
+                    </ul>
+                    <div class="dropdown extend-show" id="larryms_topSubMenu">
+                        <i class="submenubtn larry-icon larry-sandianshu" id="subMenuButton"></i>
+                        <ul class="dropdown-menu larryms-nav" id="dropdown"></ul>
+                    </div>
+                </div>
+                <!-- 右侧常用菜单 -->
+                <div class="larryms-topbar-right" id="topbarR">
+                    <ul class="layui-nav clearfix">
+                        <li class="layui-nav-item" lay-unselect>
+                            <a id="message" class="message" data-group='0' onclick="changePassword();">
+                                <i class="layui-icon layui-icon-xiugaimima"></i>
+                                <cite>密码</cite>
+                                
+                            </a>
+                        </li>
+                        <li class="layui-nav-item" lay-unselect>
+                            <a id="bulletin" onclick="OperNoBull()"><i class="layui-icon layui-icon-horn"></i><cite>公告</cite>
+                                <span class="layui-badge-dot"></span>
+                            </a>
+                        </li>
+                        <li class="layui-nav-item" lay-unselect>
+                            <a id="lock"><i class="layui-icon layui-icon-iconfonticonfontdenglu"></i><cite>锁屏</cite></a>
+                        </li>
+                        <li class="layui-nav-item" lay-unselect>
+                            <a id="clearCached"><i class="layui-icon layui-icon-qingchuhuancun"></i><cite>缓存</cite></a>
+                        </li>
+                        <li class="layui-nav-item" lay-unselect>
+                            <a id="larryTheme"><i class="layui-icon layui-icon-theme"></i><cite>主题</cite></a>
+                        </li>
+                        <li class="layui-nav-item exit" lay-unselect>
+                            <a id="logout" data-url='@MvcApplication.ApplicationPath/Home/Login'><i class="layui-icon layui-icon-tuichu1"></i><cite>退出</cite></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 内容主体 -->
+        <div class="larryms-body" id="larryms_body">
+            <!-- 左侧导航区域 -->
+            <div class="layui-side pos-a larryms-left layui-bg-black" id="larry_left">
+                <div class="layui-side-scroll">
+                    <!-- 系统菜单 -->
+                    <div class="sys-menu-box">
+                        <ul class="larryms-nav larryms-nav-tree" id="larryms_left_menu" lay-filter="LarrySide" data-group='0'>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 右侧框架内容区域 -->
+            <div class="layui-body pos-a larryms-right" id="larry_right">
+                <div class="layui-tab larryms-tab" id="larry_tab" lay-filter="larryTab" lay-allowclose="true">
+                    <div class="larryms-title-box clearfix" id="larryms_title">
+                        <div class="larryms-btn-default larryms-press larryms-pull-left hide" id="goLeft">
+                            <i class="layui-icon layui-icon-zuozhankai"></i>
+                        </div>
+                        <ul class="layui-tab-title larryms-tab-title" lay-allowclose='false' id="larry_tab_title"
+                            lay-filter='larrymsTabTitle'>
+                            <li class="layui-this" id="larryms_home" lay-id="0" data-group="0" data-id="larryms-home" fresh="1">
+                                <i class="layui-icon layui-icon-shouye"></i>
+                                <cite>首页</cite>
+                            </li>
+                        </ul>
+                        <div class="larryms-btn-group clearfix">
+                            <div class="larryms-btn-default larryms-press larryms-pull-right hide" id="goRight">
+                                <i class="larry-icon larry-gongyongshuangjiantouyou"></i>
+                            </div>
+                            <div class="refresh larryms-press" id="larryms_refresh">
+                                <i class="layui-icon layui-icon-shuaxin3"></i>
+                                <cite>刷新</cite>
+                            </div>
+                            <div class="larryms-press often" lay-filter="larryOperate" id="buttonRCtrl">
+                                <ul class="larryms-nav">
+                                    <li class="larryms-nav-item">
+                                        <a class="top">
+                                            <i class="layui-icon layui-icon-config-safe"></i><cite>常用操作</cite><span class="larryms-nav-more"></span>
+                                        </a>
+                                        <dl class="larryms-nav-child layui-anim layui-anim-upbit">
+                                            <dd id="tabCtrD">
+                                                <a data-ename="positionCurrent">
+                                                    <i class="layui-icon layui-icon-location"></i><cite>定位当前选项卡</cite>
+                                                </a>
+                                            </dd>
+                                            <dd id="tabCtrA">
+                                                <a data-ename="closeCurrent">
+                                                    <i class="layui-icon layui-icon-control102"></i><cite>关闭当前选项卡</cite>
+                                                </a>
+                                            </dd>
+                                            <dd id="tabCtrB">
+                                                <a data-ename="closeOther"><i class="layui-icon layui-icon-jiaoyiguanbi"></i><cite>关闭其他选项卡</cite></a>
+                                            </dd>
+                                            <dd id="tabCtrC">
+                                                <a data-ename="closeAll"><i class="layui-icon layui-icon-jiaoyiguanbi"></i><cite>关闭全部选项卡</cite></a>
+                                            </dd>
+                                            <dd>
+                                                <a data-ename="refreshAdmin">
+                                                    <i class="layui-icon layui-icon-shuaxin3"></i><cite>刷新最外层框架</cite>
+                                                </a>
+                                            </dd>
+                                        </dl>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- tab title end -->
+                    <div class="layui-tab-content larryms-tab-content" id="larry_tab_content">
+                        <div class="layui-tab-item layui-show">
+                            <iframe class="larry-iframe" data-id='0' name="ifr_0" id='ifr0' src="@MvcApplication.ApplicationPath/Home/manager" frameborder="no" border="0"></iframe>
+                        </div>
+                    </div>
+                    <!-- tab content end -->
+                </div>
+            </div>
+            @*<div id="line"></div>*@
+            @RenderBody()
+            <!-- 移动端支持 -->
+            <div class="larryms-mobile-shade" id="larrymsMobileShade"></div>
+        </div>
+        <!-- 底部固定区域 -->
+        <div class="layui-footer larryms-footer" data-show='on' id="larry_footer">
+            <div class="copyright inline-block pos-al">
+                <i class="layui-icon layui-icon-shengji"></i>
+                当前登录用户：@MvcApplication.UserName
+            </div>
+            <div class="larryms-info inline-block pos-ar">
+                <a href="#" target="_blank">
+                    四川网管家信息技术有限公司 版权所有 2019 
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<!-- 加载layui.js文件-->
+<script src="~/Content/plugins/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="~/Content/layui/layui.js"></script>
+<script src="~/Content/FW/fw.js?20190123"></script>
+<script type="text/javascript">
+    // 当前系统名
+    var sysName = "@MvcApplication.SystemName";
+    // 当前UserName
+    var userName = "@MvcApplication.UserName";
+    // 当前发布网站的虚拟目录
+    var applicationPath = "@MvcApplication.ApplicationPath";
+
+    //layui.cache.menusUrl = 'datas/menudatas.json';//这里设置 菜单数据项接口地址 或data参数
+    layui.cache.menusUrl = '@MvcApplication.ApplicationPath/AfMenu/GetMenus';
+    layui.cache.page = 'index';
+    //说明：并非一个页面只能加载一个模块 可以这样定义：'index,common';也并非每个页面都要定义一个模块，事实上模块根据功能需要可以公用
+    layui.cache.rightMenu = false; //默认开启页面右键菜单，设置为 custom 时需要自定义右键菜单，设置为false 关闭右键菜单
+    layui.config({
+        version: "2.0.7",
+        base: '@MvcApplication.ApplicationPath/Content/'  //实际使用时，建议改成绝对路径
+    }).extend({
+        larry: 'larry/base'
+    }).use('larry');
+
+    //修改密码
+    function changePassword() {
+        layui.use(['jquery', 'layer', 'form'], function () {
+            var $ = layui.jquery, layer = layui.layer, form = layui.form;
+            var url = '@MvcApplication.ApplicationPath/AfUser/ChangePassword';
+            var html = "<div class='layui-form' style='padding-top:20px;'>";
+            html += "<div class='layui-form-item'>";
+            html += "<label class='layui-form-label'>原密码</label>";
+            html += "<div class='layui-input-inline'>";
+            html += "<input id='oldpsd' type='password' class='layui-input' placeholder='请输入原密码'/>";
+            html += "</div></div><div class='layui-form-item'>";
+            html += "<label class='layui-form-label'>新密码</label>";
+            html += "<div class='layui-input-inline'>";
+            html += "<input id='newpsd' type='password' class='layui-input' placeholder='请输入新密码'/>";
+            html += "</div></div><div class='layui-form-item'>";
+            html += "<label class='layui-form-label'>再次输入</label>";
+            html += "<div class='layui-input-inline'>";
+            html += "<input id='newpsd2' type='password' class='layui-input' placeholder='请再次输入新密码'/>";
+            html += "</div></div></div>";
+            layer.open({
+                type: 1
+                , area: ['500px', '300px']
+                , title: '修改密码'
+                , content: html
+                , btn: ['确定', '取消']
+                , yes: function (index, layero) {
+                    var oldpsd = $("#oldpsd").val();
+                    var newpsd = $("#newpsd").val();
+                    var newpsd2 = $("#newpsd2").val();
+                    if (oldpsd == null || oldpsd.length < 1) {
+                        layer.alert("请输入原密码");
+                        return;
+                    }
+                    if (newpsd == null || newpsd.length < 1) {
+                        layer.alert("请输入新密码");
+                        return;
+                    }
+                    if (newpsd2 == null || newpsd2.length < 1) {
+                        layer.alert("请再次输入新密码");
+                        return;
+                    }
+                    if (oldpsd == newpsd) {
+                        layer.alert("新旧密码不可相同");
+                        return;
+                    }
+                    if (newpsd != newpsd2) {
+                        layer.alert("两次输入的新密码不相同");
+                        return;
+                    }
+
+                    $.post(url, { oldpsd: oldpsd, newpsd: newpsd }, function (result) {
+                        if (result.IsSuccess == true) {
+                            layer.alert(result.Message, { icon: 1 });
+                            layer.close();
+                        } else {
+                            layer.alert(result.Message, { icon: 2 });
+                        }
+                    });
+                }
+                , btn2: function (index, layero) {
+                    layer.close();
+                }
+            });
+
+        });
+    }
+
+    //活动页签的iframe ID
+    var iframeid = "";
+
+    //记录活动面签的iframe ID（打开页签及弹出顶级窗口时记录）
+    function RecordActiveIframeID() {
+        layui.use(['jquery'], function () {
+            var $ = layui.jquery;
+            iframeid = $(".layui-tab-item.layui-show").children("iframe").attr("id");
+        });
+    }
+
+    //添加一个选项卡（页签）
+    function AddTabWindow(title, url) {
+        RecordActiveIframeID();
+        var data = {
+            id: title,
+            title: title,
+            href: url,
+            icon: "layui-icon-duihua",
+            font: "layui-icon"
+        };
+       // console.log(top.tab);
+        top.tab.tabAdd(data);
+    }
+
+    //刷新列表数据
+    function RefreshData() {
+        layui.use(['jquery'], function () {
+            var $ = layui.jquery;
+            $("#" + iframeid)[0].contentWindow.RefreshData();
+        });
+    }
+    function OperNoBull() {
+        layui.use(['jquery', 'layer', 'form'], function () {
+            var $ = layui.jquery, layer = layui.layer, form = layui.form;
+            //JS获取菜单表：首页-公告列表名称的菜单，获取菜单的URL
+            var name = "首页-公告列表";
+            var url = "../Home/ModuleUrl?name=" + name;
+            $.post(TransURL(url), function (result) {
+                if (result.IsSuccess == true) {
+                    //获取URL
+                    //OpenFrameWindow("系统公告", result.Message);
+                    //OpenTopWindow("系统公告", 1000, 600, result.Message);
+                    layui.use('layer', function () {
+                        layui.layer.open({
+                            type: 2
+                            , title: "系统公告"
+                            , maxmin: true
+                            , area: [1000 + 'px', 600 + 'px']
+                            , content: TransURL(result.Message)
+                        });
+                    });
+                } else {
+                    //获取失败
+                    //layer.alert("获取失败 " + result.Message);
+                    //OpenFrameWindow("系统公告", "../Home/Default");
+                }
+            });
+        })
+
+    }
+    //进加载页面执行
+    
+    layui.use(['form', 'element', 'layer', 'jquery'], function () {
+        var form = layui.form, element = layui.element; layer = layui.layer, $ = layui.jquery;
+        //获取未读公告数量
+            var name = "";
+            var url = "../Home/ModuleUrl?name=" + name;
+            $.post(TransURL(url), function (result) {
+                if (result.IsSuccess == true) {
+                    //获取数量
+                    //$("#bullnum").text(result.Message);
+                    var html = "你有" + result.Message + "条未读公告！";
+                    $("#bulletin").attr("title", html);
+                } else {
+                    //获取失败显示0
+                    //$("#bullnum").text("0");
+                    $("#bulletin").attr("title", "你有0条未读公告！");
+                }
+            });
+        
+    });
+</script>

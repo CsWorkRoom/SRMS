@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<script src="~/Content/FW/LayuiZtree.js"></script>
+<input type="hidden" id="DepartmentSelect" value="@ViewBag.DepartmentSelect" />
+
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline">
+        所属部门
+        <div class="layui-input-inline">
+            <input type="text" id="DEPT_CODE" name="DEPT_CODE" value="0">
+        </div>
+        登录名
+        <div class="layui-input-inline">
+            <input type="text" id="NAME" name="NAME" value="" placeholder="" class="layui-input search_input">
+        </div>
+        用户姓名
+        <div class="layui-input-inline">
+            <input type="text" id="FULL_NAME" name="FULL_NAME" value="" placeholder="" class="layui-input search_input">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+            <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+            <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+            <button class="layui-btn search_btn" onclick="ResetAll();" title="重置所有密码为“123456”的用户密码"><i class="layui-icon layui-icon-011caozuo_zhongzhi"></i>重置所有</button>
+        </div>
+        </div>
+</blockquote>
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfUser/GetList', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', even: true}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 30, sort: true, fixed: 'left' }">ID</th>
+            <th lay-data="{ field: 'NAME', width: 90, sort: true }">登录名</th>
+            <th lay-data="{ field: 'FULL_NAME', width: 90, sort: true }">用户姓名</th>
+            <th lay-data="{ field: 'DEPT_NAME', width: 100, sort: true }">所属部门</th>
+            <th lay-data="{ field: 'IS_ENABLE', width: 80, sort: true, templet: '#tmpenable', align:'center'}">启用状态</th>
+            <th lay-data="{ field: 'IS_LOCKED', width: 80, sort: true, templet: '#tmplock', align:'center'}">锁定状态</th>
+            <th lay-data="{ field: 'ROLE_NAMES', minWidth: 80}">拥有角色</th>
+            <th lay-data="{ field: 'LOGIN_COUNT', width: 80, sort: true}">登录次数</th>
+            <th lay-data="{ field: 'LAST_LOGIN_TIME', width: 135, sort: true}">最后登录时间</th>
+            <th lay-data="{ width: 250, align: 'left', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- 枚举值 -->
+<script type="text/html" id="tmpenable">
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="Start_color">启用</span>
+    {{#  } else { }}
+    <span class="Stop_color">停用</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="tmplock">
+    {{#  if(d.IS_LOCKED == '1'){ }}
+    <span class="lock_color">锁定</span>
+    {{#  } else { }}
+    <span class="unlock_color">未锁定</span>
+    {{#  } }}
+</script>
+
+<!-- 操作-->
+<script type="text/html" id="operation">
+    {{#  if(d.ID > 1){ }}
+    <span class="layui-badge layui-bg-green" lay-event="edit">编辑</span>
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="layui-badge layui-bg-cyan" lay-event="disable">停用</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-blue" lay-event="enable">启用</span>
+    {{#  } }}
+    <span class="layui-badge" lay-event="del">删除</span>
+    {{#  } }}
+    <span class="layui-badge layui-bg-gray" lay-event="reset" title="重置密码">重置</span>
+    {{# if(d.IS_LOCKED=='1'){ }}
+    <span class="layui-badge layui-bg-black" lay-event="locked">解锁</span>
+    {{#  } }}   
+</script>
+
+<!-- 表格事件-->
+<script src="~/Views/AfUser/JS/Index.js?v=20190226"></script>

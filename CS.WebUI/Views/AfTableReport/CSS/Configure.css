@@ -1,0 +1,40 @@
+﻿.MenuDiv_select{
+    width:340px;
+    height:230px;
+    overflow:auto;
+    position:static;
+}
+.yulanDiv{
+    width:100px;
+    float:right;
+    width:38%;        
+}
+
+.SaveButStyle{
+    float:right;
+}
+
+.butList{
+    width:60%;
+    float:left
+}
+.butList .layui-btn{
+    margin-top:10px
+}
+.layui-field-box{
+    height:38px;
+    text-align: center;
+}
+
+.textareaBox{
+    height: 300px;
+}
+
+.aotuWidth{
+    width:auto;
+    padding: 9px 5px;
+}
+.showSqlHelp_a {
+     margin: 0px; 
+     cursor: help;
+}

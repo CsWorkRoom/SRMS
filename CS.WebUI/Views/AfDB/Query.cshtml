@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+
+<!-- 枚举值-->
+<script type="text/javascript">
+    var dbname = new Array();
+    dbname[0] = "本地默认数据库";
+    @foreach (var item in ViewBag.DIC_DBS)
+    {
+        <text>
+            dbname['@item.Key'] = "@item.Value";
+        </text>
+    }
+</script>
+
+<form id="form" action="../AfDB/ExportQuery" method="post" onsubmit="return CheckExportQuery();">
+    <div id="divLeft" style="overflow:auto;width:230px;min-height:200px;float:left;">
+        <div class="layui-form">
+            <select id="DB_ID" name="dbid" lay-filter="DB_ID">
+                <option value="-1">请选择数据库</option>
+                @foreach (var item in ViewBag.DIC_DBS)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </select>
+        </div>
+
+        <div style="border:1px solid #e1e1e1;overflow:auto;" id="divTableNames">
+            选择数据库加载表
+        </div>
+    </div>
+    <div id="divRight" style="min-height:200px; margin-left:232px;">
+        <textarea id="sql" name="sql" placeholder="请先选择数据库，再点击表名（左侧最多列出该库200张表）或者输入SQL查询语句" class="layui-textarea"></textarea>
+        <button class="layui-btn search_btn" type="button" onclick="QueryPage();"><i class="layui-icon layui-icon-search"></i>分页查询</button>
+        <button class="layui-btn search_btn" type="button" onclick="QueryAll();"><i class="layui-icon layui-icon-query1"></i>查询全部</button>
+        <button class="layui-btn search_btn" type="submit" onclick=""><i class="layui-icon layui-icon-form"></i>导出数据</button>
+        <button class="layui-btn search_btn" type="button" onclick="ShowInputPassword();"><i class="layui-icon layui-icon-qiyong"></i>执行语句</button>
+        <table id="datatable" class="layui-table" lay-size="sm" lay-filter="tablefilter"></table>
+        <div id="divPage"></div>
+    </div>
+</form>
+<script src="~/Views/AfDB/JS/Query.js?v=20181204"></script>

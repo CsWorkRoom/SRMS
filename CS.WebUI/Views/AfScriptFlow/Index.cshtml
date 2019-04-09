@@ -1,0 +1,137 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<input type="hidden" id="SHOW_SELF" value="@ViewBag.SHOW_SELF" />
+<blockquote class="layui-elem-quote">
+    <div class="layui-inline layui-form">
+        任务组名称
+        <div class="layui-input-inline">
+            <input type="text" id="NAME" name="NAME" value="" placeholder="" class="layui-input search_input">
+        </div>
+        运行状态
+        <div class="layui-input-inline">
+            <select name="RUN_STATE" id="RUN_STATE" lay-verify="" lay-filter="RUN_STATE" >
+                <option value="" selected="selected">请选择</option>
+                @foreach (var item in ViewBag.RUN_STATE)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
+            </select>
+        </div>
+        是否启用
+        <div class="layui-input-inline">
+            <select name="IS_ENABLE" id="IS_ENABLE" lay-verify="" lay-filter="IS_ENABLE" >
+                <option value="" selected="selected">请选择</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+        是否成功
+        <div class="layui-input-inline">
+            <select name="LAST_TASK_IS" id="LAST_TASK_IS" lay-verify="" lay-filter="LAST_TASK_IS">
+                <option value="" selected="selected">请选择</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+        <button class="layui-btn search_btn" onclick="Query();"><i class="layui-icon layui-icon-search"></i>查询</button>
+        <button class="layui-btn search_btn" onclick="ExportFile();"><i class="layui-icon layui-icon-exl"></i>导出</button>
+        <button class="layui-btn search_btn" onclick="Add();"><i class="layui-icon layui-icon-weibiaoti2010104"></i>新增</button>
+    </div>
+</blockquote>
+
+<script type="text/javascript">
+    //脚本流类型
+    var StType = new Array();
+    @foreach (var item in ViewBag.ST_TYPE)
+    {
+        <text>StType['@item.Key'] = "@item.Value";</text>
+    }
+
+    //枚举状态
+    var StRunStatue = new Array();
+    @foreach (var item in ViewBag.RUN_STATE)
+    {
+        <text>StRunStatue['@item.Key'] = "@item.Value";</text>
+    }
+
+</script>
+
+
+<!--表格显示-->
+<table class="layui-table" lay-size="sm" lay-data="{height: 'full-73',id:'datatable', url:'../AfScriptFlow/GetList?self=@ViewBag.SHOW_SELF', page:{limit:20, layout:['refresh', 'prev', 'page', 'next', 'skip', 'limit', 'count']}, skin: 'row', even: true}" lay-filter="tablefilter">
+    <thead>
+        <tr>
+            <th lay-data="{ field: 'ID', width: 60, sort: true, fixed: 'left' }">ID</th>
+            <th lay-data="{ field: 'TYPE_ID', minWidth: 120, sort: true, templet: '#tmptype' }">任务组类型</th>
+            <th lay-data="{ field: 'NAME', minWidth: 120, sort: true }">任务组名称</th>
+            <th lay-data="{ field: 'CRON', minWidth: 100 }">时间表达式</th>
+            <th lay-data="{ field: 'RETRY_TIMES', width: 70, align: 'center' }">重试次数</th>
+            <th lay-data="{ field: 'IS_ENABLE', width: 85, align: 'center', sort: true, templet: '#tmpisenable' }">是否启用</th>
+            <th lay-data="{ field: 'LAST_TASK_ID', width: 65, align: 'center' }">最近执行</th>
+            <th lay-data="{ field: 'RUN_STATUS', width: 85, align: 'center', sort: true, templet: '#tmprunstatue' }">运行状态</th>
+            <th lay-data="{ field: 'LAST_TASK_IS', width: 85, align: 'center', sort: true,templet:'#tmplasttaskIs' }">是否成功</th>
+            <th lay-data="{ field: 'LAST_TASK_ST', width: 135, align: 'center', sort: true, templet:'#tmpStartData'}">开始时间</th>
+            <th lay-data="{ field: 'LAST_TASK_FT', minWidth: 135, align: 'center', sort: true,templet:'#tmpFinishData' }">完成时间</th>
+            <th lay-data="{ field: 'CREATE_TIME', minWidth: 135, align: 'center', sort: true }">创建时间</th>
+            <th lay-data="{ width: 200, align: 'left', toolbar: '#operation', fixed: 'right' }">操作</th>
+        </tr>
+    </thead>
+</table>
+
+<script type="text/html" id="tmptype">
+    <span>
+        {{ StType[d.TYPE_ID] }}
+    </span>
+</script>
+<script type="text/html" id="tmpisenable">
+    {{#  if(d.IS_ENABLE == '1'){ }}
+    <span class="Start_color">启用</span>
+    {{#  } else { }}
+    <span class="Stop_color">停用</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="tmprunstatue">
+    <span>
+        {{ (d.LAST_TASK_ID > 0)? StRunStatue[d.RUN_STATUS]:"-" }}
+    </span>
+</script>
+<script type="text/html" id="tmplasttaskIs">
+    {{# if (d.LAST_TASK_ID > 0 && StRunStatue[d.RUN_STATUS] == '结束') { }}
+    {{# if (d.LAST_TASK_IS == 1) { }}
+    <span class="is_ok">是</span>
+    {{# } else { }}
+    <span class="is_error">否</span>
+    {{# } }}
+    {{# } else { }}
+    <span>-</span>
+    {{# } }}
+</script>
+<!--模型化时间-->
+<script type="text/html" id="tmpStartData">
+    <span>
+        {{ d.LAST_TASK_ID==0||d.LAST_TASK_ST=='0001-01-01 00:00:00'|| d.LAST_TASK_ST==null ? '-':d.LAST_TASK_ST }}
+    </span>
+</script>
+<script type="text/html" id="tmpFinishData">
+    <span>
+        {{ d.LAST_TASK_ID==0 || d.LAST_TASK_FT=='0001-01-01 00:00:00'||d.LAST_TASK_FT==null ? '-':d.LAST_TASK_FT }}
+    </span>
+</script>
+
+
+<!-- 操作-->
+<script type="text/html" id="operation">
+    {{StIsEnable[d.IS_ENABLE] == "未启用" ? '<span class="layui-badge layui-bg-blue" lay-event="enable">启用</span>':'<span class="layui-badge layui-bg-cyan" lay-event="disable">停用</span>'}}
+    {{#  if(d.LAST_TASK_ID > 0&&StRunStatue[d.RUN_STATUS] != "结束"){ }}
+    <span class="layui-badge layui-bg-cyan" lay-event="stop">停止</span>
+    {{# }else{ }}
+    <span class="layui-badge layui-bg-blue" lay-event="start">启动</span>
+    {{# } }}
+    <span class="layui-badge layui-bg-green" lay-event="edit">编辑</span>
+    <span class="layui-badge layui-bg-gray" lay-event="log">日志</span>
+</script>
+
+
+<!-- 表格事件-->
+<script src="~/Views/AfScriptFlow/JS/Index.js?v=20181212"></script>

@@ -1,0 +1,136 @@
+﻿@model CS.BLL.FW.BF_ST_FLOW.Entity
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<!--引用第三方插件-->
+<script type="text/javascript" src="~/Content/jquery-ui/jquery-ui-1.11.4.js"></script>
+<script type="text/javascript" src="~/Content/jsPlumb/jquery.jsPlumb-1.7.2.js"></script>
+<script type="text/javascript" src="~/Content/FW/ztree_fuzzysearch.js"></script>
+<script type="text/javascript" src="~/Content/zTree/jquery.ztree.exhide.js"></script>
+<!--引用本身样式-->
+<link type="text/css" href="~/Views/AfScriptFlow/Css/ScriptFlow.css?v=20181107" rel="stylesheet" />
+<!--jsplums-->
+<script type="text/javascript" src="~/Content/FW/jsPlumbNode.js?Verison=V2"></script>
+<script type="text/javascript" src="~/Content/FW/LayuiZtree.js"></script>
+
+<input hidden="hidden" id="dictype" value="@ViewBag.ScriptTypeSelect" />
+<form class="layui-form" action="">
+    <input hidden="hidden" id="ID" name="ID" value="@Model.ID" />
+    <input hidden="hidden" id="TASK_ID" name="TASK_ID" value="@ViewBag.TASK_ID" />
+    <input hidden="hidden" id="dicFlowNode" name="dicFlowNode" value="@ViewBag.ScriptFlowNode" />
+    <div class="top">
+        <div class="w menu">
+            <ul class="menu-btn">
+                <li data-info="sriptFlow"><i class="layui-icon iconfont layui-icon-renwu"></i>任务组信息</li>
+                <li data-info="sriptFlowLog"><i class="layui-icon iconfont layui-icon-xinxi"></i>任务组日志</li>
+                <li data-info="Help"><i class="layui-icon iconfont layui-icon-bangzhu"></i>帮助</li>
+                <li data-info="Refresh"><i class="layui-icon iconfont layui-icon-shuaxin1"></i>刷新</li>
+            </ul>
+            <ul class="legend">
+                <li><i class="layui-icon iconfont layui-icon-tushi"></i>成功</li>
+                <li><i class="layui-icon iconfont layui-icon-tushi icon-tushi-fail"></i>失败</li>
+                <li><i class="layui-icon iconfont layui-icon-tushi icon-tushi-work"></i>工作中</li>
+                <li><i class="layui-icon iconfont layui-icon-tushi icon-tushi-wait"></i>等待中</li>
+            </ul>
+        </div>
+    </div>
+    <div class="w clearfix Middle">
+        <div class="left hide">
+        </div>
+        <div class="right all" id="nodePanel">
+            <div></div>
+        </div>
+    </div>
+    <div id="TopPanelHide" class="hide">
+        <!--列表任务-->
+        <div id="list">list</div>
+        <!--任务组信息-->
+        <div id="sriptFlow">
+            <div class="layui-inline" style="margin-top: 10px">
+                <label class="layui-form-label">任务组名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="NAME" name="NAME" value="@Model.NAME" placeholder="请输入任务组名称" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 10px">
+                <label class="layui-form-label">任务组类型</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="TYPE_ID" name="TYPE_ID" value="@Model.TYPE_ID">
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 10px">
+                <label class="layui-form-label">时间表达式</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="CRON" name="CRON" value="@Model.CRON" placeholder="请输入时间表达式" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 10px">
+                <label class="layui-form-label">失败重试次数</label>
+                <div class="layui-input-inline" style="width: 145px;">
+                    <input type="text" id="RETRY_TIMES" name="RETRY_TIMES" value="@Model.RETRY_TIMES" placeholder="请输入失败重试次数" autocomplete="off" class="layui-input" disabled>
+                </div>
+            </div>
+            <div class="layui-inline" style="margin-top: 10px">
+                <label class="layui-form-label">任务组备注</label>
+                <div class="layui-input-inline">
+                    <textarea id="REMARK" name="REMARK" value="@Model.REMARK" style="height: 200px" placeholder="请输入备注信息" class="layui-input" disabled></textarea>
+                </div>
+            </div>
+        </div>
+        <!--帮助-->
+        <div id="Help" class="Help-word">
+            <p>0 0 12 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 每天中午12点整触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 ? * * <span class="layui-icon iconfont layui-icon-jiantou"></span> 每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> * 每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 2017 2017年的每天上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 * 14 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到下午2:59期间的每1分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 0/5 14 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到下午2:55期间的每5分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 0/5 14,18 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 0-5 14 * * ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 在每天下午2点到下午2:05期间的每1分钟触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 15 10 ? * <span class="layui-icon iconfont layui-icon-jiantou"></span> MON-FRI 周一至周五的上午10:15触发; <span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+            <p>0 10,30 14 ? <span class="layui-icon iconfont layui-icon-jiantou"></span> 3 WED 每年三月的星期三的下午2:10和2:30触发;<span class="copy-date icon iconfont icon-iconfont20">复制时间表达式</span></p>
+        </div>
+    </div>
+    <div id="layuiTab" class="layui-tab layui-tab-brief " style="height:99%;margin:0; padding:0;">
+        <ul class="layui-tab-title">
+            <li class="layui-this">任务日志</li>
+            <li class="deal">操作</li>
+        </ul>
+        <div class="layui-tab-content" style="height:86%;padding:5px">
+            <div class="layui-tab-item layui-show" style="height:100%">
+                <iframe style="width:100%;height:100%;border:none" data-id='0' name="ifr_0" id='log' frameborder="no" border="0"></iframe>
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-inline" style="margin-top: 10px">
+                    <label class="layui-form-label">是否成功</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="IS_SUCCESS" name="IS_SUCCESS" value="" class="layui-input" disabled>
+                    </div>
+                </div>
+                <div class="layui-inline" style="margin-top: 10px">
+                    <label class="layui-form-label">基准日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="REFERENCE_DATE" name="REFERENCE_DATE" value="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline" style="margin-top: 10px">
+                    <span class="layui-btn" id="btnStart">
+                        <i class="layui-icon">&#xe608;</i> 启动
+                    </span>
+                </div>
+                <fieldset class="layui-elem-field" style="margin-left: 10px;">
+                    <legend>任务内容</legend>
+                    <div class="layui-field-box">
+                        <div class="layui-form-item">
+                            <div class="layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <textarea placeholder="请输入任务内容" rows="8" style="width: 100%" lay-verify="required|content" name="CONTENT" id="CONTENT" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfScriptTask/JS/Look.js?Vesion=V1"></script>

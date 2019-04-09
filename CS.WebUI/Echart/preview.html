@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="./vendors/bootstrap/css/bootstrap.css"><!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries-->
+    <!--[if lt IE 9]>
+     <script src="../Common/Scripts/html5shiv.min.js"></script>
+     <script src="../Common/Scripts/respond.min.js"></script>
+     <![endif]-->
+    <link rel="stylesheet" type="text/css" href="./stylesheets/main.css?_v_=1510583857922">
+    <title>ECharts Demo</title>
+    <script type="text/javascript">
+        window.EC_DEMO_LANG = 'cn';
+    </script>
+</head>
+<body>
+    <input id="endCode" type="text" style="display:none" />
+    <input id="seachData" type="text" style="display:none" />
+    <button id="SearchBtn" onclick="clickBtn()"></button>
+
+    <button id="getEndCode" onclick="getNowCode()"></button>
+    <div id="main-container">
+        <div id="code-container">
+            <div id="control-panel">
+                <div id="code-info">
+                </div>
+                <div class="control-btn-panel">
+                    <a href="javascript:;" id="childRun" onclick="runkCurData()" class="btn btn-default btn-sm">运行</a>
+                </div>
+            </div>
+            <div id="code-panel"></div>
+        </div>
+        <div id="h-handler" class="handler"></div>
+        <div class="right-container">
+            <div id="chart-panel" class="right-panel">
+            </div>
+        </div>
+    </div>
+    <!--<script>
+        if (window !== top) {
+            var nav = document.getElementsByClassName('navbar')[0];
+            nav.parentNode.removeChild(nav);
+            document.getElementById('main-container').style.top = 0;
+        }</script>-->
+    <script type="text/javascript" src="../Content/plugins/jquery-3.2.1.min.js"></script>
+    <!--<script type="text/javascript" src="./vendors/jquery/jquery.js"></script>-->
+    <script type="text/javascript" src="./vendors/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="./vendors/lodash.js"></script>
+    <script type="text/javascript" src="./vendors/dat.gui.min.js"></script>
+    <script type="text/javascript" src="./vendors/echarts/echarts-all-3.js?_v_=15105857922"></script>
+    <script type="text/javascript" src="./vendors/echarts-stat/ecStat.min.js?_v_=15105857922"></script>
+    <!--<script type="text/javascript" src="./vendors/echarts/map/js/china.js?_v_=15105857922"></script>
+    <script type="text/javascript" src="./vendors/echarts/map/js/world.js?_v_=15105857922"></script>-->
+    <script type="text/javascript" src="./vendors/echarts/extension/dataTool.js?_v_=15105857922"></script>
+    <!--<script type="text/javascript" src="./javascripts/api.map.js"></script>
+    <script type="text/javascript" src="./vendors/echarts/extension/bmap.js?_v_=15105857922"></script>-->
+    <script type="text/javascript" src="./vendors/ace/src/ace.js"></script>
+    <script type="text/javascript" src="./vendors/ace/src/ext-language_tools.js"></script>
+    <script type="text/javascript" src="./javascripts/editor.js"></script>
+    <script type="text/javascript" src="./javascripts/chartShow.js"></script>
+    <script type="text/javascript" src="../Content/FW/aes.js"></script>
+    <script type="text/javascript" src="./javascripts/hm.js"></script>
+
+    <script type="text/javascript" id="chartJsCode">
+        //var dataArr = [];//从后端返回的数据json对象集合,用户可以直接在编辑时使用
+
+        $(document).ready(function () {
+            $('#main-container').css('top', '0%');
+            gb.editor.setValue('var option = {\n    \n};\n');
+
+            //gb.editor.setValue(data, -1);
+        });
+
+        $(window).resize(function () {
+            $('#main-container').css('top', '0%');
+            echarts.init($('#chart-panel')[0]).resize();//重新绘制图表
+        });
+
+        //点击查询按钮后的处理
+        function clickBtn() {
+            //处理后端加载的数据
+            var searchDat = $("#seachData").val();//获取后台数据
+            if (searchDat != null && searchDat != "" && searchDat.length > 0) {
+                dataArr = $.parseJSON($("#seachData").val());
+            }
+
+            var code = Decrypt($("#endCode").val());//解密
+            gb.editor.setValue(code, -1);//给编辑区赋值代码体
+            runDebounce();//执行
+
+            //eval(code);
+            //loadChart();
+        }
+
+        //运行
+        function runkCurData()
+        {
+            //处理后端加载的数据
+            var searchDat = $("#seachData").val();//获取后台数据
+            if (searchDat != null && searchDat != "" && searchDat.length > 0) {
+                dataArr = $.parseJSON($("#seachData").val());
+            }
+
+            disposeAndRun();//运行用户的代码
+        }
+
+        //获取当前代码体
+        function getNowCode()
+        {
+            //eval(gb.editor.getValue());
+            var coded = gb.editor.getValue();
+
+            $("#endCode").val(Encrypt(gb.editor.getValue()));
+        }
+
+        ////加载图形报表的数据
+        //$(function () {
+        //    var code = parent.$("#CHART_CODE").val();
+        //    $("#endCode").val(code);
+        //    $("#SearchBtn").click();//触发CHART子页面的查询按钮
+        //});
+    </script>
+</body>
+</html>

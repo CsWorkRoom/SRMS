@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.FW.BF_BULLETIN.Entity
+
+
+
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block" style="padding-top: 10px;" >
+               @Model.TITLE
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">摘要</label>
+            <div class="layui-input-block" style="padding-top: 10px;">
+               @Model.SUMMARY
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
+            <label class="layui-form-label">公告内容</label>
+            <div class="layui-input-block" style="padding-top: 10px;">
+                 @Model.CONTENT
+            </div>
+        </div>
+
+        <div style="padding:10px;">
+
+               
+                <div class="layui-upload-list">
+                    <table class="layui-table" lay-size="sm">
+                        <thead>
+                            <tr>
+                                <th>文件名</th>
+
+                                <th>操作</th>
+                            </tr>
+                            @foreach (var item in ViewBag.FileList)
+                            {
+                                <tr>
+                                    <th>@item.FILE_NAME</th>  
+                                    <th>
+                                        <button type="button" class="layui-btn" onclick="downloadFiles(@item.ID);">下载</button>
+                                    </th>
+                                </tr>
+                            }
+                        </thead>
+                    </table>
+                </div>
+       </div>
+
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+<script type="text/javascript">
+
+    //下载文件
+    function downloadFiles(ID) {
+        var bid = $("#ID").val();
+        window.location = "../AfBulletin/Show?id=" + bid + "&aid=" + ID;
+    }
+</script>

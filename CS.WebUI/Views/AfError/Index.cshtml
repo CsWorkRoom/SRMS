@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<center>
+    @if (ViewBag.ErrorCode > 0)
+    {
+        <label >@ViewBag.ErrorCode</label>
+        if (ViewBag.ErrorCode == 404)
+        {
+            <label>页面找不到了</label>
+        }
+    }
+    else if(string.IsNullOrWhiteSpace(ViewBag.ErrorMessage))
+    {
+        <label >出现了未知错误</label>
+    }
+    else
+    {
+        <label >@ViewBag.ErrorMessage</label>
+    }
+    @if (string.IsNullOrWhiteSpace(ViewBag.URL) == false)
+    {
+       <label >@ViewBag.URL</label>
+    }
+</center>
