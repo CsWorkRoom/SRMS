@@ -39,7 +39,7 @@ values(
 insert into BF_SYS_CONFIG(
 ID,VALUE,REMARK,CREATE_UID,UPDATE_UID,CREATE_TIME,UPDATE_TIME)
 values(
-12,'easyman','新增及重置用户的默认密码',1,2,to_date('2018-11-01','YYYY-MM-DD'),to_date('2018-11-01','YYYY-MM-DD'));
+12,'123qwe','新增及重置用户的默认密码',1,2,to_date('2018-11-01','YYYY-MM-DD'),to_date('2018-11-01','YYYY-MM-DD'));
 insert into BF_SYS_CONFIG(
 ID,VALUE,REMARK,CREATE_UID,UPDATE_UID,CREATE_TIME,UPDATE_TIME)
 values(
