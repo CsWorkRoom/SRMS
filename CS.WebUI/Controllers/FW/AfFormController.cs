@@ -508,6 +508,15 @@ namespace CS.WebUI.Controllers.FW
                 bool bitResult = false;
                 if (op == "0")//数据添加
                 {
+                    entity.TABLE_NAME = BF_FORM.Instance.CreateTable(entity, FieldList);//动态创建数据库表
+                    if (entity.TABLE_NAME == "")
+                    {
+                        result.IsSuccess = false;
+                        result.Message = "对不起！数据库表有误，请联系管理员。";
+                        BLog.Write(BLog.LogLevel.WARN, "动态创建数据库表出现异常：表为空了");
+                        return Json(result, JsonRequestBehavior.AllowGet);
+                    }
+
                     #region 数据添加
                     foreach (BF_FORM.FieldInfo item in FieldList)
                     {
@@ -525,9 +534,9 @@ namespace CS.WebUI.Controllers.FW
                             else
                             {
                                 val = collection[item.EN_NAME] == null ? "" : collection[item.EN_NAME].ToString();
-                                if (string.IsNullOrWhiteSpace(val) && item.INPUT_TYPE==(int)Enums.FormInputType.单个复选框)//针对单个复选框由于只存在是或否的关系所以如果不选择时，有默认值，就按默认值走，如果没有就为0
+                                if (string.IsNullOrWhiteSpace(val) && item.INPUT_TYPE == (int)Enums.FormInputType.单个复选框)//针对单个复选框由于只存在是或否的关系所以如果不选择时，有默认值，就按默认值走，如果没有就为0
                                 {
-                                    val =  "0" ;
+                                    val = "0";
                                 }
                             }
 
@@ -558,15 +567,14 @@ namespace CS.WebUI.Controllers.FW
                                 }
                             }
                         }
+                        else if (item.IS_KEY_FIELD == 1 && item.IS_AUTO_INCREMENT == 0)
+                        {
+                            strFields.Add(item.EN_NAME);
+                            strValues.Add(GetNextValueFromSeqDef(entity.TABLE_NAME));
+                        }
                     }
-                    entity.TABLE_NAME = BF_FORM.Instance.CreateTable(entity, FieldList);//动态创建数据库表
-                    if (entity.TABLE_NAME == "")
-                    {
-                        result.IsSuccess = false;
-                        result.Message = "对不起！数据库表有误，请联系管理员。";
-                        BLog.Write(BLog.LogLevel.WARN, "动态创建数据库表出现异常：表为空了");
-                        return Json(result, JsonRequestBehavior.AllowGet);
-                    }
+                    //entity.TABLE_NAME = BF_FORM.Instance.CreateTable(entity, FieldList);//动态创建数据库表
+                  
                     bitResult = BF_FORM.Instance.insertData(entity.DB_ID, entity.TABLE_NAME, strFields, strValues);
                     #endregion
                 }
@@ -664,5 +672,37 @@ namespace CS.WebUI.Controllers.FW
         }
         #endregion
         #endregion
+
+        /// <summary>
+        /// 获得指定表的下一个序列值
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="isBeginPre"></param>
+        /// <param name="fix"></param>
+        /// <returns></returns>
+        private int GetNextValueFromSeqDef(string tableName, bool isBeginPre = true, string fix = "SQ_")
+        {
+            string seq = "";
+            try
+            {
+                if (isBeginPre)
+                {
+                    seq = fix + tableName;
+                }
+                else
+                {
+                    seq = tableName + fix;
+                }
+                using (Base.DBHelper.BDBHelper dbHelper = new Base.DBHelper.BDBHelper())
+                {
+                    return dbHelper.GetNextValueFromSeq(seq);
+                }
+            }
+            catch (Exception ex)
+            {
+                BLog.Write(BLog.LogLevel.ERROR, string.Format(@"获得序列[{0}]失败:{1}", seq, ex.Message));
+            }
+            return 0;
+        }
     }
 }
