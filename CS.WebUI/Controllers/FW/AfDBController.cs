@@ -336,6 +336,20 @@ namespace CS.WebUI.Controllers.FW
             }
         }
 
+        public string GetAllTableList(int dbID)
+        {
+            try
+            {
+                List<string> list = BF_DATABASE.Instance.GetAllTableList(dbID);
+                return SerializeObject(list);
+            }
+            catch (Exception ex)
+            {
+                BLog.Write(BLog.LogLevel.WARN, "获取表列表出错：" + ex.ToString());
+                return "";
+            }
+        }
+
         /// <summary>
         /// 获取数据表字段列表
         /// </summary>

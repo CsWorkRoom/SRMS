@@ -454,3 +454,12 @@ $(function () {
     //    return false;
     //});
 });
+
+//判断字符串是否为空的方法
+function IsEmpty(obj) {
+    if (typeof obj == "undefined" || obj == null || obj == "" || obj == 'null') {
+        return true;
+    } else {
+        return false;
+    }
+}

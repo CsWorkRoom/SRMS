@@ -448,5 +448,36 @@ namespace CS.WebUI.Controllers.FW
             { }
             return resbool;
         }
+        /// <summary>
+        /// 获得指定表的下一个序列值
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="isBeginPre"></param>
+        /// <param name="fix"></param>
+        /// <returns></returns>
+        public int GetNextValueFromSeqDef(string tableName, bool isBeginPre = true, string fix = "SQ_")
+        {
+            string seq = "";
+            try
+            {
+                if (isBeginPre)
+                {
+                    seq = fix + tableName;
+                }
+                else
+                {
+                    seq = tableName + fix;
+                }
+                using (Base.DBHelper.BDBHelper dbHelper = new Base.DBHelper.BDBHelper())
+                {
+                    return dbHelper.GetNextValueFromSeq(seq);
+                }
+            }
+            catch (Exception ex)
+            {
+                BLog.Write(BLog.LogLevel.ERROR, string.Format(@"获得序列[{0}]失败:{1}", seq, ex.Message));
+            }
+            return 0;
+        }
     }
 }
