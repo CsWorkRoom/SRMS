@@ -24,6 +24,7 @@ CREATE TABLE BF_FLOW
    REMARK         VARCHAR2 (512),
    MAIN_TABLE     VARCHAR2 (128) NOT NULL,
    MAIN_PAGE      VARCHAR2 (512) NOT NULL,
+   MAIN_FUN     VARCHAR2 (128) NOT NULL,
    CREATE_UID     INTEGER DEFAULT 0 NOT NULL,
    UPDATE_UID     INTEGER DEFAULT 0 NOT NULL,
    CREATE_TIME    TIMESTAMP DEFAULT SYSDATE NOT NULL,
@@ -71,3 +72,73 @@ create table BF_FLOW_NODE_JOIN
    constraint PK_BF_FLOW_NODE_JOIN primary key (ID)
 );
 CREATE SEQUENCE SQ_BF_FLOW_NODE_JOIN;
+
+
+--------------以下是流程实例表信息-----------
+---------------------------------------------
+
+--------流程实例---------------
+create table BF_FLOW_CASE 
+(
+   ID                   INTEGER              not null,
+   FLOW_TYPE_ID   INTEGER DEFAULT 0 NOT NULL,
+   FLOW_ID              INTEGER DEFAULT 0 NOT NULL,
+   MAIN_TABLE           VARCHAR2(128),
+   PRIMARY_KEY          INTEGER,
+   MAIN_PAGE            VARCHAR2(512),
+   NAME                 VARCHAR2(128),
+   IS_ARCHIVE           SMALLINT DEFAULT 0 NOT NULL, 
+   ARCHIVE_TIME         TIMESTAMP,
+   IS_ENABLE            SMALLINT DEFAULT 1 NOT NULL, 
+   ENABLE_REMARK        VARCHAR2(512),
+   CREATE_UID           INTEGER DEFAULT 0 NOT NULL,
+   CREATE_TIME          TIMESTAMP DEFAULT SYSDATE NOT NULL,
+   REMARK        VARCHAR2(512),
+   constraint PK_BF_FLOW_CASE primary key (ID)
+);
+
+CREATE SEQUENCE SQ_BF_FLOW_CASE;
+
+
+--------流程实例节点---------------
+create table BF_FLOW_NODE_CASE 
+(
+   ID                   INTEGER              not null,
+   FLOW_ID              INTEGER DEFAULT 0 NOT NULL,
+   FLOW_CASE_ID         INTEGER DEFAULT 0 NOT NULL,
+   FLOW_NODE_ID         INTEGER DEFAULT 0 NOT NULL,
+   FROM_FLOW_NODE_CASE_ID INTEGER DEFAULT 0 NOT NULL,
+   NAME                 VARCHAR(128),
+   IS_MAIN              SMALLINT DEFAULT 0 NOT NULL, 
+   DIV_X                INTEGER,
+   DIV_Y                INTEGER,
+   REMARK               VARCHAR(512),
+   USER_IDS             VARCHAR(1024),
+   ROLE_IDS             VARCHAR(1024),
+   DPT_IDS              VARCHAR(1024),
+   AUDIT_STATUS         SMALLINT DEFAULT 0 NOT NULL, 
+   IS_FINISH            SMALLINT,
+   FINISH_TIME          TIMESTAMP,
+   CREATE_UID           INTEGER DEFAULT 0 NOT NULL,
+   CREATE_TIME          TIMESTAMP DEFAULT SYSDATE NOT NULL,
+   constraint PK_BF_FLOW_NODE_CASE primary key (ID)
+);
+
+CREATE SEQUENCE SQ_BF_FLOW_NODE_CASE;
+
+--------节点处理记录---------------
+create table BF_FLOW_NODE_CASE_RECORD 
+(
+   ID                   INTEGER              not null,
+   FLOW_ID              INTEGER DEFAULT 0 NOT NULL,
+   FLOW_CASE_ID         INTEGER DEFAULT 0 NOT NULL,
+   FLOW_NODE_ID         INTEGER DEFAULT 0 NOT NULL,
+   FLOW_NODE_CASE_ID    INTEGER DEFAULT 0 NOT NULL,
+   AUDIT_STATUS         SMALLINT NOT NULL,
+   AUDIT_CONTENT        VARCHAR2(1024),
+   AUDIT_UID            INTEGER,
+   AUDIT_TIME           TIMESTAMP,
+   constraint PK_BF_FLOW_NODE_CASE_RECORD primary key (ID)
+);
+
+CREATE SEQUENCE SQ_BF_FLOW_NODE_CASE_RECORD;

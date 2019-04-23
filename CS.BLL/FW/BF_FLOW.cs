@@ -87,6 +87,12 @@ namespace CS.BLL.FW
             public string MAIN_PAGE { get; set; }
 
             /// <summary>
+            /// 主页面提交函数
+            /// </summary>
+            [Field(IsNotNull = true, Length = 128, Comment = "主表单表")]
+            public string MAIN_FUN { get; set; }
+
+            /// <summary>
             /// 创建者ID
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "0", Comment = "创建者ID")]

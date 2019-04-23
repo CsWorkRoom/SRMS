@@ -81,6 +81,9 @@
     <Compile Include="FW\BF_BULLETIN_ATTACH.cs" />
     <Compile Include="FW\BF_BULLETIN_USER.cs" />
     <Compile Include="FW\BF_FILE.cs" />
+    <Compile Include="FW\BF_FLOW_NODE_CASE_RECORD.cs" />
+    <Compile Include="FW\BF_FLOW_CASE.cs" />
+    <Compile Include="FW\BF_FLOW_NODE_CASE.cs" />
     <Compile Include="FW\BF_FLOW_NODE_JOIN.cs" />
     <Compile Include="FW\BF_FLOW_NODE.cs" />
     <Compile Include="FW\BF_FLOW.cs" />
