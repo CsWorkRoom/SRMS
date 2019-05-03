@@ -27,6 +27,7 @@ layui.use(['form', 'layer', 'jquery'], function () {
 });
 
 function save() {
+    debugger;
     layui.use(['form', 'layer', 'jquery'], function () {
         var form = layui.form, layer = layui.layer, $ = layui.$;
         var url = "../AfScriptType/Edit";

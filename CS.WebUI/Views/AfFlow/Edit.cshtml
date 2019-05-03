@@ -1,0 +1,102 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.FW.BF_FLOW.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="FlowTypes" value="@ViewBag.FlowTypes" /> <!--流程类型下拉项-->
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">基本信息</li>
+                <li>流程配置</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">流程名<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="NAME" value="@Model.NAME" lay-verify="required" placeholder="请输入流程名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">流程类型</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="FLOW_TYPE_ID" id="FLOW_TYPE_ID" value="@Model.FLOW_TYPE_ID">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">主表单表<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <select id="MAIN_TABLE" name="MAIN_TABLE" lay-search="" lay-verify="mainTable">
+                                    @foreach (var item in ViewBag.TbList)
+                                    {
+                                        if (Model.MAIN_TABLE == item)
+                                        {
+                                            <option value="@item" selected="selected">@item</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item">@item</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">主页面<span class="imust">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="MAIN_PAGE" value="@Model.MAIN_PAGE" lay-verify="required" placeholder="请输入主页面url" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">流程说明</label>
+                            <div class="layui-input-inline">
+                                <textarea name="REMARK" class="layui-input" placeholder="">@Model.REMARK</textarea>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否启用</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" id="IS_ENABLE" name="IS_ENABLE" value="@Model.IS_ENABLE" />
+                                @if (Model.IS_ENABLE == 1)
+                                {
+                                    <input type="checkbox" checked="checked" lay-skin="switch" lay-filter="switchUse" lay-text="启用|停用">
+                                }
+                                else
+                                {
+                                    <input type="checkbox" lay-skin="switch" lay-filter="switchUse" lay-text="启用|停用">
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-tab-item">
+                    <input type="hidden" id="FlowNodes" name="FlowNodes" value="@ViewBag.FlowNodes" /><!--流程节点信息-->
+                    <input type="hidden" id="FlowNodeJoins" name="FlowNodeJoins" value="@ViewBag.FlowNodeJoins" /><!--流程节点关系信息-->
+                    <blockquote class="layui-elem-quote">
+                        用于配置流程<br />
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfFlow/JS/Edit.js?v=20190415"></script>
+<script type="text/javascript" src="~/Content/FW/aes.js"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20180927"></script>

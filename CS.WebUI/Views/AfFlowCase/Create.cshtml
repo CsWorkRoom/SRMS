@@ -1,0 +1,52 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.WebUI.Models.FW.FlowCaseModel
+
+<form id="flowForm" class="layui-form" action="" method="post">
+    <!--为避免与表单表中的控件重名，此处不设置name属性-->
+    <input type="hidden" id="SysCsFlowID" value="@Model.SysCsFlowID" /> <!--流程ID-->
+    <input type="hidden" id="SysCsMainTable" value="@Model.SysCsMainTable" /><!--流程主表单表-->
+    <input type="hidden" id="SysCsMainPage" value="@Model.SysCsMainPage" /><!--流程主表单页面-->
+    <input type="hidden" id="SysCsMainFun" value="@Model.SysCsMainFun" /><!--流程主页面主函数-->
+    <input type="hidden" id="sysCsMainTableKey" value="@Model.sysCsMainTableKey" /><!--表单的主键ID-->
+
+    <div class="form-top-content">
+        @*<iframe scrolling="no" id="FlowMainPage" frameborder="0" src="/afscripttype/edit?id=0"
+                style="min-height:600px;width:100%;height:100%;"></iframe>*@
+        <iframe scrolling="no" id="FlowMainPage" frameborder="0" src="@Model.SysCsMainPage"
+                style="min-height:600px;width:100%;height:100%;"></iframe>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit onclick="FlowSubmit()">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfFlowCase/JS/Create.js?v=20190416"></script>
+<script type="text/javascript" src="~/Content/FW/aes.js"></script>
+
+<script>
+  // 计算页面的实际高度，iframe自适应会用到
+  function calcPageHeight(doc) {
+      var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+      var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+      var height  = Math.max(cHeight, sHeight)
+      return height
+  }
+  //根据ID获取iframe对象
+  var ifr = document.getElementById('FlowMainPage')
+  ifr.onload = function() {
+  	  //解决打开高度太高的页面后再打开高度较小页面滚动条不收缩
+  	  ifr.style.height='0px';
+      var iDoc = ifr.contentDocument || ifr.document
+      var height = calcPageHeight(iDoc)
+      if(height < 850){
+      	height = 850;
+      }
+      ifr.style.height = height + 'px'
+  }
+</script>

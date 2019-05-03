@@ -1,0 +1,72 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.FW.BF_FLOW_NODE_CASE_RECORD.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="FLOW_ID" name="FLOW_ID" value="@Model.FLOW_ID" /> <!--流程ID-->
+    <input type="hidden" id="FLOW_CASE_ID" name="FLOW_CASE_ID" value="@Model.FLOW_CASE_ID" /><!--流程实例ID-->
+    <input type="hidden" id="FLOW_NODE_ID" name="FLOW_NODE_ID" value="@Model.FLOW_NODE_ID" /> <!--流程节点ID-->
+    <input type="hidden" id="FLOW_NODE_CASE_ID" name="FLOW_NODE_CASE_ID" value="@Model.FLOW_NODE_CASE_ID" /><!--流程节点实例ID-->
+
+    <div class="form-top-content">
+        <div class="layui-tab-content">
+            <!--嵌入表单展示页面-->
+            <div class="layui-form-item">
+                <iframe scrolling="no" id="MainFormPage" frameborder="0" src="@ViewBag.MainFormPage"
+                        style="min-height:300px;width:100%;"></iframe>
+            </div>
+            <!--以下是审批信息-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">审批状态</label>
+                <div class="layui-input-block">
+                    <select id="AUDIT_STATUS" name="AUDIT_STATUS" lay-filter="selectAudit">
+                        @foreach (var item in ViewBag.AuditStatusList)
+                        {
+                            <option value="@item.value">@item.key</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">审批说明</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入审批说明" class="layui-textarea" name="AUDIT_CONTENT" id="AUDIT_CONTENT" lay-verify="required">@Model.AUDIT_CONTENT</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+
+<script src="~/Views/AfFlowCase/JS/Deal.js?v=20190416"></script>
+<script type="text/javascript" src="~/Content/FW/aes.js"></script>
+
+<script>
+  // 计算页面的实际高度，iframe自适应会用到
+  function calcPageHeight(doc) {
+      var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+      var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+      var height  = Math.max(cHeight, sHeight)
+      return height
+  }
+  //根据ID获取iframe对象
+  var ifr = document.getElementById('MainFormPage')
+  ifr.onload = function() {
+  	  //解决打开高度太高的页面后再打开高度较小页面滚动条不收缩
+  	  ifr.style.height='0px';
+      var iDoc = ifr.contentDocument || ifr.document
+      var height = calcPageHeight(iDoc)
+      if(height < 850){
+      	height = 850;
+      }
+      ifr.style.height = height + 'px'
+  }
+</script>
