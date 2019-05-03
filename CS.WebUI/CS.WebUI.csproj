@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1545,9 +1546,6 @@
     <Content Include="Views\AfFile\JS\Edit.js" />
     <Content Include="Views\AfFile\JS\Index.js" />
     <Content Include="Views\AfFile\JS\Upload.js" />
-    <Content Include="Views\AfFlowCase\JS\Create.js" />
-    <Content Include="Views\AfFlowCase\JS\Deal.js" />
-    <Content Include="Views\AfFlow\JS\Edit.js" />
     <Content Include="Views\AfForm\CSS\Edit.css" />
     <Content Include="Views\AfForm\JS\DownMode.js" />
     <Content Include="Views\AfForm\JS\Edit.js" />
@@ -1614,14 +1612,15 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrTopic\CSS\Edit.css" />
+    <Content Include="Views\SrTopic\JS\Edit.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\FW\AfFlowCaseController.cs" />
-    <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrTopicController.cs" />
     <Compile Include="Controllers\UpFileController.cs" />
     <Compile Include="Controllers\FW\ABaseController.cs" />
     <Compile Include="Controllers\FW\AfBulletinController.cs" />
@@ -1650,7 +1649,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\FW\FlowCaseModel.cs" />
     <Compile Include="Models\SysModel.cs" />
     <Compile Include="Models\FW\BulletinModels.cs" />
     <Compile Include="Models\FW\MenuModels.cs" />
@@ -1827,9 +1825,7 @@
     <Content Include="Views\Home\manager.cshtml" />
     <None Include="Properties\PublishProfiles\QSS_HTML.pubxml" />
     <Content Include="Views\Home\Login4A.cshtml" />
-    <Content Include="Views\AfFlow\Edit.cshtml" />
-    <Content Include="Views\AfFlowCase\Create.cshtml" />
-    <Content Include="Views\AfFlowCase\Deal.cshtml" />
+    <Content Include="Views\SrTopic\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
