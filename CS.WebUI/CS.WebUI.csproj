@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1611,12 +1612,15 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrTopic\CSS\Edit.css" />
+    <Content Include="Views\SrTopic\JS\Edit.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrTopicController.cs" />
     <Compile Include="Controllers\UpFileController.cs" />
     <Compile Include="Controllers\FW\ABaseController.cs" />
     <Compile Include="Controllers\FW\AfBulletinController.cs" />
@@ -1821,6 +1825,8 @@
     <Content Include="Views\Home\manager.cshtml" />
     <None Include="Properties\PublishProfiles\QSS_HTML.pubxml" />
     <Content Include="Views\Home\Login4A.cshtml" />
+    <Content Include="Views\SrTopic\Edit.cshtml" />
+    <Content Include="tsconfig.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
