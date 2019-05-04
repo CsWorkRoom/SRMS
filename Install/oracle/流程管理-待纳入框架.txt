@@ -47,6 +47,7 @@ CREATE TABLE BF_FLOW_NODE
    USER_IDS             VARCHAR2(1024),
    ROLE_IDS             VARCHAR2(1024),
    DPT_IDS              VARCHAR2(1024),
+   DEAL_WAY      SMALLINT DEFAULT 0 NOT NULL,
    CREATE_UID     INTEGER DEFAULT 0 NOT NULL,
    UPDATE_UID     INTEGER DEFAULT 0 NOT NULL,
    CREATE_TIME    TIMESTAMP DEFAULT SYSDATE NOT NULL,
@@ -116,6 +117,7 @@ create table BF_FLOW_NODE_CASE
    USER_IDS             VARCHAR(1024),
    ROLE_IDS             VARCHAR(1024),
    DPT_IDS              VARCHAR(1024),
+   DEAL_WAY      SMALLINT DEFAULT 0 NOT NULL,
    AUDIT_STATUS         SMALLINT DEFAULT 0 NOT NULL, 
    IS_FINISH            SMALLINT,
    FINISH_TIME          TIMESTAMP,
@@ -142,3 +144,14 @@ create table BF_FLOW_NODE_CASE_RECORD
 );
 
 CREATE SEQUENCE SQ_BF_FLOW_NODE_CASE_RECORD;
+
+--------流程关联表---------------
+create table BF_FLOW_REF
+(
+   ID                   INTEGER              not null,
+   PARENT_ID            INTEGER,
+   FLOW_ID              INTEGER,
+   constraint PK_BF_FLOW_REF primary key (ID)
+);
+
+CREATE SEQUENCE SQ_BF_FLOW_REF;

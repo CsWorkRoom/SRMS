@@ -66,7 +66,7 @@ namespace CS.WebUI.Controllers.FW
                 //流程
                 var flow = BF_FLOW.Instance.GetEntityByKey<BF_FLOW.Entity>(SysCsFlowID);
                 //主节点
-                var mainNode = BF_FLOW_NODE.Instance.GetEntity<BF_FLOW_NODE.Entity>("FLOW_ID=? AND IS_MAIN=1");
+                var mainNode = BF_FLOW_NODE.Instance.GetEntity<BF_FLOW_NODE.Entity>("FLOW_ID=? AND IS_MAIN=1", SysCsFlowID);
                 #region 01.保存流程实例
                 int flowCaseId = BF_FLOW_CASE.Instance.GetNextValueFromSeqDef();
                 BF_FLOW_CASE.Entity flowCase = new BF_FLOW_CASE.Entity()
@@ -91,7 +91,7 @@ namespace CS.WebUI.Controllers.FW
                 int mainFlowNodeCaseId = BF_FLOW_NODE_CASE.Instance.AddMainFlowNodeCase(mainNode, flowCaseId, flow.ID);
                 #endregion
 
-                #region 02-2.保存主节点处理(填报)人信息（未完成）
+                #region 02-2.保存主节点处理(填报)人信息
                 BF_FLOW_NODE_CASE_RECORD.Entity mainFlowNodeCaseRecord = new BF_FLOW_NODE_CASE_RECORD.Entity
                 {
                     ID = BF_FLOW_NODE_CASE_RECORD.Instance.GetNextValueFromSeqDef(),
@@ -108,9 +108,10 @@ namespace CS.WebUI.Controllers.FW
 
                 #region 03.生成（下个）节点待办信息.
                 var isSuccess = BF_FLOW_CASE.Instance.CreateNextNodesCase(flow, mainNode, flowCaseId);
+                #endregion
+
                 result.IsSuccess = true;
                 result.Message = "流程实例创建成功！";
-                #endregion
             }
             catch (Exception ex)
             {
@@ -166,8 +167,39 @@ namespace CS.WebUI.Controllers.FW
                 BF_FLOW_NODE_CASE_RECORD.Instance.Add(record);
                 #endregion
 
-                #region 02.触发下个节点流转
-                var resBool = BF_FLOW_CASE.Instance.CreateNextNodesCase(flow, currFlowNode, record.FLOW_CASE_ID);
+                bool isPass = false;
+                #region 02.修改当前节点实例状态
+                var flowNodeCase= BF_FLOW_NODE_CASE.Instance.GetEntityByKey<BF_FLOW_NODE_CASE.Entity>(record.FLOW_NODE_CASE_ID);
+                if (record.AUDIT_STATUS == CS.Common.Enums.AuditStatus.退回.GetHashCode())
+                {
+                    flowNodeCase.AUDIT_STATUS = (short)CS.Common.Enums.AuditStatus.退回.GetHashCode();
+                    flowNodeCase.IS_FINISH = 1;
+                    flowNodeCase.FINISH_TIME = DateTime.Now;
+                    BF_FLOW_NODE_CASE.Instance.UpdateByKey(flowNodeCase, flowNodeCase.ID);
+
+                    //退回流程至流程主节点
+                    BF_FLOW_NODE_CASE.Instance.ReturnFlowNodeCase(record.FLOW_NODE_ID, record.FLOW_CASE_ID);
+                }
+                else
+                {
+                    //验证是否多人全部审批通过
+                    if(BF_FLOW_NODE_CASE.Instance.ValidateFlowNodeCaseIsFinish(record.FLOW_NODE_CASE_ID))
+                    {
+                        flowNodeCase.AUDIT_STATUS = (short)CS.Common.Enums.AuditStatus.通过.GetHashCode();
+                        flowNodeCase.IS_FINISH = 1;
+                        flowNodeCase.FINISH_TIME = DateTime.Now;
+                        BF_FLOW_NODE_CASE.Instance.UpdateByKey(flowNodeCase, flowNodeCase.ID);
+
+                        isPass = true;
+                    }
+                }
+                #endregion
+
+                #region 03.触发下个节点流转
+                if (isPass)
+                {
+                    var resBool = BF_FLOW_CASE.Instance.CreateNextNodesCase(flow, currFlowNode, record.FLOW_CASE_ID);
+                }
                 #endregion
             }
             catch(Exception ex)

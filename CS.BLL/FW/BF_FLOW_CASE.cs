@@ -130,10 +130,41 @@ namespace CS.BLL.FW
 
         }
         #endregion
+        /// <summary>
+        /// 创建一个流程实例
+        /// </summary>
+        /// <param name="flowId"></param>
+        /// <returns></returns>
+        public int CreateFlowCase(int flowId, int mainTableKey)
+        {
+            //流程
+            var flow = BF_FLOW.Instance.GetEntityByKey<BF_FLOW.Entity>(flowId);
+            //主节点
+            var mainNode = BF_FLOW_NODE.Instance.GetEntity<BF_FLOW_NODE.Entity>("FLOW_ID=? AND IS_MAIN=1");
+            #region 保存流程实例
+            int flowCaseId = BF_FLOW_CASE.Instance.GetNextValueFromSeqDef();
+            BF_FLOW_CASE.Entity flowCase = new BF_FLOW_CASE.Entity()
+            {
+                ID = flowCaseId,
+                CREATE_TIME = DateTime.Now,
+                CREATE_UID = SystemSession.UserID,
+                FLOW_ID = flow.ID,
+                FLOW_TYPE_ID = flow.FLOW_TYPE_ID,
+                IS_ARCHIVE = 0,
+                IS_ENABLE = 1,
+                MAIN_PAGE =(mainTableKey > 0)?((flow.MAIN_PAGE.IndexOf('?') >= 0) ? (flow.MAIN_PAGE + "&id=" + mainTableKey) : (flow.MAIN_PAGE + "?id=" + mainTableKey)):flow.MAIN_TABLE,
+                MAIN_TABLE = flow.MAIN_TABLE,
+                PRIMARY_KEY = mainTableKey,
+                NAME = flow.NAME
+            };
+            BF_FLOW_CASE.Instance.Add(flowCase);
+            #endregion
+            return flowCaseId;
+        }
 
         /// <summary>
         /// 为当前节点添加下级节点的实例s
-        /// 追加流程是否结束的处理（暂未实现）
+        /// 追加流程是否结束的处理
         /// </summary>
         /// <param name="flow"></param>
         /// <param name="currFlowNode"></param>
@@ -169,11 +200,38 @@ namespace CS.BLL.FW
                 }
                 else
                 {
-                    #region 加入走向说明
-                    Dictionary<string, object> dic = new Dictionary<string, object>();
-                    dic.Add("REMARK", "未找到下级走向节点");//是否流程就结束了呢？
-                    BF_FLOW_CASE.Instance.UpdateByKey(dic, flowCaseId);
-                    #endregion
+                    //验证流程是否结束（末梢节点是否均处理完毕）
+                    if(ValidateFlowCaseIsFinish(flow.ID, flowCaseId))
+                    {
+                        string remark = null;
+                        //结束流程
+                        var flowCase= BF_FLOW_CASE.Instance.GetEntityByKey<BF_FLOW_CASE.Entity>(flowCaseId);
+                        flowCase.IS_ARCHIVE = 1;
+                        flowCase.IS_ENABLE = 1;
+                        flowCase.ARCHIVE_TIME = DateTime.Now;
+                        BF_FLOW_CASE.Instance.UpdateByKey(flowCase, flowCaseId);
+
+                        //验证和触发下个流程
+                        var flowRefList = BF_FLOW_REF.Instance.GetNextFlow(flow.ID);
+                        if(flowRefList!=null&&flowRefList.Count>0)
+                        {
+                            foreach(var flowRef in flowRefList)
+                            {
+                                CreateFlowCaseAndMainNodeCase(flowRef.FLOW_ID);
+                            }
+                            remark = string.Format(@"创建了[{0}]个下级流程", flowRefList.Count);
+                        }
+                        else
+                        {
+                            remark = "未找到下级走向节点";
+                        }
+
+                        #region 加入走向说明
+                        Dictionary<string, object> dic = new Dictionary<string, object>();
+                        dic.Add("REMARK", remark);//是否流程就结束了呢？
+                        BF_FLOW_CASE.Instance.UpdateByKey(dic, flowCaseId);
+                        #endregion
+                    }
                 }
             }
             catch(Exception ex)
@@ -185,6 +243,63 @@ namespace CS.BLL.FW
             }
             return resBool;
         }
-
+        /// <summary>
+        /// 验证流程是否已执行完毕（末梢节点是否已执行完毕）
+        /// </summary>
+        /// <param name="flowId"></param>
+        /// <param name="flowCaseId"></param>
+        /// <returns></returns>
+        public bool ValidateFlowCaseIsFinish(int flowId,int flowCaseId)
+        {
+            bool resBool = false;
+            var endFlowNodeList= BF_FLOW_NODE_JOIN.Instance.GetList<BF_FLOW_NODE_JOIN.Entity>("TO_NODE_ID NOT IN (SELECT FROM_NODE_ID FROM BF_FLOW_NODE_JOIN) AND FLOW_ID=?", flowId);
+            if(endFlowNodeList!=null&&endFlowNodeList.Count>0)
+            {
+                var flowNodeCaseList= BF_FLOW_NODE_CASE.Instance.GetList<BF_FLOW_NODE_CASE>("FLOW_CASE_ID=? AND FLOW_ID=? AND IS_FINISH=1 AND FLOW_NODE_ID IN (?) AND AUDIT_STATUS=?",
+                   flowCaseId, flowId, string.Join(",", endFlowNodeList.Select(p => p.TO_NODE_ID.ToString())),
+                   CS.Common.Enums.AuditStatus.通过.GetHashCode());
+                if(flowNodeCaseList!=null&&flowNodeCaseList.Count>0&&flowNodeCaseList.Count==endFlowNodeList.Count)
+                {
+                    resBool = true;
+                }
+            }
+            return resBool;
+        }
+        /// <summary>
+        /// 创建流程实例及第一个节点待办项
+        /// </summary>
+        /// <param name="flowId"></param>
+        /// <returns></returns>
+        public int CreateFlowCaseAndMainNodeCase(int flowId)
+        {
+            //01.创建流程实例
+            int flowCaseId = CreateFlowCase(flowId, 0);
+            //02.创建主流程节点实例
+            var mainNode = BF_FLOW_NODE.Instance.GetEntity<BF_FLOW_NODE.Entity>("FLOW_ID=? AND IS_MAIN=1");
+            int mainFlowNodeCaseId = BF_FLOW_NODE_CASE.Instance.GetNextValueFromSeqDef();
+            BF_FLOW_NODE_CASE.Entity mainFlowNodeCase = new BF_FLOW_NODE_CASE.Entity()
+            {
+                ID = mainFlowNodeCaseId,
+                DIV_X = mainNode.DIV_X,
+                DIV_Y = mainNode.DIV_Y,
+                AUDIT_STATUS = Convert.ToInt16(CS.Common.Enums.AuditStatus.未审批.GetHashCode()),
+                CREATE_TIME = DateTime.Now,
+                CREATE_UID = SystemSession.UserID,
+                USER_IDS = mainNode.USER_IDS,//待处理人的指定，当前是从流程配置中互获取
+                DPT_IDS = mainNode.DPT_IDS,
+                ROLE_IDS = mainNode.ROLE_IDS,
+                FLOW_CASE_ID = flowCaseId,
+                FLOW_ID = flowId,
+                FROM_FLOW_NODE_CASE_ID = 0,
+                IS_FINISH = 0,
+                IS_MAIN = 1,
+                NAME = mainNode.NAME,
+                REMARK = "由上级流程自动触发创建",
+                FLOW_NODE_ID = mainNode.ID,
+                DEAL_WAY=mainNode.DEAL_WAY
+            };
+            BF_FLOW_NODE_CASE.Instance.Add(mainFlowNodeCase);
+            return mainFlowNodeCaseId;
+        }
     }
 }
