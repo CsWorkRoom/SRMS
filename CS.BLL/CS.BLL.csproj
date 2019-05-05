@@ -81,13 +81,13 @@
     <Compile Include="FW\BF_BULLETIN_ATTACH.cs" />
     <Compile Include="FW\BF_BULLETIN_USER.cs" />
     <Compile Include="FW\BF_FILE.cs" />
-    <Compile Include="FW\BF_FLOW.cs" />
-    <Compile Include="FW\BF_FLOW_CASE.cs" />
-    <Compile Include="FW\BF_FLOW_NODE.cs" />
-    <Compile Include="FW\BF_FLOW_NODE_CASE.cs" />
+    <Compile Include="FW\BF_FLOW_REF.cs" />
     <Compile Include="FW\BF_FLOW_NODE_CASE_RECORD.cs" />
+    <Compile Include="FW\BF_FLOW_CASE.cs" />
+    <Compile Include="FW\BF_FLOW_NODE_CASE.cs" />
     <Compile Include="FW\BF_FLOW_NODE_JOIN.cs" />
-    <Compile Include="FW\BF_FLOW_TYPE.cs" />
+    <Compile Include="FW\BF_FLOW_NODE.cs" />
+    <Compile Include="FW\BF_FLOW.cs" />
     <Compile Include="FW\BF_FORM.cs" />
     <Compile Include="FW\BF_IMPORT.cs" />
     <Compile Include="FW\BF_CHART_REPORT.cs" />
@@ -99,6 +99,7 @@
     <Compile Include="FW\BF_ST_TASK.cs" />
     <Compile Include="FW\BF_ST_TASK_FLOW_NODE_LOG.cs" />
     <Compile Include="FW\BF_ST_TASK_LOG.cs" />
+    <Compile Include="FW\BF_FLOW_TYPE.cs" />
     <Compile Include="FW\BF_ST_TYPE.cs" />
     <Compile Include="FW\BF_ST_FLOW.cs" />
     <Compile Include="FW\BF_SYS_CONFIG.cs" />

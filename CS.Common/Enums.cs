@@ -73,6 +73,17 @@ namespace CS.Common
             通过 = 1,
             退回 = 2
         }
+
+        /// <summary>
+        /// 流程处理方式
+        /// 1：一人审批通过就进入下个流程
+        /// 2：全部人员审批通过进入下个流程
+        /// </summary>
+        public enum DealWay
+        {
+            一人审批即可 = 0,
+            多人全部审批 = 1
+        }
         /// <summary>
         /// 酬金种类
         /// </summary>

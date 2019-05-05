@@ -105,6 +105,14 @@ namespace CS.BLL.FW
             public string DPT_IDS { get; set; }
 
             /// <summary>
+            /// 流程处理方式
+            /// 1：一人审批通过就进入下个流程
+            /// 2：全部人员审批通过进入下个流程
+            /// </summary>
+            [Field(IsNotNull = true, DefaultValue = "0", Comment = "流程处理方式")]
+            public short DEAL_WAY { get; set; }
+
+            /// <summary>
             /// 创建者ID
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "0", Comment = "创建者ID")]
