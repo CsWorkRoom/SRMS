@@ -1,0 +1,76 @@
+﻿  .delete {
+     width: 20px;
+     height: 20px;
+     border-radius: 60%;
+     position: absolute;
+     top: -10px;
+     right: -10px;
+     cursor: pointer;
+ }
+
+.aLabel {
+    font-size: 20px;
+    font-weight: bolder;
+}
+.ep {
+    float: right;
+    width: 0.7em;
+    height: 0.7em;
+    background-color: #994466;
+    cursor: pointer;
+}
+
+.titl {
+    max-width: 100px;
+    float: left;
+}
+
+.dragHover {
+    border: 1px dotted red;
+}
+
+.node-selected {
+    border-color: red !important;
+}
+
+.node-panel {
+    border: 1px solid #346789;
+    -ms-border-radius: 0.5em 0.5em 0.5em 0.5em;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    -webkit-box-shadow: 2px 2px 19px #E0E0E0;
+    -ms-box-shadow: 2px 2px 19px #E0E0E0;
+    box-shadow: 2px 2px 19px #E0E0E0;
+    cursor: move;
+    -ms-opacity: 0.8;
+    opacity: 0.8;
+    padding: 10px;
+    width: 200px;
+    z-index: 0;
+    font-size: 11.5px;
+    position: absolute;
+}
+
+#editWFStepNodeModal {
+    border: 1px solid #346789;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    min-height: 310px;
+    margin-top: 10px;
+}
+
+.layui-input {
+    border-width: 0px;
+    border-bottom: 1px solid #808080;
+}
+
+.layui-table tbody tr:hover {
+    background-color: white
+}
+
+.layui-table-cell {
+    height: auto;
+    line-height: 20px;
+}
+
+.layui-form-select dl {
+    max-height: 150px;
+}

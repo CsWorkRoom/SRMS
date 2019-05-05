@@ -5,9 +5,10 @@ function save() {
         var url = "../AfFlow/Edit";
         //#region 节点及节点关联信息
         //#endregion
-
-        $("#FlowNodes").val("[]");
-        $("#FlowNodeJoins").val("[]");
+        var nodes = getNodeString();
+        var joins = getNodeJoinString();
+         $("#FlowNodes").val(nodes);
+         $("#FlowNodeJoins").val(joins);
         SaveForm('form', url);
         return;
     });

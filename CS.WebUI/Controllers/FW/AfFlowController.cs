@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CS.WebUI.Models.FW;
 
 namespace CS.WebUI.Controllers.FW
 {
@@ -105,7 +106,7 @@ namespace CS.WebUI.Controllers.FW
                     //entity.IS_ENABLE = 1;
                     entity.CREATE_UID = SystemSession.UserID;
                     entity.CREATE_TIME = DateTime.Now;
-                    i = BF_FLOW.Instance.Add(entity,true);
+                    i = BF_FLOW.Instance.Add(entity, true);
                     entity.ID = i;
                 }
                 else
@@ -266,6 +267,59 @@ namespace CS.WebUI.Controllers.FW
         #endregion
 
         #region 校验是否有正在运行中的流程实例（暂未实现）
+        #endregion
+
+
+        #region 获取所有的 角色/人员/部门信息
+        public ActionResult GetEntityTree(string type)
+        {
+            var entitys = new List<ZTreeModel>();
+            if (type == "user")
+            {
+                var entityUsers = BLL.FW.BF_USER.Instance.GetList<BLL.FW.BF_USER.Entity>("IS_ENABLE=1 AND IS_LOCKED=0").OrderBy(e => e.FULL_NAME);
+                foreach (var user in entityUsers)
+                {
+                    ZTreeModel model = new ZTreeModel();
+                    model.id = user.ID;
+                    model.pid = 0;
+                    model.name = user.NAME;
+                    model.open = false;
+                    model.chkDisabled = false;
+                    entitys.Add(model);
+                }
+            }
+            else if (type == "role")
+            {
+                var entityRoles = BLL.FW.BF_ROLE.Instance.GetList<BLL.FW.BF_ROLE.Entity>("IS_ENABLE=1").OrderBy(e => e.NAME);
+                foreach (var role in entityRoles)
+                {
+                    ZTreeModel model = new ZTreeModel();
+                    model.id = role.ID;
+                    model.pid = 0;
+                    model.name = role.NAME;
+                    model.open = false;
+                    model.chkDisabled = false;
+                    entitys.Add(model);
+                }
+            }
+            else
+            {
+                var entityRoles = BLL.FW.BF_DEPARTMENT.Instance.GetList<BLL.FW.BF_DEPARTMENT.Entity>().OrderBy(e => e.NAME);
+                foreach (var role in entityRoles)
+                {
+                    ZTreeModel model = new ZTreeModel();
+                    model.id = role.ID;
+                    model.pid = 0;
+                    model.name = role.NAME;
+                    model.open = false;
+                    model.chkDisabled = false;
+                    entitys.Add(model);
+                }
+            }
+
+            var obj = new { code = 0, data = entitys };
+            return Json(obj);
+        }
         #endregion
     }
 }

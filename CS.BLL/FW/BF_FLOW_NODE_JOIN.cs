@@ -244,5 +244,7 @@ namespace CS.BLL.FW
         /// 目标节点名
         /// </summary>
         public string TO_NODE_NAME { get; set; }
+
+        public string CONDITION_CONTENT { get; set; }
     }
 }

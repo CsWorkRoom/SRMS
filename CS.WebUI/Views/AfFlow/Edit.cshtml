@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Content.cshtml";
 }
 @model CS.BLL.FW.BF_FLOW.Entity
-
 <form id="form" class="layui-form" action="" method="post">
     <input type="hidden" id="FlowTypes" value="@ViewBag.FlowTypes" /> <!--流程类型下拉项-->
     <input type="hidden" id="ID" name="ID" value="@Model.ID" />
@@ -86,6 +85,10 @@
                     <blockquote class="layui-elem-quote">
                         用于配置流程<br />
                     </blockquote>
+                    <button type="button" class="layui-btn"  onclick="newnode()">新增节点</button>
+                    <div id="editWFStepNodeModal">
+                    </div>
+                    <input type="hidden" name="nodeIndex" id="nodeIndex" value="0" />
                 </div>
             </div>
         </div>
@@ -96,7 +99,454 @@
             <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
         </div>
     </div>
+
+
+
+    <div class="modal-body" id="editWFStepNodeModal-Line" style="display: none; opacity: 0.5; width: 98%;">
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <form class="layui-form">
+                    <div class="layui-form-item" style="margin-top: 80px;">
+                        <label class="layui-form-label" style="font-size: 12px; width: 100px;">流转定义</label>
+                        <div class=" layui-input-inline">
+                            <select name="joinType" id="joinType" class="layui-select" style="width: 100px; background-color: transparent; border: 0; border-width: 0px; text-align: center">
+                                <option value="提交">提交</option>
+                                <option value="初审">初审</option>
+                                <option value="复审">复审</option>
+                                <option value="审核">审核</option>
+                                <option value="审核完成">审核完成</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-col-md12" style="text-align: center;">
+                <button class=" layui-btn layui-btn-sm" type="button"  onclick="setJoin()"><i class=" layui-icon layui-icon-bianji"></i>流转定义</button>
+            </div>
+        </div>
+    </div>
 </form>
+
+<div class="modal-body" id="editWFStepNodeModal-body" style="display: none; opacity: 0.5; top: 10px;">
+    <div class="layui-form">
+        <table style="width: 500px;">
+            <tr>
+                <td width="100" align="right" style="height: 50px;">节点名称：</td>
+                <td align="left">
+                    <input type="text" id="nodeName" style="background-color: transparent; border: 0; border-bottom: 1px solid #808080; height: 27px; width: 350px;" />
+                    </td>
+           </tr>
+            <tr>
+                    <td width="100" align="right" style="height: 50px;">节点类型：</td>
+                <td align="left">
+                    <input type="radio" name="nodeType" value="user" title="用户" checked="" lay-filter="nodetype"/>
+                    <input type="radio" name="nodeType" value="role" title="角色" lay-filter="nodetype"/>
+                    <input type="radio" name="nodeType" value="district" title="部门" lay-filter="nodetype"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="100" align="right" style="height: 50px;">处理对象：</td>
+                <td align="left" id="enTr" >
+                    <div cytype="dropDownTool" cyprops="url:'../afFlow/GetEntityTree?type=user',checkbox:'true',search:'true',tips:'请选择对象'"
+                         id="ids" name="ids" value="" class="layui-input-normal">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" style="height: 50px; margin-top: 20px;"></td>
+                <td align="center">
+					<input type="hidden" id="hidNodeDivId" value="0"/>
+                    <button type="button" class=" layui-btn layui-btn-sm" id="addNode" onclick="addnode()"><i class=" layui-icon layui-icon-bianji"></i>设置节点</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<link href="~/Views/AfFlow/CSS/Edit.css" rel="stylesheet" />
+<link href="~/Views/AfFlow/CSS/cyStyle.css" rel="stylesheet" />
+<link href="~/Views/AfFlow/CSS/cyType.css" rel="stylesheet" />
 <script src="~/Views/AfFlow/JS/Edit.js?v=20190415"></script>
 <script type="text/javascript" src="~/Content/FW/aes.js"></script>
 <script src="~/Content/FW/LayuiZtree.js?v=20180927"></script>
+<script src="~/Content/FW/dropDownTool.js?v=20180927"></script>
+<script src="~/Content/zTree/jquery.ztree.all.min.js?v=20180927"></script>
+<script src="~/Content/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="~/Content/JsPlumb1.4/jquery.jsPlumb-1.3.16-all-min.js" type="text/javascript"></script>
+   <script src="~/Content/JsPlumb1.4/Plumbs.js" type="text/javascript"></script>
+    <script src="~/Content/JsPlumb1.4/jsPlumb-connectors-statemachine-1.4.0-RC1.js" type="text/javascript"></script>
+<script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-util-1.4.0-RC1.js"></script>
+    <script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-dom-adapter-1.4.0-RC1.js"></script>
+<script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-1.4.0-RC1.js"></script>
+    <script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-anchors-1.4.0-RC1.js"></script>
+<script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-endpoint-1.4.0-RC1.js"></script>
+    <script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-connection-1.4.0-RC1.js"></script>
+<script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-defaults-1.4.0-RC1.js"></script>
+    <script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-connectors-statemachine-1.4.0-RC1.js"></script>
+<script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-connectors-flowchart-1.4.0-RC1.js"></script>
+    <script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-renderers-svg-1.4.0-RC1.js"></script>
+<script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-renderers-canvas-1.4.0-RC1.js"></script>
+    <script src="~/Content/JsPlumb1.4/1.4.0/jsPlumb-renderers-vml-1.4.0-RC1.js"></script>
+<script src="~/Content/JsPlumb1.4/1.4.0/jquery.jsPlumb-1.4.0-RC1.js"></script>
+<script>
+    var rdovalue = 'user';
+    layui.use(['layer', 'form', 'jquery', 'element'],
+        function() {
+            var layer = layui.layer;
+            form = layui.form;
+            $ = layui.$;
+            element = layui.element;
+            form.on('radio(nodetype)',
+                function(data) {
+                     rdovalue = data.value;
+                    bindentity(rdovalue,"");
+                });
+            bindNodes();
+
+        });
+
+	 //编辑流程是绑定节点
+	function bindNodes() {
+	    var nodes = JSON.parse($("#FlowNodes").val());
+	    var nodejoins = JSON.parse($("#FlowNodeJoins").val());
+	    $("#editWFStepNodeModal").html("");
+	    $.each(nodes, function(idx, obj) {
+	        var nodetype = "";
+	        var ids = "";
+			if (obj.USER_IDS != null) {
+			    nodetype = "user";
+			    ids = obj.USER_IDS;
+			}
+	        else if (obj.ROLE_IDS != null) {
+			    nodetype = "role";
+			    ids = obj.ROLE_IDS;
+	        }
+	        else if (obj.DPT_IDS != null) {
+			    nodetype = "district";
+			    ids = obj.DPT_IDS;
+	        }
+	        var node= {
+	            name:obj.NAME,
+	            type:nodetype,
+	            ids:ids
+	        }
+	   
+	       var currIndex = getNodeIndex();
+	        onAddNode(obj.ID, obj.DIV_X, obj.DIV_Y, currIndex,node);
+	    });
+	    $.each(nodejoins,function(idx, obj) {
+	        addLine("node_"+obj.FROM_NODE_ID, "node_"+obj.TO_NODE_ID, obj.CONDITION_CONTENT)
+	        setTimeout(function() {
+	                $("#node_" + obj.FROM_NODE_ID).css("left", (obj.DIV_Y+1) + "px");
+	                jsPlumb.repaintEverything();
+	            },
+	            1000);
+	    });
+	}
+
+	//初始化处理对象选择
+	function bindentity(rdovalue,ids) {
+	    $("#enTr").html("");
+	    var dropHtml =
+	        '<div cytype="dropDownTool" cyprops="url:\'../afFlow/GetEntityTree?type=' +
+	            rdovalue +
+	            '\',checkbox:\'true\',search:\'true\',tips:\'请选择对象\'" id = "ids" name= "ids" value="'+ids+'" class="layui-input-normal" ></div>';
+	    $("#enTr").append(dropHtml);
+	    $("#ids").dropDownTool();
+	}
+   
+	//向页面增加流程节点
+    function addnode() {
+        var nodename = $("#nodeName").val();
+        var ids = $("#ids_values").val();
+        var nodedivid = $("#hidNodeDivId").val();//编辑状态下
+        var nodetype = rdovalue;
+        if (nodename == "") {
+            layer.msg("节点名称不能为空");
+        }
+		else if (ids == null || ids == "") {
+            layer.msg("节点名处理对象不能为空");
+        }
+        else {
+            var node= {
+                name:nodename,
+                type:nodetype,
+				ids:ids
+            }
+            //判断是更新节点还是新增节点
+            if (divIsExists(nodedivid)) {
+                //更新
+                var node = $(".inner[name='" + nodedivid + "']");
+                node.attr("nodetype", nodetype);
+                node.attr("ids", ids);
+                node.attr("title", nodename);
+                node.find("strong").text(nodename);
+            }
+            else {//新增
+                var currIndex = getNodeIndex();
+                onAddNode(0, 250+currIndex*20, 20*currIndex, currIndex,node);
+            }
+            layer.closeAll();
+        }
+        
+    }
+
+	function newnode() {
+	    clearObj();
+	    editnode();
+	}
+    function editnode() {
+        var url = $("#editWFStepNodeModal-body");
+        layer.open({
+            type: 1,
+            id:"editnode",
+            // offset: ['2px', '2px'],
+            shade: [0.1, '#fff'],
+            area: ['600px', '350px'],
+            title: '流程节点管理', //不显示标题
+            content: url, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            zIndex:"2",
+            success : function() {
+                $(".layui-layer-page").css("z-index","");
+            },
+            end : function() {
+                $(".layui-layer-shade").css("display","none");
+            }
+        });
+    }
+	
+    //flownodeId表中的ID，nodeDivID 页面上node控件的id
+    function onAddNode( flownodeId,top, left, nodediv,node) {
+        var html = "";
+		if (flownodeId != 0) {
+		    nodediv = "node_"+flownodeId;
+		}
+        html += "<div class='node-panel inner'  id='" + nodediv + "' nodeid='" + flownodeId + "' index='" + nodediv + "' name='" + nodediv 
+            + "'ids='"+ node.ids+   "'nodetype='"+ node.type+  "'title='"+ node.name+ "'style='top:" + top + "px;left:" + left + "px;'><strong>" + node.name + "</strong><div class='ep'></div>"
+            + " <i class='layui-icon layui-icon-delete delete' onclick= 'onRemoveNode(this)' />"
+            + "</div > ";
+
+        $("#editWFStepNodeModal").append(html);
+
+        var node = $(".inner[name='" + nodediv + "']");
+        Plumbs.UI.Views.Plumb.addPannel(node);
+        onRegistDraggable(node);
+        onRegistDblclick(node);
+        onRegistClick(node);
+    }
+
+    function clearObj() {
+        $("#nodeName").val('');
+        $("#ids_values").val('');
+        $("#hidNodeDivId").val("0");
+    }
+    //重新绑定节点编辑
+    function setObj(nodeId, nodeName, nodeType, nodeIndex,ids) {
+        $("#nodeName").val(nodeName);
+        $("#nodeType").val(nodeType);
+        $("#hidNodeDivId").val(nodeId);
+        $('[name=nodeType]').each(function (i, item) {
+            if ($(item).val() == nodeType) {
+                $(item).prop('checked', true);
+                form.render('radio');
+                bindentity(nodeType,ids);
+            }
+        });
+
+    }
+    function onRemoveNode(del) {
+        var selectNode = $(del.parentNode);// $(".node-selected");
+        if (selectNode && selectNode.length > 0) {
+            layer.confirm('确定要删除该节点吗？', {
+                btn: ['是','否'] //按钮
+            }, function(index){
+                Plumbs.UI.Views.Plumb.delPannel(selectNode.attr("id"));
+                selectNode.remove();
+                layer.close(index);
+            }, function(){
+            });
+        } else {
+            layer.alert('请先选择要删除的节点!')
+        }
+    }
+
+    function getNodeIndex() {
+        var $index = $('#nodeIndex');
+        var result = $index.val();
+        var num = new Number(result);
+        num = num + 1;
+        $index.val(num);
+        return num;
+    }
+
+	
+    function onCloseDialog() {
+        $.ligerDialog.hide(); //关闭弹出窗; //关闭弹出窗
+        $(".l-dialog,.l-window-mask").css("display", "none"); //只隐藏遮罩层
+    }
+
+    function divIsExists(divname) {
+        var node = $(".inner[name='" + divname + "']");
+
+        if (node.length == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function onRegistDraggable(node) {
+        node.draggable({
+            scroll: true,
+            stop: function () {
+                jsPlumb.repaintEverything();
+            }
+        });
+    }
+
+	//双击节点进行节点编辑
+    function onRegistDblclick(node) {
+        node.dblclick(function () {
+            var nodeName = node.attr("title");
+            var nodeType = node.attr("nodetype");
+            var ids = node.attr("ids");
+            var nodeIndex = node.attr("index");
+            var nodedivId = node.attr("id");
+            var url = $("#editWFStepNodeModal-body");
+            clearObj(node);
+            setObj(nodedivId, nodeName, nodeType, nodeIndex,ids);
+            editnode();
+
+        });
+    }
+
+    var isNodeClick = false;
+    function onRegistClick(node) {
+        node.click(function () {
+            $(".inner").removeClass("node-selected");
+            node.addClass("node-selected");
+            isNodeClick = true;
+        });
+    }
+
+    function onRegistPannelClick() {
+        $(this).click(function () {
+            if (!isNodeClick) {
+                $(".inner").removeClass("node-selected");
+            }
+            isNodeClick = false;
+        });
+    }
+
+    var line;
+    var lableId;
+    function dialogWindow_Line(obj,joinType, lineid) {
+        lableId = lineid;
+        var connects = $(jsPlumb.getAllConnections().jsPlumb_DefaultScope);
+        connects.each(function () {
+            if (this.id == lableId) {
+                line = this;
+                return;
+            }
+        })
+		console.log(line.title)
+        //绑定下拉模板；
+        if (typeof (line.title) != 'undefined' && line.title != null &&line.title != "") {
+            var select = "dd[lay-value='" + line.title + "']";
+            $('#joinType').siblings("div .layui-form-select").find('dl').find(select).click();
+        }
+        var url = $("#editWFStepNodeModal-Line");
+        clearObj();
+
+        //弹出表关联条件设置层
+        layer.open({
+            type: 1,
+            id:"editnode",
+            // offset: ['2px', '2px'],
+            shade: [0.1, '#fff'],
+            area: ['600px', '350px'],
+            title: '流转定义管理', //不显示标题
+            content: url, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            zIndex:"2",
+            success : function() {
+                $(".layui-layer-page").css("z-index","");
+            },
+            end : function() {
+                $(".layui-layer-shade").css("display","none");
+            }
+        });
+    }
+
+    function deleteAllJoin() {
+        //删除所有的连线.解决刷新页面缓存的问题
+        jsPlumb.detachEveryConnection();
+    }
+
+	//获取所有线条信息
+    function getNodeJoinString() {
+
+        var result = [];
+        $(jsPlumb.getAllConnections().jsPlumb_DefaultScope).each(function () {
+            var node = {
+                FROM_NODE_NAME:this.source.attr("title"),
+                TO_NODE_NAME:this.target.attr("title"),
+                CONDITION_CONTENT:this.title
+            };
+            result.push(node);
+           // nodeJoinString += "," + this.sourceId + "|" + this.targetId + "|" + this.title;
+        });
+        return JSON.stringify(result);
+    }
+    function getNodeCount() {
+        return $(".inner").length;
+    }
+
+	//获取所有节点信息
+    function getNodeString() {
+        var result = [];
+		
+        $(".inner").each(function () {
+            var n = $(this);
+            var uids,rids,dids;
+            var ntype = n.attr("nodetype");
+			if (ntype == "user") {
+			    uids = n.attr("ids");
+			}
+			else if (ntype == "role") {
+			    rids = n.attr("ids");
+			}
+			else if (ntype == "district") {
+			    dids = n.attr("ids");
+			}
+            var node = {
+                NAME:n.attr("title"),
+				IS_MAIN:1,
+                DIV_X:n.css("top").replace('px',''),
+                DIV_Y:n.css("left").replace('px',''),
+				USER_IDS:uids,
+				ROLE_IDS:rids,
+				DPT_IDS:dids
+            };
+            result.push( node);
+          //  result += node.attr("nodeid");//节点ID
+           // result += "|" + node.attr("nodeid");//对应表ID
+           // result += "|" + node.attr("nodetype");//对应节点类型
+          //  result += "|" + node.attr("Id");//节点层ID
+           // result += "|" + node.attr("ids");//节点层ID
+        });
+        return JSON.stringify(result);
+    }
+
+	//向页面上添加线条
+    function addLine(fromStepNodeName, toStepNodeName, jointype) {
+        Plumbs.UI.Views.Plumb.ConnectNode(fromStepNodeName, toStepNodeName, jointype);
+    }
+	//设置节点之间的链接方式
+	 function setJoin() {
+            var jtype = $("#joinType").val();
+                line.title =jtype ;
+                line.getOverlay("label").setLabel(jtype);//lableId + ":" +
+                layer.closeAll('page');
+        }
+
+</script>
