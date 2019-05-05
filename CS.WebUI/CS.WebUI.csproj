@@ -149,6 +149,7 @@
   <ItemGroup>
     <Content Include="Content\FW\aes.js" />
     <Content Include="Content\FW\bootBack.js" />
+    <Content Include="Content\FW\dropDownTool.js" />
     <Content Include="Content\FW\fw.js" />
     <Content Include="Content\FW\jsPlumbNode.js" />
     <Content Include="Content\FW\ztree_fuzzysearch.js" />
@@ -182,6 +183,30 @@
     <Content Include="Content\jquery-ui\jquery-ui-1.11.4.js" />
     <Content Include="Content\jquery-ui\jquery-ui.min.css" />
     <Content Include="Content\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jquery.jsPlumb-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsBezier-0.4.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-1.4.0-tests.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-anchors-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-apidoc-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-connection-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-connector-editors-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-connectors-flowchart-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-connectors-statemachine-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-defaults-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-dom-adapter-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-drag-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-endpoint-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-overlays-guidelines-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-renderers-canvas-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-renderers-svg-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-renderers-vml-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\jsPlumb-util-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\mootools.jsPlumb-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\1.4.0\yui.jsPlumb-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\jquery.jsPlumb-1.3.16-all-min.js" />
+    <Content Include="Content\JsPlumb1.4\jsPlumb-connectors-statemachine-1.4.0-RC1.js" />
+    <Content Include="Content\JsPlumb1.4\Plumbs.js" />
     <Content Include="Content\jsPlumb\jquery.jsPlumb-1.7.2.js" />
     <Content Include="Content\larry\base.js" />
     <Content Include="Content\larry\extend\echarts.min.js" />
@@ -1548,6 +1573,9 @@
     <Content Include="Views\AfFile\JS\Upload.js" />
     <Content Include="Views\AfFlowCase\JS\Create.js" />
     <Content Include="Views\AfFlowCase\JS\Deal.js" />
+    <Content Include="Views\AfFlow\CSS\cyStyle.css" />
+    <Content Include="Views\AfFlow\CSS\cyType.css" />
+    <Content Include="Views\AfFlow\CSS\Edit.css" />
     <Content Include="Views\AfFlow\JS\Edit.js" />
     <Content Include="Views\AfForm\CSS\Edit.css" />
     <Content Include="Views\AfForm\JS\DownMode.js" />
@@ -1655,6 +1683,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FW\FlowCaseModel.cs" />
+    <Compile Include="Models\FW\ZTreeModel.cs" />
     <Compile Include="Models\SysModel.cs" />
     <Compile Include="Models\FW\BulletinModels.cs" />
     <Compile Include="Models\FW\MenuModels.cs" />
