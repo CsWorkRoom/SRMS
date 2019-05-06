@@ -54,4 +54,32 @@ CREATE TABLE SR_BUDGET_TYPE
    CONSTRAINT PK_SR_BUDGET_TYPE PRIMARY KEY (ID)
 );
 
+--------业务附件管理---------------
+create table SR_FILES 
+(
+   ID                   INTEGER              not null,
+   DISPLAY_NAME         VARCHAR2(1024),
+   REAL_NAME            VARCHAR2(1024),
+   PATH                 VARCHAR2(2048),
+   FORMAT               VARCHAR2(64),
+   FILE_SIZ             DECIMAL(12, 2),
+   BELONG_TAG           VARCHAR2(512),
+   REMARK               VARCHAR2(1024),
+   CREATE_TIME          TIMESTAMP,
+   CREATE_UID           INTEGER,
+   IS_DELETE            SMALLINT,
+   DELETE_UID           INTEGER,
+   DELETE_TIME          TIMESTAMP,
+   constraint PK_SR_FILES primary key (ID)
+);
+
+comment on table SR_FILES is
+'用于集中存放科研管理系统文件信息';
+
+comment on column SR_FILES.PATH is
+'物理路径地址';
+
+comment on column SR_FILES.IS_DELETE is
+'1：在用
+0：删除';
 

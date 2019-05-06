@@ -1,6 +1,7 @@
 ﻿using CS.Base.Log;
 using CS.BLL.FW;
 using CS.WebUI.Models.FW;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -58,7 +59,8 @@ namespace CS.WebUI.Controllers
                 string fileName = string.Empty;
                 try
                 {
-                    fileName = Path.GetFileName(file.FileName);
+                    #region 保存文件到物理路径
+                    string fileDisplayName = Path.GetFileName(file.FileName);
                     string path = Base.Config.BConfig.GetConfigToString(pathName);//获取文件目录
 
                     if (Directory.Exists(path) == false)
@@ -67,12 +69,32 @@ namespace CS.WebUI.Controllers
                     }
 
                     path = new DirectoryInfo(path).FullName;
-                    //格式说明：{时间}-{用户}-{文件字节大小}_{文件原名}
-                    fileName = string.Format("{0}-{1}-{2}_&&_{3}", DateTime.Now.ToString("yyyyMMdd-HHmmss"), SystemSession.UserName, file.ContentLength, fileName);
+                    //格式说明：{时间}-{用户工号}-{文件字节大小}_{文件原名}
+                    fileName = string.Format("{0}-{1}-{2}_&&_{3}", DateTime.Now.ToString("yyyyMMdd-HHmmss"), SystemSession.UserName, file.ContentLength, fileDisplayName);
                     string saveName = string.Format("{0}\\{1}", path, fileName);
                     file.SaveAs(saveName);
+                    #endregion
+
+                    #region 保存信息到文件表 fileEntity
+                    int fileId = CS.BLL.FW.SR_FILES.Instance.GetNextValueFromSeqDef();//主键ID
+                    CS.BLL.FW.SR_FILES.Entity fileEntity = new SR_FILES.Entity()
+                    {
+                        ID = fileId,
+                        CREATE_TIME = DateTime.Now,
+                        CREATE_UID = SystemSession.UserID,
+                        IS_DELETE = 0,
+                        DISPLAY_NAME = fileDisplayName,
+                        REAL_NAME = fileName,
+                        FILE_SIZE = file.ContentLength,
+                        FORMAT = Path.GetExtension(file.FileName),
+                        PATH = path
+                    };
+                    CS.BLL.FW.SR_FILES.Instance.Add(fileEntity);//保存
+                    #endregion
+
                     result.IsSuccess = true;
-                    result.Message = fileName;
+                    result.Message = "保存文件成功";
+                    result.Result = SerializeObject(fileEntity);
                 }
                 catch (Exception ex)
                 {
@@ -87,6 +109,28 @@ namespace CS.WebUI.Controllers
                 result.Message = "客户端未上载文件！";
             }
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        /// 序列化格式设置
+        /// </summary>
+        private static JsonSerializerSettings _jsonSerializerSettings = null;
+        /// <summary>
+        /// 序列化为JSON字符串
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected string SerializeObject(object data)
+        {
+            if (_jsonSerializerSettings == null)
+            {
+                _jsonSerializerSettings = new JsonSerializerSettings();
+                _jsonSerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
+            }
+
+            //转为JSON字符串
+            return JsonConvert.SerializeObject(data, _jsonSerializerSettings);
         }
     }
 }

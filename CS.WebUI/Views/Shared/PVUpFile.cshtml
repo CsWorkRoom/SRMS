@@ -27,35 +27,37 @@
 
                     @if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
                     {
-                        List<CS.WebUI.Models.FilesModel> list = new List<CS.WebUI.Models.FilesModel>();//附件类
+                        //获得已上传的文件
+                        var fileList = CS.BLL.FW.SR_FILES.Instance.GetList<CS.BLL.FW.SR_FILES.Entity>("ID IN (?)", Model.FILES.Substring(1));
+                        //List<CS.WebUI.Models.FilesModel> list = new List<CS.WebUI.Models.FilesModel>();//附件类
 
-                        var fileArr = Model.FILES.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                        if (fileArr != null && fileArr.Length > 0)
-                        {
-                            foreach (var f in fileArr)
-                            {
-                                //"{0}-{1}-{2}_{3}"
-                                var preStr = f.Substring(0, f.IndexOf("_&&_"));//前缀串
-                                list.Add(new CS.WebUI.Models.FilesModel
-                                {
-                                    FILE_NAME = f.Substring(f.IndexOf("_&&_") + 4),
-                                    FILE_PATH = CS.Base.Config.BConfig.GetConfigToString(Model.PathName) + "\\" + f,
-                                    FILE_SIZE = Convert.ToInt32(preStr.Substring(preStr.LastIndexOf('-') + 1)),
-                                    REAL_FILE_NAME = f
-                                });
-                            }
-                        }
-                        foreach (var item in list)
+                        //var fileArr = Model.FILES.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        //if (fileArr != null && fileArr.Length > 0)
+                        //{
+                        //    foreach (var f in fileArr)
+                        //    {
+                        //        //"{0}-{1}-{2}_{3}"
+                        //        var preStr = f.Substring(0, f.IndexOf("_&&_"));//前缀串
+                        //        list.Add(new CS.WebUI.Models.FilesModel
+                        //        {
+                        //            FILE_NAME = f.Substring(f.IndexOf("_&&_") + 4),
+                        //            FILE_PATH = CS.Base.Config.BConfig.GetConfigToString(Model.PathName) + "\\" + f,
+                        //            FILE_SIZE = Convert.ToInt32(preStr.Substring(preStr.LastIndexOf('-') + 1)),
+                        //            REAL_FILE_NAME = f
+                        //        });
+                        //    }
+                        //}
+                        foreach (var item in fileList)
                         {
                             <tr>
-                                <th><a href="@item.FILE_PATH" download="@item.FILE_NAME">@item.FILE_NAME</a></th>
+                                <th><a href="@item.PATH" download="">@item.DISPLAY_NAME</a></th>
                                 <th>
                                     @Math.Round((Double)item.FILE_SIZE / 1024, 1)
                                     KB
                                 </th>
                                 <th><span style="color: #5FB878;">已上传</span></th>
                                 <th>
-                                    <input type="hidden" class="demo-real-name" value="@item.REAL_FILE_NAME" />
+                                    <input type="hidden" class="demo-real-name" value="@item.REAL_NAME" />
                                     <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="upfile.deleteFile(this);">删除</button>
                                 </th>
                             </tr>
@@ -136,12 +138,14 @@
                   var tr = fileListView.find('tr#upload-' + index), tds = tr.children();
                   tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
                   //tds.eq(3).html(''); //清空操作
-                  var opHt = '<input type="hidden" class="demo-real-name" value="' + res.Message + '" />';
+
+                  var curFile = $.parseJSON(res.Result);//获得返回文件信息
+                  var opHt = '<input type="hidden" class="demo-real-name" value="' + curFile.ID + '" />';
                   opHt += '<button class="layui-btn layui-btn-mini layui-btn-danger" onclick="upfile.deleteFile(this);">删除</button>';
                   tds.eq(3).html(opHt); //调整操作区（为删除）
                   //res.Message;
                   var files = $("#FILES").val();//获取已上传文件(以逗号隔开)
-                  files = files + "," + res.Message;
+                  files = files + "," + curFile.ID;
                   $("#FILES").val(files);
                   return delete this.files[index]; //删除文件队列已经上传成功的文件
               }
@@ -161,7 +165,7 @@
         //删除上传附件
         deleteFile: function (curCtr) {
             //删除tr，同时删除Files中的值
-            var realFileName = $(curCtr).prev().val();//真实名
+            var realFileName = $(curCtr).prev().val();//文件ID
             var $tr = $(curCtr).parent().parent();
             $tr.remove();
             if (realFileName != null && realFileName.length > 0) {
@@ -169,6 +173,9 @@
                 var reg = new RegExp(","+realFileName,"g");
                 files = files.replace(reg,'');
                 $("#FILES").val(files);
+
+                //#region 将SR_FILES中对应信息标记为删除（未实现）
+                //#endregion
             }
         }
     }
