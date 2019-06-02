@@ -76,8 +76,8 @@ namespace CS.WebUI.Controllers
                     #endregion
 
                     #region 保存信息到文件表 fileEntity
-                    int fileId = CS.BLL.FW.SR_FILES.Instance.GetNextValueFromSeqDef();//主键ID
-                    CS.BLL.FW.SR_FILES.Entity fileEntity = new SR_FILES.Entity()
+                    int fileId = CS.BLL.SR.SR_FILES.Instance.GetNextValueFromSeqDef();//主键ID
+                    CS.BLL.SR.SR_FILES.Entity fileEntity = new BLL.SR.SR_FILES.Entity()
                     {
                         ID = fileId,
                         CREATE_TIME = DateTime.Now,
@@ -89,7 +89,7 @@ namespace CS.WebUI.Controllers
                         FORMAT = Path.GetExtension(file.FileName),
                         PATH = path
                     };
-                    CS.BLL.FW.SR_FILES.Instance.Add(fileEntity);//保存
+                    CS.BLL.SR.SR_FILES.Instance.Add(fileEntity);//保存
                     #endregion
 
                     result.IsSuccess = true;

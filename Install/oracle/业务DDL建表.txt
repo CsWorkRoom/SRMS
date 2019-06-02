@@ -83,3 +83,32 @@ comment on column SR_FILES.IS_DELETE is
 '1：在用
 0：删除';
 
+--------课题完善表---------------
+create table SR_TOPIC_DETAIL 
+(
+   ID                   INTEGER              not null,
+   TOPIC_ID             INTEGER  not null,
+   SUBJECT_ID           INTEGER              not null,
+   DEPARTMENT_ID        INTEGER              not null,
+   ACCOUNTING_TYPE_ID   INTEGER              ,
+   REMARK               VARCHAR(1024),
+   FILES                VARCHAR(2048),
+   CREATE_UID    INTEGER DEFAULT 0 NOT NULL,
+   UPDATE_UID    INTEGER DEFAULT 0 NOT NULL,
+   CREATE_TIME   TIMESTAMP DEFAULT SYSDATE NOT NULL,
+   UPDATE_TIME   TIMESTAMP DEFAULT SYSDATE NOT NULL,
+   constraint PK_SR_TOPIC_DETAIL primary key (ID)
+);
+
+--------课题完善表参与单位信息---------------
+create table SR_TOPIC_DETAIL_COMPANY 
+(
+   ID                   INTEGER              not null,
+   TOPIC_DETAIL_ID      INTEGER              not null,
+   NAME                 VARCHAR(256)         not null,
+   PHONE                VARCHAR(32),
+   ADDRESS              VARCHAR(256),
+   REMARK               VARCHAR(512),
+   constraint PK_SR_TOPIC_DETAIL_COMPANY primary key (ID)
+);
+

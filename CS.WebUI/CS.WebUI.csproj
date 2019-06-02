@@ -1643,6 +1643,7 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrTopicDetail\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\Edit.css" />
     <Content Include="Views\SrTopic\JS\Edit.js" />
     <Content Include="Web.config" />
@@ -1653,6 +1654,7 @@
     <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrTopicDetailController.cs" />
     <Compile Include="Controllers\SR\SrTopicController.cs" />
     <Compile Include="Controllers\UpFileController.cs" />
     <Compile Include="Controllers\FW\ABaseController.cs" />
@@ -1864,6 +1866,7 @@
     <Content Include="Views\AfFlow\Edit.cshtml" />
     <Content Include="Views\AfFlowCase\Create.cshtml" />
     <Content Include="Views\AfFlowCase\Deal.cshtml" />
+    <Content Include="Views\SrTopicDetail\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
