@@ -32,13 +32,21 @@ namespace CS.WebUI.Controllers.FW
             {
                 ShowAlert(string.Format("课题编号[{0}]应大于0", topicId));
             }
-
+            ViewBag.Companys = "[]";//参与单位值初始化
             var ent = SR_TOPIC_DETAIL.Instance.GetEntity<SR_TOPIC_DETAIL.Entity>("TOPIC_ID=?", topicId);
             if(ent==null||ent.ID<1)
             {
                 ent = new SR_TOPIC_DETAIL.Entity();
             }
-
+            else
+            {
+                //课题完善信息和合作单位集合
+                var companyList= SR_TOPIC_DETAIL_COMPANY.Instance.GetList<SR_TOPIC_DETAIL_COMPANY.Entity>("TOPIC_DETAIL_ID=?", ent.ID);
+                if(companyList!=null&&companyList.Count>0)
+                {
+                    ViewBag.Companys = SerializeObject(companyList);
+                }
+            }
             #region 初始赋值
             ent.TOPIC_ID = topicId;
             #endregion
@@ -147,6 +155,11 @@ namespace CS.WebUI.Controllers.FW
                     result.Message = "出现了未知错误";
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
+
+                #region 保存合作单位信息
+                string companys = collection["Companys"];
+                SR_TOPIC_DETAIL_COMPANY.Instance.SaveCompanys(entity.ID, companys);
+                #endregion
 
                 result.IsSuccess = true;
                 result.Message = "保存成功";

@@ -106,7 +106,9 @@ create table SR_TOPIC_DETAIL_COMPANY
    ID                   INTEGER              not null,
    TOPIC_DETAIL_ID      INTEGER              not null,
    NAME                 VARCHAR(256)         not null,
+   LINK_NAME            VARCHAR(64)         not null,
    PHONE                VARCHAR(32),
+   IS_CONTRACT          SMALLINT DEFAULT 0,
    ADDRESS              VARCHAR(256),
    REMARK               VARCHAR(512),
    constraint PK_SR_TOPIC_DETAIL_COMPANY primary key (ID)

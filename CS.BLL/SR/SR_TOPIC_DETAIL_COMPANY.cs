@@ -75,6 +75,10 @@ namespace CS.BLL.SR
         #endregion
 
         #region 方法
+        public void SaveCompanys(int topicDetailId,string companys)
+        {
+
+        }
         #endregion
     }
 }

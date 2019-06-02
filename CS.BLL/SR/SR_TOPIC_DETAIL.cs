@@ -105,19 +105,5 @@ namespace CS.BLL.SR
         }
         #endregion
 
-        #region 支持的底层方法(一般为对表的增删改操作)
-        /// <summary>
-        /// 添加一个学科完善信息
-        /// </summary>
-        /// <param name="ent"></param>
-        public void Add(Entity ent)
-        {
-
-        }
-
-        public void Update(Entity ent)
-        { }
-        #endregion
-
     }
 }
