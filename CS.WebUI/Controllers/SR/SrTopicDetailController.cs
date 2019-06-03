@@ -158,11 +158,12 @@ namespace CS.WebUI.Controllers.FW
 
                 #region 保存合作单位信息
                 string companys = collection["Companys"];
-                SR_TOPIC_DETAIL_COMPANY.Instance.SaveCompanys(entity.ID, companys);
+                int delCount = 0, addCount = 0,updateCount = 0;
+                SR_TOPIC_DETAIL_COMPANY.Instance.SaveCompanys(entity.ID, companys, out addCount, out updateCount, out delCount);
                 #endregion
 
                 result.IsSuccess = true;
-                result.Message = "保存成功";
+                result.Message = string.Format("保存成功！\r\n合作单位：新增【{0}】,修改【{1}】,删除【{2}】", addCount, updateCount, delCount);
                 WriteOperationLog(BLog.LogLevel.INFO, true, Modular, (entity.ID > 0 ? "修改" : "添加"), "", (entity.ID > 0 ? "修改" : "添加") + "ID为" + entity.ID + "的信息成功！");
             }
             catch (Exception ex)

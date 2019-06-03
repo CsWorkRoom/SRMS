@@ -62,7 +62,7 @@ var company = {
           , size: 'sm'
           , cols: [[
             { field: 'ID', title: '编号', hidden: true }
-            , { field: 'NAME', title: '参与单位', edit: 'text', width: 200}
+            , { field: 'NAME', title: '参与单位名称', edit: 'text', width: 200}
             , { field: 'LINK_NAME', title: '单位联系人', edit: 'text', width: 150 }
             , { field: 'PHONE', title: '联系电话', edit: 'text', width: 120 }
             , { field: 'IS_CONTRACT', title: '是否有合作协议', templet: '#checkboxContract', width: 180 }
