@@ -75,15 +75,18 @@ var budget = {
                         return;
                     }
                     //#endregion
+
+                    $("#tipFee").html(budget.getTotalFee());//总预算的提示信息
                 }
             });
         });
+        $("#tipFee").html(budget.getTotalFee());//总预算的提示信息
     },
 
     //添加一个单位
     addBudget: function (index) {
         var item = {
-            'BUDGET_TYPE_ID': 0,
+            'BUDGET_TYPE_ID': 1,//此处应该给一个类型表中有的值作为默认值
             'FEE':0
         };
         budget.budgetArr.push(item);
@@ -107,6 +110,14 @@ var budget = {
         var val = $(obj).val();//当前选择的值
         budget.budgetArr[index]['BUDGET_TYPE_ID'] = val;
         budget.budgetRender();
+    },
+    //获得预算总金额
+    getTotalFee: function () {
+        var totalFee = 0;
+        $.each(budget.budgetArr, function (i, n) {
+            totalFee = totalFee + Number(n.FEE);
+        });
+        return totalFee;
     },
     //判断字符是否为空的方法
     isEmpty: function (obj) {

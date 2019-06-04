@@ -28,6 +28,9 @@
             <fieldset class="layui-elem-field">
                 <legend>课题预算清单</legend>
             </fieldset>
+            <blockquote class="layui-elem-quote">
+                提示：当前预算总额为 <span id="tipFee" style="font-size:18px;color:red;font-weight:bold">0</span> 元。
+            </blockquote>
             <table id="tbBudget" class="layui-table" lay-size="sm" lay-filter="tbBudget"></table><!--参与单位信息-->
             <input type="hidden" id="Budgets" name="Budgets" value="@ViewBag.Budgets" /> <!--预算列表-->
         </div>
@@ -39,5 +42,5 @@
         </div>
     </div>
 </form>
-<script src="~/Views/SrTopicBudget/JS/Edit.js?v=20190602"></script>
+<script src="~/Views/SrTopicBudget/JS/Edit.js?v=20190604"></script>
 <script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
