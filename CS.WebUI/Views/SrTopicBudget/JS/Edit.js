@@ -62,7 +62,7 @@ var budget = {
                     if (!$.isNumeric(data.FEE)) {
                         $(this).val(preValue);//恢复为修改前的值
                         data.FEE = preValue;//恢复为修改前的值
-                        layer.alert("预算值[" + data.MODIFY_FEE + "]不是数值类型！");//抛出错误
+                        layer.alert("预算值[" + data.FEE + "]不是数值类型！");//抛出错误
                         return;
                     }
                     //#endregion

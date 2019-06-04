@@ -129,3 +129,55 @@ create table SR_TOPIC_BUDGET
  UPDATE_TIME   TIMESTAMP DEFAULT SYSDATE NOT NULL,
    constraint PK_SR_TOPIC_BUDGET primary key (ID)
 );
+
+--------课题经费报销总表---------------
+create table SR_TOPIC_FUNDS 
+(
+   ID                   INTEGER              not null,
+   TOPIC_ID             INTEGER,
+   TOTAL_FEE            DECIMAL(15, 2)  default 0     not null,
+   REMARK               VARCHAR(512),
+   BANK_NAME            VARCHAR(256)         not null,
+   BANK_NO              VARCHAR(128)         not null,
+   BANK_ADDRESS         VARCHAR(256),
+   USER_NAME            VARCHAR(64),
+   USER_PHONE           VARCHAR(32),
+   FILES                VARCHAR(1024),
+   CREATE_UID           INTEGER,
+   UPDATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_TIME          TIMESTAMP,
+   AUDIT_STATUS         INTEGER,
+   constraint PK_SR_TOPIC_FUNDS primary key (ID)
+);
+
+--------课题经费明细清单---------------
+create table SR_TOPIC_FUNDS_DETAIL 
+(
+   ID                   INTEGER              not null,
+   TOPIC_ID             INTEGER,
+   TOPIC_FUNDS_ID       INTEGER,
+   NAME                 VARCHAR(128)         not null,
+   FEE                  DECIMAL(15, 2)   default 0     not null,
+   REMARK               VARCHAR(512),
+   CREATE_UID           INTEGER,
+   UPDATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_TIME          TIMESTAMP,
+   constraint PK_SR_TOPIC_FUNDS_DETAIL primary key (ID)
+);
+
+--------经费报销银行卡信息---------------
+create table SR_BANK 
+(
+   ID                   INTEGER              not null,
+   BANK_NAME            VARCHAR(256)         not null,
+   BANK_NO              VARCHAR(128)         not null,
+   BANK_ADDRESS         VARCHAR(512),
+   IS_DEFAULT           SMALLINT default 0,
+   USER_NAME            VARCHAR(64),
+   USER_PHONE           VARCHAR(32),
+   CREATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   constraint PK_SR_BANK primary key (ID)
+);

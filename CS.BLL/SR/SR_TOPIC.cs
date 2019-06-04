@@ -1,4 +1,5 @@
-﻿using CS.Library.BaseQuery;
+﻿using CS.Common;
+using CS.Library.BaseQuery;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -141,47 +142,66 @@ namespace CS.BLL.SR
 
         #endregion
 
-        /// <summary>
-        /// 添加一条课题信息
-        /// </summary>
-        /// <param name="entity">实体</param>
-        /// <param name="attachmentList"></param>
-        /// <returns></returns>
-        public int AddBulletin(Entity entity, List<string> attachmentList)
+        //获取全量课题信息(含类型树)
+        public List<ZtreeModel> GetTopicTree()
         {
-            //1:新增BF_Bulletin表数据
-            var bullId = Add(entity, true);
-            if (bullId < 1)
+            var obj = new List<ZtreeModel>();
+            #region 拼课题类
+            DataTable typeDt = SR_TOPIC_TYPE.Instance.GetTable();
+            if (typeDt != null && typeDt.Rows.Count > 0)
             {
-                return 0;
+                foreach (DataRow dr in typeDt.Rows)
+                {
+                    if (string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()))
+                    {
+                        obj.Add(new ZtreeModel
+                        {
+                            id = "type_" + dr["ID"],
+                            pId = "type_" + (string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"]),
+                            name = dr["NAME"].ToString(),
+                            icon = "/Content/zTree/img/1_open.png"
+                            //value = Convert.ToInt32(dr["ID"])
+                        });
+                    }
+                    else
+                    {
+                        obj.Add(new ZtreeModel
+                        {
+                            id = "type_" + dr["ID"],
+                            pId = "type_" + (string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"]),
+                            name = dr["NAME"].ToString(),
+                            icon = "/Content/zTree/img/7.png"
+                            //value = Convert.ToInt32(dr["ID"])
+                        });
+                    }
+                }
             }
-            
-            //3:根据attachmentList往BF_BULLETIN_ATTACH添加记录
-            BLL.FW.BF_BULLETIN_ATTACH.Instance.AddBulletinAttach(bullId, attachmentList);
-            return bullId;
+            #endregion
+
+            #region 拼课题
+            DataTable dt = Instance.GetTable();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    obj.Add(
+                        new ZtreeModel
+                        {
+                            id = dr["ID"].ToString().Trim(),
+                            pId = (string.IsNullOrWhiteSpace(dr["TOPIC_TYPE_ID"].ToString()) ? "" : "type_" + dr["TOPIC_TYPE_ID"]),
+                            name = dr["NAME"].ToString(),
+                            icon = "/Content/zTree/img/3.png"//图标
+                        });
+                }
+            }
+            #endregion
+            return obj;
         }
-
-
-   
-       
-
-        /// <summary>
-        /// 分页查询课题信息
-        /// </summary>
-        /// <param name="pageSize"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="order"></param>
-        /// <param name="where"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        public IList<Entity> GetListPage(int pageSize, int pageIndex, Order order, string where = "", params object[] values)
+        //根据用户获得与之相关的课题信息
+        public void GetTopicTreeByUser()
         {
-            IList<Entity> list = base.GetListPage<Entity>(pageSize, pageIndex, order, where, values);
 
-            return list;
         }
-
-      
 
     }
 }
