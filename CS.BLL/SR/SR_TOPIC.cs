@@ -129,6 +129,14 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsNotNull = false, DefaultValue = "0", Comment = "课题状态")]
             public int STATE { get; set; }
+
+            #region CS增加字段
+            /// <summary>
+            /// 课题总预算
+            /// </summary>
+            [Field(IsNotNull = false, DefaultValue = "0", Comment = "课题总预算")]
+            public double TOTAL_FEE { get; set; }
+            #endregion
         }
 
         #endregion

@@ -114,3 +114,18 @@ create table SR_TOPIC_DETAIL_COMPANY
    constraint PK_SR_TOPIC_DETAIL_COMPANY primary key (ID)
 );
 
+--------øŒÃ‚‘§À„±Ì---------------
+create table SR_TOPIC_BUDGET 
+(
+   ID                   INTEGER              not null,
+   TOPIC_ID             INTEGER   not null,
+   BUDGET_TYPE_ID       INTEGER DEFAULT 0,
+   NAME                 VARCHAR(128)         not null,
+   FEE                  DECIMAL(15, 2)       not null,
+   REMARK               VARCHAR(512),
+   CREATE_UID    INTEGER DEFAULT 0 NOT NULL,
+  UPDATE_UID    INTEGER DEFAULT 0 NOT NULL,
+  CREATE_TIME   TIMESTAMP DEFAULT SYSDATE NOT NULL,
+ UPDATE_TIME   TIMESTAMP DEFAULT SYSDATE NOT NULL,
+   constraint PK_SR_TOPIC_BUDGET primary key (ID)
+);
