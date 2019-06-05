@@ -27,10 +27,10 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">报销总额<span class="imust">*</span></label>
                     <div class="layui-input-inline">
-                        <div class="layui-col-xs9">
+                        <div class="layui-col-xs10">
                             <input type="text" name="TOTAL_FEE" id="TOTAL_FEE" lay-verify="totalFeeMust"  placeholder="请填写报销总金额"  value="@Model.TOTAL_FEE" autocomplete="off" class="layui-input">
                          </div> 
-                        <div class="layui-col-xs3">
+                        <div class="layui-col-xs2">
                             <span>元</span>
                         </div>
                     </div>
@@ -38,23 +38,49 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">开户行<span class="imust">*</span></label>
+                    <label class="layui-form-label">银行帐号<span class="imust">*</span></label>
                     <div class="layui-input-inline">
-                        <input type="text" name="BANK_NAME" id="BANK_NAME" placeholder="请填写开户行" lay-verify="require" value="@Model.BANK_NAME" autocomplete="off" class="layui-input">
+                        <div class="layui-row">
+                            <div class="layui-col-md8">
+                                <input type="text" name="BANK_NO" id="BANK_NO" placeholder="请填写银行帐号" lay-verify="required" value="@Model.BANK_NO" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-col-md4">
+                                <button id="selectBankBtn" class="layui-btn layui-btn-normal" title="选择已经填报过的银行" onclick="funds.ShowTree(); return false;">
+                                    已有银行
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">银行帐号<span class="imust">*</span></label>
+                    <label class="layui-form-label">开户行<span class="imust">*</span></label>
                     <div class="layui-input-inline">
-                        <input type="text" name="BANK_NO" id="BANK_NO" placeholder="请填写银行帐号" lay-verify="require" value="@Model.BANK_NO" autocomplete="off" class="layui-input">
+                        <input type="text" name="BANK_NAME" id="BANK_NAME" placeholder="请填写开户行" lay-verify="required" value="@Model.BANK_NAME" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+            </div>
+            <!-- zTree树状图 相对定位在其下方 -->
+            <div class="csZtree" style="display:none; position: absolute;border:1px solid #4aa5ff;">
+                <select id="bankSelect" name="bankSelect" lay-filter="selectGroup">
+                    <option value="-1">--请选择--</option>
+                    @if (ViewBag.Banks != "[]")
+                    {
+                        foreach (var item in ViewBag.Banks)
+                        {
+                            <option value="@item.ID">@(item.BANK_NAME + "(" + item.BANK_NO + ")")</option>
+                        }
+                    }
+                </select>
+                @if (ViewBag.Banks == "[]")
+                {
+                    <span style="font-size:18px;color:red">提示：当前未收录有银行信息</span>
+                }
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">开户行地址<span class="imust">*</span></label>
                     <div class="layui-input-inline">
-                        <input type="text" name="BANK_ADDRESS" id="BANK_ADDRESS" placeholder="请填写开户行地址" lay-verify="require" value="@Model.BANK_ADDRESS" autocomplete="off" class="layui-input">
+                        <input type="text" name="BANK_ADDRESS" id="BANK_ADDRESS" placeholder="请填写开户行地址" lay-verify="required" value="@Model.BANK_ADDRESS" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -110,5 +136,5 @@
         </div>
     </div>
 </form>
-<script src="~/Views/SrTopicFunds/JS/Edit.js?v=20190605"></script>
+<script src="~/Views/SrTopicFunds/JS/Edit.js?v=20190603"></script>
 <script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>

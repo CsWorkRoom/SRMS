@@ -37,6 +37,8 @@ layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function (
     //提交
     form.on('submit(submit)', function (data) {//验证提交
         $("#FundsDetails").val(JSON.stringify(funds.fundsDetailArr));
+
+        $("#IS_DEFAULT_BANK").val(0);
         $("#DefaultCk:checked").each(function () { // 遍历指标维度多选框
             $("#IS_DEFAULT_BANK").val(1);//1为选中
         });
@@ -52,6 +54,10 @@ layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function (
         }
         //#endregion
         save();//保存
+    });
+
+    form.on('select(selectGroup)', function (data) {
+        funds.ChangeBankSelect();
     });
 
     //#region 三个下拉绑定
@@ -125,6 +131,7 @@ var funds = {
                 }
             });
         });
+        $("#tipFee").html(funds.getTotalFee());//总预算的提示信息
     },
 
     //添加一个单位
@@ -163,5 +170,48 @@ var funds = {
             return false;
         }
     },
+    //显示树弹框
+    ShowTree: function () {
+        layui.use(['layer', 'jquery'], function () {
+            var layer = layui.layer, $ = layui.$;
+            layer.open({
+                type: 1
+                , title: '请勾选查询字段'
+                , btn: '关闭'
+                , btnAlign: 'c' //按钮居中
+                , area: ['390px', '300px']
+                , shade: 0 //不显示遮罩
+                , content: $('.csZtree') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+            });
+        });
+    },
+    //选择银行卡后的动作
+    ChangeBankSelect: function () {
+        var bankId = $("#bankSelect").val();
+        if (bankId == -1)//未选择
+        {
+
+        }
+        else//赋值后关闭弹框
+        {
+            var banks = $("#Banks").val();
+            if(!funds.isEmpty(banks)&&banks.length>0)
+            {
+                var bankArr = $.parseJSON(banks);
+                $.each(funds.bankArr, function (i, n) {
+                    if(n.ID==bankId)
+                    {
+                        $("#BANK_NAME").val(n.BANK_NAME);
+                        $("#BANK_NO").val(n.BANK_NO);
+                        $("#BANK_ADDRESS").val(n.BANK_ADDRESS);
+                        $("#USER_NAME").val(n.USER_NAME);
+                        $("#USER_PHONE").val(n.USER_PHONE);
+                        layer.closeAll();
+                        return false;
+                    }
+                });
+            }
+        }
+    }
 }
 //#endregion

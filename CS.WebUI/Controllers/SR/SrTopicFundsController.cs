@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using CS.WebUI.Models.FW;
 using CS.BLL.SR;
 using System.Text;
+using CS.Base.DBHelper;
 
 namespace CS.WebUI.Controllers.FW
 {
@@ -96,7 +97,7 @@ namespace CS.WebUI.Controllers.FW
 
             try
             {
-                throw new Exception("抛出错误");
+                //throw new Exception("抛出错误");
                 #region 00.数据校验(暂未实现)
                 //校验经费总金额与清单经费金额之和是否相等
                 #endregion
@@ -119,7 +120,46 @@ namespace CS.WebUI.Controllers.FW
                 }
                 #endregion
 
-                #region 01-2.附件银行卡信息自动存储(暂未实现)
+                #region 01-2.附件银行卡信息自动存储
+                short isDefault = Convert.ToInt16(collection["IS_DEFAULT_BANK"]);
+                var bankList= SR_BANK.Instance.GetList<SR_BANK.Entity>("CREATE_UID=?", SystemSession.UserID);
+                if(bankList!=null&&bankList.Count>0)
+                {
+                    var bank = bankList.FirstOrDefault(p => p.BANK_NO == ent.BANK_NO);
+                    if (bank != null && bank.ID > 0)
+                    {
+                        bank.BANK_NAME = ent.BANK_NAME;
+                        bank.BANK_ADDRESS = ent.BANK_ADDRESS;
+                        bank.USER_NAME = ent.USER_NAME;
+                        bank.USER_PHONE = ent.USER_PHONE;
+                        bank.IS_DEFAULT = isDefault;
+                        if (isDefault == 1)
+                        {
+                            foreach (var item in bankList)
+                            {
+                                item.IS_DEFAULT = 0;
+                                SR_BANK.Instance.UpdateByKey(item, item.ID);
+                            }
+                        }
+                        SR_BANK.Instance.UpdateByKey(bank, bank.ID);
+                    }
+                    else
+                    {
+                        if (isDefault == 1)
+                        {
+                            foreach (var item in bankList)
+                            {
+                                item.IS_DEFAULT = 0;
+                                SR_BANK.Instance.UpdateByKey(item, item.ID);
+                            }
+                        }
+                        SaveBank(ent, isDefault);
+                    }
+                }
+                else
+                {
+                    SaveBank(ent, isDefault);
+                }
                 #endregion
 
                 int addCount = 0, updateCount = 0, delCount = 0;
@@ -128,6 +168,12 @@ namespace CS.WebUI.Controllers.FW
                 if (!string.IsNullOrWhiteSpace(fundsDetails) && fundsDetails.Length > 0)
                 {
                     SR_TOPIC_FUNDS_DETAIL.Instance.SaveFundsDetail(fundsId, ent.TOPIC_ID, fundsDetails, out addCount, out updateCount, out delCount);
+                    #region 修改经费清单表字段：TOPIC_ID、TOPIC_FUNDS_ID
+                    using (BDBHelper db = new BDBHelper())
+                    {
+                        db.ExecuteNonQuery(string.Format(@"UPDATE SR_TOPIC_FUNDS_DETAIL SET TOPIC_ID={0} WHERE TOPIC_FUNDS_ID={1}", ent.TOPIC_ID, fundsId));
+                    }
+                    #endregion
                 }
                 #endregion
 
@@ -143,6 +189,21 @@ namespace CS.WebUI.Controllers.FW
                 WriteOperationLog(BLog.LogLevel.ERROR, false, Modular, "经费报销填报", "", err);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        private void SaveBank(SR_TOPIC_FUNDS.Entity ent,short isDefault)
+        {
+            SR_BANK.Entity newBank = new SR_BANK.Entity();
+            newBank.ID = SR_BANK.Instance.GetNextValueFromSeqDef();
+            newBank.BANK_NO = ent.BANK_NO;
+            newBank.BANK_NAME = ent.BANK_NAME;
+            newBank.BANK_ADDRESS = ent.BANK_ADDRESS;
+            newBank.USER_NAME = ent.USER_NAME;
+            newBank.USER_PHONE = ent.USER_PHONE;
+            newBank.IS_DEFAULT = isDefault;
+            newBank.CREATE_TIME = DateTime.Now;
+            newBank.CREATE_UID = SystemSession.UserID;
+            SR_BANK.Instance.Add(newBank);
         }
 
     }
