@@ -118,6 +118,8 @@
     <Compile Include="SR\SR_ACCOUNTING_TYPE.cs" />
     <Compile Include="SR\SR_TOPIC_BUDGET.cs" />
     <Compile Include="SR\SR_BANK.cs" />
+    <Compile Include="SR\SR_TOPIC_TASK_DONE.cs" />
+    <Compile Include="SR\SR_TOPIC_TASK.cs" />
     <Compile Include="SR\SR_TOPIC_FUNDS_DETAIL.cs" />
     <Compile Include="SR\SR_TOPIC_FUNDS.cs" />
     <Compile Include="SR\SR_TOPIC_DETAIL_COMPANY.cs" />

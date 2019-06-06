@@ -181,3 +181,34 @@ create table SR_BANK
    CREATE_TIME          TIMESTAMP,
    constraint PK_SR_BANK primary key (ID)
 );
+
+--------课题中期检查任务---------------
+create table SR_TOPIC_TASK 
+(
+   ID                   INTEGER              not null,
+   TOPIC_ID             INTEGER  not null,
+   NAME                 VARCHAR(128)  not null,
+   BEGIN_TIME           TIMESTAMP,
+   END_TIME             TIMESTAMP,
+   REMARK               VARCHAR(1024),
+   FILES                VARCHAR(1024),
+   CREATE_UID           INTEGER,
+   UPDATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_TIME          TIMESTAMP,
+   constraint PK_SR_TOPIC_TASK primary key (ID)
+);
+--------课题中期检查任务执行情况---------------
+create table SR_TOPIC_TASK_DONE 
+(
+   ID                   INTEGER              not null,
+   TOPIC_TASK_ID        INTEGER not null,
+   TOPIC_ID             INTEGER not null,
+   FILES                VARCHAR(1024),
+   REMARK               VARCHAR(1024),
+   CREATE_UID           INTEGER,
+   UPDATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_TIME          TIMESTAMP,
+   constraint PK_SR_TOPIC_TASK_DONE primary key (ID)
+);
