@@ -24,6 +24,7 @@ namespace CS.WebUI.Controllers.FW
     {
         public string Modular = "课题中期检查任务";
 
+        #region 任务下达
         /// <summary>
         /// 编辑及新增
         /// </summary>
@@ -122,5 +123,124 @@ namespace CS.WebUI.Controllers.FW
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region 任务执行
+        /// <summary>
+        /// 编辑及新增
+        /// </summary>
+        /// <param name="topicTaskId">课题中期任务编号</param>
+        /// <returns></returns>
+        public ActionResult Done(int topicTaskId = 0)
+        {
+            #region 00.校验任务是否已处理
+            string msg = "";
+            if (IsDoneTask(topicTaskId, out msg))
+            {
+                //ShowAlert(msg);
+                return Content("<script>alert('" + msg + "');window.location.href='about:blank';window.close();</script>");
+            }
+            #endregion
+
+            SR_TOPIC_TASK_DONE.Entity done = new SR_TOPIC_TASK_DONE.Entity();
+            ViewBag.Task = null;
+
+            #region 01.任务主体
+            ViewBag.BeginEndData = "";
+            if (topicTaskId>0)
+            {
+                SR_TOPIC_TASK.Entity task = SR_TOPIC_TASK.Instance.GetEntityByKey<SR_TOPIC_TASK.Entity>(topicTaskId);
+                if (task.BEGIN_TIME != null)
+                {
+                    //时间范围
+                    ViewBag.BeginEndData = task.BEGIN_TIME.Value.ToString("yyyy-MM-dd") + " - " + task.END_TIME.Value.ToString("yyyy-MM-dd");
+                }
+                done.TOPIC_TASK_ID = topicTaskId;
+                done.TOPIC_ID = task.TOPIC_ID;
+                ViewBag.Task = task;
+            }
+            #endregion
+
+            #region 02.课题下拉(树状结构)
+            var list = SR_TOPIC.Instance.GetTopicTree();
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    item.icon = ApplicationPath + item.icon;
+                }
+            }
+            //课题下拉树
+            ViewBag.TopicSelect = SerializeObject(list);
+            #endregion
+
+            return View(done);
+        }
+
+        /// <summary>
+        /// 编辑提交(暂时未考虑审核)
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public JsonResult Done(SR_TOPIC_TASK_DONE.Entity ent)
+        {
+            JsonResultData result = new JsonResultData();
+
+            try
+            {
+                #region 00.校验任务是否已处理
+                string msg = "";
+                if (IsDoneTask(ent.TOPIC_TASK_ID, out msg))
+                {
+                    result.IsSuccess = false;
+                    throw new Exception(msg);
+                }
+                #endregion
+
+                #region 01.保存任务执行
+                ent.UPDATE_TIME = DateTime.Now;
+                ent.UPDATE_UID = SystemSession.UserID;
+                if (ent.ID == 0)
+                {
+                    var entId = SR_TOPIC_TASK_DONE.Instance.GetNextValueFromSeqDef();
+                    ent.CREATE_TIME = DateTime.Now;
+                    ent.CREATE_UID = SystemSession.UserID;
+                    ent.ID = entId;
+                    SR_TOPIC_TASK_DONE.Instance.Add(ent);
+                }
+                else
+                {
+                    SR_TOPIC_TASK_DONE.Instance.UpdateByKey(ent, ent.ID);
+                }
+                #endregion
+
+
+                result.IsSuccess = true;
+                result.Message = string.Format(@"中期检查任务处理成功!");
+            }
+            catch (Exception ex)
+            {
+                string err = string.Format(@"中期检查任务处理失败：{0}", ex.Message);
+                result.IsSuccess = false;
+                result.Message = err;
+                BLog.Write(BLog.LogLevel.ERROR, err);
+                WriteOperationLog(BLog.LogLevel.ERROR, false, Modular, "中期检查任务处理", "", err);
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        private bool IsDoneTask(int topicTaskId,out string msg)
+        {
+            bool resBool = false;
+            msg = "";
+            var doneList = SR_TOPIC_TASK_DONE.Instance.GetList<SR_TOPIC_TASK_DONE.Entity>("TOPIC_TASK_ID=? AND CREATE_UID=?", topicTaskId, SystemSession.UserID);
+            if(doneList!=null&&doneList.Count>0)
+            {
+                msg = "您当前所使用的工号已经提交处理了本任务，请勿重复处理。";
+                resBool = true;
+            }
+            return resBool;
+        }
+        #endregion
     }
 }

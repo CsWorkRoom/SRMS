@@ -1645,6 +1645,7 @@
     <Content Include="Views\ImportApproval\JS\Approval.js" />
     <Content Include="Views\SrTopicBudget\JS\Edit.js" />
     <Content Include="Views\SrTopicDetail\JS\Edit.js" />
+    <Content Include="Views\SrTopicTask\JS\Done.js" />
     <Content Include="Views\SrTopicTask\JS\Edit.js" />
     <Content Include="Views\SrTopicFunds\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\Edit.css" />
@@ -1876,6 +1877,7 @@
     <Content Include="Views\SrTopicBudget\Edit.cshtml" />
     <Content Include="Views\SrTopicFunds\Edit.cshtml" />
     <Content Include="Views\SrTopicTask\Edit.cshtml" />
+    <Content Include="Views\SrTopicTask\Done.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
