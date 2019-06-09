@@ -198,7 +198,7 @@ var funds = {
             if(!funds.isEmpty(banks)&&banks.length>0)
             {
                 var bankArr = $.parseJSON(banks);
-                $.each(funds.bankArr, function (i, n) {
+                $.each(bankArr, function (i, n) {
                     if(n.ID==bankId)
                     {
                         $("#BANK_NAME").val(n.BANK_NAME);
@@ -206,7 +206,7 @@ var funds = {
                         $("#BANK_ADDRESS").val(n.BANK_ADDRESS);
                         $("#USER_NAME").val(n.USER_NAME);
                         $("#USER_PHONE").val(n.USER_PHONE);
-                        layer.closeAll();
+                        layer.closeAll();//关闭所有弹框
                         return false;
                     }
                 });
