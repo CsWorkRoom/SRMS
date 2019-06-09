@@ -5,6 +5,8 @@
 <form id="form" class="layui-form" action="" method="post">
     <input type="hidden" id="TypeSelect"  value="@ViewBag.TypeSelect"/>
     <input type="hidden" id="ID" name="ID" value="@Model.ID"/>
+    <input type="hidden" id="CREATE_USER_ID" name="CREATE_USER_ID" value="@Model.CREATE_USER_ID"/>
+    <input type="hidden" id="CREATE_TIME" name="CREATE_TIME" value="@Model.CREATE_TIME"/>
     <div class="form-top-content">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>课题基础信息</legend>
@@ -43,7 +45,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">课题备注<span class="imust">*</span></label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入公告内容" id="REMARK" name="REMARK" rows="8" style="width:100%" lay-verify="remark"   class="layui-textarea">@Model.REMARK</textarea>
+                <textarea placeholder="请输入内容" id="REMARK" name="REMARK" rows="8" style="width:100%" lay-verify="remark"   class="layui-textarea">@Model.REMARK</textarea>
             </div>
         </div>
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
@@ -61,7 +63,16 @@
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>相关文件</legend>
         </fieldset>
-        
+    <div class="layui-form-item" >
+        <!--引入外导文件视图-->
+        @Html.Partial("PVUpFile",
+            new CS.WebUI.Models.FileMsg
+            {
+                PathName = "TopicDetailPath",//存放文件的目录名.在web.config中配置
+                FILES = Model.FILES,
+                IsRequire = false//是否必填项（true=必填，false=非必填）,默认非必填
+            })
+    </div>
     </div>
     <div class="form-bottom-submit">
         <div class="layui-inline">

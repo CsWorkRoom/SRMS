@@ -4,57 +4,66 @@
 <input type="hidden" id="pathName" value="@Model.PathName" /> <!--文件所在目录-->
 <div style="padding:10px;">
     <div class="layui-upload">
-        <button type="button" class="layui-btn layui-btn-normal" id="testList">
-            <i class="layui-icon layui-icon-icon-import"></i>选择文件（可多选）
-            @if (Model.IsRequire)
-            {
-            <span class="imust">*</span>
-            }
-        </button>
-        <button type="button" class="layui-btn" id="testListAction">
-            <i class="layui-icon layui-icon-uploading"></i>开始上传
-        </button>
+		@if (Model.IsEnbale)
+		{
+		    <button type="button" class="layui-btn layui-btn-normal" id="testList">
+		        <i class="layui-icon layui-icon-icon-import"></i>选择文件（可多选）
+		        @if (Model.IsRequire)
+		        {
+		            <span class="imust">*</span>
+		        }
+		    </button>
+		    <button type="button" class="layui-btn" id="testListAction">
+		        <i class="layui-icon layui-icon-uploading"></i>开始上传
+		    </button>
+		}
         <div class="layui-upload-list">
             <table class="layui-table" lay-size="sm">
                 <thead>
-                    <tr>
-                        <th>文件名</th>
-                        <th>大小</th>
-                        <th>状态</th>
-                        <th>操作</th>
-                    </tr>
+                <tr>
+                    <th>文件名</th>
+                    <th>大小</th>
+                    <th>状态</th>
+                @if (Model.IsEnbale)
+                {
+                    <th>操作</th>
+                }
+                </tr>
 
-                    @if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
+                @if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
+                {
+                    using (BDBHelper db = new BDBHelper())
                     {
-                        using (BDBHelper db = new BDBHelper())
+                        var dt = db.ExecuteDataTable(string.Format("SELECT * FROM SR_FILES WHERE ID IN ({0})", Model.FILES.Substring(1)));
+                        if (dt != null && dt.Rows.Count > 0)
                         {
-                            var dt = db.ExecuteDataTable(string.Format("SELECT * FROM SR_FILES WHERE ID IN ({0})", Model.FILES.Substring(1)));
-                            if (dt != null && dt.Rows.Count > 0)
+                            for (int i = 0; i < dt.Rows.Count; i++)
                             {
-                                for (int i=0;i<dt.Rows.Count;i++)
-                                {
-                                    var row = dt.Rows[i];
-                                    <tr>
-                                        <th><a href="@(row["PATH"])" download="">@(row["DISPLAY_NAME"])</a></th>
+                                var row = dt.Rows[i];
+                                <tr>
+                                    <th><a href="@(row["PATH"])" download="">@(row["DISPLAY_NAME"])</a></th>
+                                    <th>
+                                        @(Math.Round((Double) row["FILE_SIZE"] / 1024, 1))
+                                        KB
+                                    </th>
+                                    <th><span style="color: #5FB878;">已上传</span></th>
+                                    @if (Model.IsEnbale)
+                                    {
                                         <th>
-                                            @(Math.Round((Double)row["FILE_SIZE"] / 1024, 1))
-                                            KB
+                                        <input type="hidden" class="demo-real-name" value="@row["REAL_NAME"]"/>
+                                        <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="upfile.deleteFile(this);">删除</button>
                                         </th>
-                                        <th><span style="color: #5FB878;">已上传</span></th>
-                                        <th>
-                                            <input type="hidden" class="demo-real-name" value="@row["REAL_NAME"]" />
-                                            <button class="layui-btn layui-btn-mini layui-btn-danger" onclick="upfile.deleteFile(this);">删除</button>
-                                        </th>
-                                    </tr>
-                                }
+                                    }
+                                </tr>
                             }
                         }
                     }
+                }
                 </thead>
                 <tbody id="fileList"></tbody>
             </table>
         </div>
-       
+
     </div>
     @if (Model.IsRequire)
     {

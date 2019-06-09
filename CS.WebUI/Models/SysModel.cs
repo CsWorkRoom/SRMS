@@ -38,6 +38,11 @@ namespace CS.WebUI.Models
     /// </summary>
     public class FileMsg
     {
+        public FileMsg()
+        {
+            this.IsEnbale = true;
+        }
+
         /// <summary>
         /// 文件存放目录名
         /// </summary>
@@ -50,6 +55,8 @@ namespace CS.WebUI.Models
         /// 是否必填项
         /// </summary>
         public bool IsRequire { get; set; }
+
+        public bool IsEnbale { get; set; }
     }
     #endregion
 

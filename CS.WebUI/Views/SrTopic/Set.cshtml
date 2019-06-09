@@ -64,6 +64,17 @@
                 <textarea placeholder="请输入公告内容" id="REMARK" rows="8" style="width:100%"   class="layui-textarea">@Model.REMARK</textarea>
             </div>
         </div>
+        <div class="layui-form-item" >
+            <!--引入外导文件视图-->
+            @Html.Partial("PVUpFile",
+                new CS.WebUI.Models.FileMsg
+                {
+                    PathName = "TopicDetailPath",//存放文件的目录名.在web.config中配置
+                    FILES = Model.FILES,
+                    IsEnbale=false,
+                    IsRequire = true//是否必填项（true=必填，false=非必填）,默认非必填
+                })
+        </div>
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>评审专家</legend>
         </fieldset>
@@ -76,6 +87,7 @@
             <ul id="ulUsers" class="ui">
             </ul>
         </div>
+      
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>评审规则</legend>
         </fieldset>

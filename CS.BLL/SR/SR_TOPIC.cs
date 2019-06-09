@@ -92,7 +92,7 @@ namespace CS.BLL.SR
             /// 附件IDS
             /// </summary>
             [Field(IsNotNull = false, Comment = "附件IDS")]
-            public string ATTACH_IDS { get; set; }
+            public string FILES { get; set; }
 
             /// <summary>
             /// 审批状态

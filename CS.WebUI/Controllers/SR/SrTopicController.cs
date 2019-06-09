@@ -72,25 +72,7 @@ namespace CS.WebUI.Controllers.SR
             ViewBag.TypeSelect = SerializeObject(obj);
             #endregion
 
-            #region 加载附件列表
-            string fileIds = "";
-            var fileList = BLL.FW.BF_BULLETIN_ATTACH.Instance.GetList<BLL.FW.BF_BULLETIN_ATTACH.Entity>("BULL_ID=?", id);
-            List<BulletinFileModel> list = new List<BulletinFileModel>();
-            foreach (var item in fileList)
-            {
-                fileIds += item.FILE_PATH + ",";
-                BulletinFileModel fileModel = new Models.FW.BulletinFileModel();
-                fileModel.ID = item.ID;
-                fileModel.BULL_ID = item.BULL_ID;
-                fileModel.FILE_PATH = item.FILE_PATH;
-                fileModel.FILE_NAME = Path.GetFileName(item.FILE_PATH);
-                list.Add(fileModel);
-
-            }
-
-            ViewBag.FileId = fileIds;
-            ViewBag.FileList = list;
-            #endregion
+          
             ModelState.Clear();
             return View(model);
         }
@@ -173,7 +155,7 @@ namespace CS.WebUI.Controllers.SR
         /// <returns></returns>
         public string GetTopicUsers(int topicId)
         {
-            IList<BLL.SR.SR_TOPIC_USER.Entity> ueList = BLL.SR.SR_TOPIC_USER.Instance.GetTopicUserList(topicId);
+            IList<BLL.SR.SR_TOPIC_USER.Entity> ueList = BLL.SR.SR_TOPIC_USER.Instance.GetTopicUserList(topicId).OrderByDescending(x=>x.IS_PERSON_LIABLE).ToList();
             var libaleList = ueList.Select(x => new TopicUser()
             {
                 ID = x.USER_ID,
