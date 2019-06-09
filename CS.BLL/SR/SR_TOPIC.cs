@@ -104,6 +104,19 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsNotNull = false, DefaultValue = "0", Comment = "是否立项")]
             public int IS_APPROVAL { get; set; }
+
+            /// <summary>
+            /// 立项说明
+            /// </summary>
+            [Field(IsNotNull = false, DefaultValue = "", Comment = "立项说明")]
+            public string APPROVAL_REMARK { get; set; }
+
+            /// <summary>
+            /// 立项时间
+            /// </summary>
+            [Field(IsNotNull = false,  Comment = "立项时间")]
+            public DateTime APPROVAL_TIME { get; set; }
+
             /// <summary>
             /// 课题总得分
             /// </summary>
@@ -129,6 +142,8 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsNotNull = false, DefaultValue = "0", Comment = "课题状态")]
             public int STATE { get; set; }
+
+         
         }
 
         #endregion

@@ -1,25 +1,87 @@
-﻿layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
+﻿
+
+function save() {
+    layui.use(['form', 'layer', 'jquery'], function () {
+        var form = layui.form, layer = layui.layer, $ = layui.$;
+        var url = "../SrTopic/Edit";
+        //#region 选择的人员信息
+        //#endregion
+        var nodes = getNodeUsers();
+        $("#SelectUser").val(nodes);
+        SaveForm('form', url);
+        return;
+    });
+}
+
+function getNodeUsers() {
+    var result = [];
+    $("#ulUsers li").each(function () {
+        var n = $(this);
+        var key = n.find(".badge");
+        var node = {
+            ID: 0,
+            TOPIC_ID: 0,
+            USER_ID: n.attr("uid"),
+            IS_PERSON_LIABLE: key.text() == "主" ? 1 : 0
+        };
+        result.push(node);
+    });
+    return JSON.stringify(result);
+}
+
+function getCurrDay() {
+    var data = new Date();
+    var yearCurr = data.getFullYear();
+    var monthCurr = data.getMonth();
+    var dayCurr = data.getDay();
+    var monLength = monthCurr.toString().length;
+    if (monLength == 1) {
+        monthCurr = "0" + monthCurr;
+    }
+    var dayLength = dayCurr.toString().length;
+    if (dayLength == 1) {
+        dayCurr = "0" + dayCurr;
+    }
+    return yearCurr + "-" + monthCurr + "-" + dayCurr;
+}
+
+layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
     var form = layui.form, layer = layui.layer, $ = layui.jquery
     layedit = layui.layedit, laydate = layui.laydate;
-    var index = layedit.build('remark');
+
+    var currDay = getCurrDay();
     //初始化开始时间
     laydate.render({
-        elem: '#startTime'
+        elem: '#START_TIME',
+        value: currDay
+        , isInitValue: true
     });
     //初始化结束时间
     laydate.render({
-        elem: '#endTime'
+        elem: '#END_TIME',
+        format: 'yyyy-MM-dd',
+        isInitValue: true,
+        value: currDay
     });
-    $("#tipUser").on("click", function () {
-        layer.tips($("#tipUserShow").html(), this, {
-            tips: [2, '#fff'],
-            //shade: [0.1, '#fff'],//增加遮罩层，后面控件不能操作
-            time: 0,
-            closeBtn: 1,
-            area: ['500px', '200px']
-        });
+    var remark = layedit.build('REMARK');
 
-    })
+    $("#tipUser").on("click",
+        function () {
+            var url = $("#add_users");
+
+            layer.open({
+                type: 1,
+                shade: false,
+                offset: ['5%', '20%'],
+                // shade: [0.1, '#fff'],
+                area: ['600px', '450px'],
+                title: '人员管理', //不显示标题
+                content: url //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+
+            });
+            $("#chooseUser").html("");
+            GetAllUser();
+        });
     //自定义验证规则
     form.verify({
         name: function (value) {
@@ -32,15 +94,14 @@
                 return '时间不能为空';
             }
         }
-        , remark: function (value) {
-            if (value.length == 0) {
-                return '备注不能为空';
-            }
-        }
         , type: function (value) {
             if (value.length == 0) {
                 return '课题类型不能为空';
             }
+        },
+        remark:
+        function (value) {
+            layedit.sync(remark);
         }
     });
     //提交
@@ -48,7 +109,32 @@
         save();//保存
     });
 
+    bindUsers();
 });
+
+function bindUsers() {
+    layui.use(['laytpl', 'form'], function () {
+        var laytpl = layui.laytpl,
+            form = layui.form;
+        $.post("../SrTopic/GetTopicUsers",
+            {
+                topicId: $("#ID").val()
+            },
+            function (_r) {
+                var data = { //数据
+                    "list": _r
+                }
+                var getTpl = userItem.innerHTML
+                    , view = $("#ulUsers");
+                laytpl(getTpl).render(data, function (html) {
+                    view.append(html);
+                });
+                form.render();
+            },
+            "json");
+    })
+
+}
 
 //切换是否第一负责人
 function linkShow(span) {
@@ -60,34 +146,20 @@ function linkShow(span) {
         spanHtml.html("普");
     }
 }
+
 //删除已选择的参与人员
 function deleteLi(uid) {
+    $("#chooseUser li").filter(function (index) {
+        return $(this).attr("uid") == uid;
+    }).remove();
+}
+//删除已选择的参与人员
+function deleteCheckLi(uid) {
     $("#ulUsers li").filter(function (index) {
         return $(this).attr("uid") == uid;
     }).remove();
 }
 
-//选择参与人员
-function selectedLi(uid, uname) {
-    var data = { //数据
-        "list": [{ "id": uid, "name": uname }]
-    }
-    var isexsit = isExsit(uid);
-    if (!isexsit) {
-        layui.use('laytpl',
-            function() {
-                var laytpl = layui.laytpl;
-                var getTpl = userItem.innerHTML, view = $("#ulUsers");
-                laytpl(getTpl).render(data,
-                    function(html) {
-                        view.append(html);
-                    });
-                layer.closeAll('tips');
-            })
-    } else {
-        layer.msg('此用户已存在');
-    }
-}
 
 //判断是否存在
 function isExsit(uid) {
@@ -173,4 +245,125 @@ function FuncInitZtreeValue(id, ztreeId) {
         }
         ztree.checkNode(node, true, false);
     }
+}
+
+function SetChooseUser() {
+    layui.use(['laytpl', 'form'], function () {
+        var laytpl = layui.laytpl,
+            form = layui.form;
+
+        var result = [];
+        $("#chooseUser li").each(function () {
+            var n = $(this);
+            var key = n.find(".badge");
+            var node = {
+                id: n.attr("uid").replace("user_", ""),
+                name: n.attr("name")
+            };
+            var isexsit = isExsit(n.attr("uid").replace("user_", ""));
+            if (!isexsit) {
+                result.push(node);
+            }
+        });
+        var data = { //数据
+            "list": result
+        }
+        var getTpl = userItem.innerHTML
+            , view = $("#ulUsers");
+        laytpl(getTpl).render(data, function (html) {
+            view.append(html);
+        });
+        form.render();
+        layer.closeAll();
+
+    })
+}
+
+var settingUser = {
+    callback: {
+        onCheck: function (event, treeId, treeNode) {
+            var treeObj = $.fn.zTree.getZTreeObj("userList");
+            var nodes = treeObj.getCheckedNodes(true);
+            var usernodes = [];
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].id.indexOf("user") >= 0) {
+                    usernodes.push(nodes[i]);
+                }
+            }
+            var data = {
+                list: usernodes
+            }
+            layui.use('laytpl',
+                function () {
+                    var laytpl = layui.laytpl;
+                    $("#chooseUser").html("");
+                    var getTpl = chooseItem.innerHTML, view = $("#chooseUser");
+                    laytpl(getTpl).render(data,
+                        function (html) {
+                            view.append(html);
+                        });
+                })
+        }
+    },
+    view: {
+        fontCss: {
+            //"padding-left": "5px",
+            "color": "#73879C",
+            "font-size": "15px !important"
+        },
+        showIcon: true
+    },
+    check: {
+        enable: true
+    },
+    data: {
+        simpleData: {
+            enable: true
+        }
+    }
+};
+function GetAllUser() {
+    layui.use('form', function () {
+        var form = layui.form;
+        var url = "/SrTopic/GetBraceUserAndDepTree";
+        $.ajax({
+            url: url,
+            type: "post",
+            beforeSend: function (XMLHttpRequest) {
+                // $("#userList").html(common.loading);
+            },
+            success: function (data) {
+                var data = data;
+                var zNodes = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {
+                        id: data[i].id,
+                        pId: data[i].pId,
+                        name: data[i].name,
+                        open: false,
+                        icon: "../../Content/Images/organ1.png",
+                        sort: data[i].ORGANL,
+                    }
+                    if (data[i].OBJECT_SORT == "1") {
+                        obj.icon = "../../Content/Images/organ2.png";
+                    } else if (data[i].OBJECT_SORT == "2") {
+                        obj.icon = "../../Content/Images/organ3.png";
+                    } else if (data[i].OBJECT_SORT == "6") {
+                        obj.icon = "../../Content/Images/person-1.png";
+                    }
+                    if (obj.id == 0) {
+                        obj.open = true;
+                    }
+                    if (data[i].id.indexOf("user") >= 0) {
+                        obj.icon = "../../Content/Images/person-1.png";
+                    }
+                    zNodes.push(obj);
+                }
+                //  MsgInfo.nodes = zNodes;
+                $.fn.zTree.init($("#userList"), settingUser, zNodes);
+                form.render();
+            }
+        });
+    })
 }
