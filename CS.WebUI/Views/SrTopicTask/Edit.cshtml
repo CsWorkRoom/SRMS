@@ -1,0 +1,63 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_TOPIC_TASK.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="TopicSelect" value="@ViewBag.TopicSelect" /> <!--课题下拉项-->
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-tab-content">
+            <div class="layui-form-item">
+                <div>
+                    <label class="layui-form-label">检查任务名<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="NAME" id="NAME" lay-verify="nameVer" value="@Model.NAME"  placeholder="请填写检查任务名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">课题<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="TOPIC_ID" id="TOPIC_ID" lay-verify="topicVer" value="@Model.TOPIC_ID">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">时间范围</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="beginEndData" name="beginEndData" lay-verify="datetimeVer" value="@ViewBag.BeginEndData" placeholder="开始结束时间" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">检查任务要求<span class="imust">*</span></label>
+                <div class="layui-input-block">
+                    <textarea name="REMARK" class="layui-input reportH" lay-verify="required" placeholder="请填写具体的检查要求内容">@Model.REMARK</textarea>
+                </div>
+            </div>
+
+            <fieldset class="layui-elem-field">
+                <legend>任务资料</legend>
+            </fieldset>
+            <!--引入外导文件视图-->
+            @Html.Partial("PVUpFile",
+                       new CS.WebUI.Models.FileMsg
+                       {
+                           PathName = "TopicTaskPath",//存放文件的目录名.在web.config中配置
+                           FILES = Model.FILES,
+                           IsRequire = false//是否必填项（true=必填，false=非必填）,默认非必填
+                       })
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/SrTopicTask/JS/Edit.js?v=20190605"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>

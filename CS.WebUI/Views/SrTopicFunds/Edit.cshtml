@@ -1,0 +1,140 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_TOPIC_FUNDS.Entity
+
+<!--增删-->
+<script type="text/html" id="addDelFundsDetail">
+    <span class="layui-badge layui-bg-green" href="#" onclick="funds.addFundsDetail({{d.LAY_TABLE_INDEX + 1}});">+</span>
+    <span class="layui-badge layui-bg-green" href="#" onclick="funds.deleteFundsDetail({{d.LAY_TABLE_INDEX}});">-</span>
+</script>
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="TopicSelect" value="@ViewBag.TopicSelect" /> <!--课题下拉项-->
+    <input type="hidden" id="Banks" value="@ViewBag.Banks" /> <!--银行卡列表-->
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-tab-content">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">课题<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="TOPIC_ID" id="TOPIC_ID" lay-verify="topicVer" value="@Model.TOPIC_ID">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">报销总额<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <div class="layui-col-xs10">
+                            <input type="text" name="TOTAL_FEE" id="TOTAL_FEE" lay-verify="totalFeeMust"  placeholder="请填写报销总金额"  value="@Model.TOTAL_FEE" autocomplete="off" class="layui-input">
+                         </div> 
+                        <div class="layui-col-xs2">
+                            <span>元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">银行帐号<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <div class="layui-row">
+                            <div class="layui-col-md8">
+                                <input type="text" name="BANK_NO" id="BANK_NO" placeholder="请填写银行帐号" lay-verify="required" value="@Model.BANK_NO" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-col-md4">
+                                <button id="selectBankBtn" class="layui-btn layui-btn-normal" title="选择已经填报过的银行" onclick="funds.ShowTree(); return false;">
+                                    已有银行
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开户行<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="BANK_NAME" id="BANK_NAME" placeholder="请填写开户行" lay-verify="required" value="@Model.BANK_NAME" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <!-- zTree树状图 相对定位在其下方 -->
+            <div class="csZtree" style="display:none; position: absolute;border:1px solid #4aa5ff;">
+                <select id="bankSelect" name="bankSelect" lay-filter="selectGroup">
+                    <option value="-1">--请选择--</option>
+                    @if (ViewBag.Banks != "[]")
+                    {
+                        foreach (var item in ViewBag.Banks)
+                        {
+                            <option value="@item.ID">@(item.BANK_NAME + "(" + item.BANK_NO + ")")</option>
+                        }
+                    }
+                </select>
+                @if (ViewBag.Banks == "[]")
+                {
+                    <span style="font-size:18px;color:red">提示：当前未收录有银行信息</span>
+                }
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">开户行地址<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="BANK_ADDRESS" id="BANK_ADDRESS" placeholder="请填写开户行地址" lay-verify="required" value="@Model.BANK_ADDRESS" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否设为默认卡</label>
+                    <input type="checkbox" checked id="DefaultCk" name="DefaultCk" title="设置默认卡">
+                    <input type="hidden" id="IS_DEFAULT_BANK" name="IS_DEFAULT_BANK" value="@ViewBag.IS_DEFAULT_BANK" /><!--是否设为默认卡-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系人姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="USER_NAME" id="USER_NAME" placeholder="请填写银行帐号联系人" value="@Model.USER_NAME" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系人电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="USER_PHONE" id="USER_PHONE" placeholder="请填写银行帐号联系电话" value="@Model.USER_PHONE" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="REMARK" class="layui-input reportH" placeholder="请填写帐号备注信息">@Model.REMARK</textarea>
+                </div>
+            </div>
+
+            <fieldset class="layui-elem-field">
+                <legend>经费详细清单</legend>
+            </fieldset>
+            <blockquote class="layui-elem-quote">
+                提示：当前报销金额之和为 <span id="tipFee" style="font-size:18px;color:red;font-weight:bold">0</span> 元。
+            </blockquote>
+            <table id="tbFundsDetail" class="layui-table" lay-size="sm" lay-filter="tbFundsDetail"></table><!--经费清单列表-->
+            <input type="hidden" id="FundsDetails" name="FundsDetails" value="@ViewBag.FundsDetails" /><!--经费清单信息s-->
+
+            <!--引入外导文件视图-->
+            @Html.Partial("PVUpFile",
+                       new CS.WebUI.Models.FileMsg
+                       {
+                           PathName = "TopicFundsPath",//存放文件的目录名.在web.config中配置
+                           FILES = Model.FILES,
+                           IsRequire = false//是否必填项（true=必填，false=非必填）,默认非必填
+                       })
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/SrTopicFunds/JS/Edit.js?v=20190603"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>

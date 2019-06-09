@@ -1,4 +1,4 @@
-﻿//表单提交
+﻿//流程的数据提交
 function sysCsFlowSave(mainTableKey) {
     layui.use(['form', 'layer', 'jquery'], function () {
         var form = layui.form, layer = layui.layer, $ = layui.$;
@@ -29,37 +29,34 @@ function sysCsFlowSave(mainTableKey) {
     });
 }
 
-////#region 基础信息-
-//layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function () {
-//    var form = layui.form, layer = layui.layer, laydate = layui.laydate, $ = layui.jquery, table = layui.table, element = layui.element;
-//    //提交
-//    form.on('submit(SysFlowSubmit)', function (data) {//验证提交
-//        alert("调用");
-//        debugger;
-//        //#region 调用子页面的提交函数
-//        var $mainFun = $("#SysCsMainFun").val();
-//        eval($mainFun);
-//        //#endregion
-
-//        sysCsFlowSave();//保存外部流程信息
-//    });
-
-//});
-
+/*
+  注意：约定流程主表单的提交按钮函数名为：SaveFlowForm()
+  返回为JsonResultData类型的json字符串
+*/
 function FlowSubmit() {
     layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function () {
         var form = layui.form, layer = layui.layer, laydate = layui.laydate, $ = layui.jquery, table = layui.table, element = layui.element;
         //#region 调用子页面的提交函数
-        var $mainFun = $("#SysCsMainFun").val();
-        //$("#core_content")[0].contentWindow.testIframe2("11");
-        //$("#FlowMainPage")[0].contentWindow.save();
-        //eval($mainFun);
-
-        $($("#FlowMainPage")[0].contentWindow[$mainFun]).eval();
+        //#region 自定义的函数调用（已作废）
+        //var $mainFun = $("#SysCsMainFun").val();
+        //$($("#FlowMainPage")[0].contentWindow[$mainFun]).eval();
         //#endregion
 
-        sysCsFlowSave();//保存外部流程信息
+        //#region 调用子页面约定函数
+        var resultMsg= $("#FlowMainPage")[0].contentWindow.SaveFlowForm();//调用子页面提交函数获得主键信息
+        //#endregion
+        //#endregion
 
+        var resJson = $.parseJSON(resultMsg);
+        if (resJson.IsSuccess)
+        {
+            //保存流程流转信息
+            sysCsFlowSave(resJson.Result.ID);//保存外部流程信息
+        }
+        else//保存失败
+        {
+            layer.alert(resJson.Message, { icon: 2 });
+        }
     });
 }
 

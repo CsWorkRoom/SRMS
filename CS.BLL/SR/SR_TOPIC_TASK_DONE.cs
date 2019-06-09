@@ -9,37 +9,28 @@ using System.Threading.Tasks;
 namespace CS.BLL.SR
 {
     /// <summary>
-<<<<<<< HEAD
-    /// 科教学科
-=======
-    /// 学科管理
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
+    /// 课题中期任务完成情况
     /// </summary>
-    public class SR_SUBJECT : BBaseQuery
+    public class SR_TOPIC_TASK_DONE : BBaseQuery
     {
         /// <summary>
         /// 单例
         /// </summary>
-        public static SR_SUBJECT Instance = new SR_SUBJECT();
+        public static SR_TOPIC_TASK_DONE Instance = new SR_TOPIC_TASK_DONE();
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public SR_SUBJECT()
+        public SR_TOPIC_TASK_DONE()
         {
             this.IsAddIntoCache = true;
-            this.TableName = "SR_SUBJECT";
-<<<<<<< HEAD
-            this.ItemName = "学科项目";
-=======
-            this.ItemName = "学科管理";
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
+            this.TableName = "SR_TOPIC_TASK_DONE";
+            this.ItemName = "课题中期任务完成情况";
             this.KeyField = "ID";
             this.OrderbyFields = "ID";
         }
 
         #region 实体
-
         /// <summary>
         /// 实体
         /// </summary>
@@ -51,27 +42,30 @@ namespace CS.BLL.SR
             [Field(IsPrimaryKey = true, IsAutoIncrement = true, IsNotNull = true, Comment = "ID ")]
             public int ID { get; set; }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
             /// <summary>
-            /// 父节点
+            /// 课题ID
             /// </summary>
-            [Field(IsNotNull = false, Length = 256, Comment = "父节点")]
-            public int PARENT_ID { get; set; }
+            [Field(IsNotNull = true, Comment = "课题ID")]
+            public int TOPIC_ID { get; set; }
 
             /// <summary>
-            /// 名称
+            /// 课题任务ID
             /// </summary>
-            [Field(IsNotNull = true, Length = 32, Comment = "名称")]
-            public string NAME { get; set; }
+            [Field(IsNotNull = true, Comment = "课题任务ID")]
+            public int TOPIC_TASK_ID { get; set; }
 
             /// <summary>
-            /// 备注
+            /// 完成内容描述
             /// </summary>
-            [Field(IsNotNull = false, Length = 1024, Comment = "备注")]
-            public string REAMRK { get; set; }
+            [Field(IsNotNull = true, Comment = "完成内容描述")]
+            public string REMARK { get; set; }
+
+            /// <summary>
+            /// 附件IDS(编号以英文逗号分隔)
+            /// 使用附件控件自动存储
+            /// </summary>
+            [Field(IsNotNull = false, Comment = "附件IDS")]
+            public string FILES { get; set; }
 
             /// <summary>
             /// 创建时间
@@ -79,10 +73,6 @@ namespace CS.BLL.SR
             [Field(IsNotNull = true, Comment = "创建时间")]
             public DateTime CREATE_TIME { get; set; }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
             /// <summary>
             /// 更新时间
             /// </summary>
@@ -100,40 +90,8 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsNotNull = true, Comment = "修改人")]
             public int UPDATE_UID { get; set; }
-
-        }
-
-        #endregion
-<<<<<<< HEAD
-        #region 方法
-        /// <summary>
-        /// 获得所有学科列表
-        /// </summary>
-        /// <param name="topicId"></param>
-        /// <returns></returns>
-        public List<Entity> GetSubjectList()
-        {
-            return GetList<Entity>().ToList();
         }
         #endregion
-    }
 
-    public class SubjectDto 
-    {
-        /// <summary>
-        /// id
-        /// </summary>
-        public int id { get; set; }
-        /// <summary>
-        /// name
-        /// </summary>
-        public string name { get; set; }
-        /// <summary>
-        /// 子节点
-        /// </summary>
-        public List<SubjectDto> children { get; set; }
-=======
-
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
     }
 }

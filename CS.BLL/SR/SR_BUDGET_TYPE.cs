@@ -9,37 +9,28 @@ using System.Threading.Tasks;
 namespace CS.BLL.SR
 {
     /// <summary>
-<<<<<<< HEAD
-    /// 科教学科
-=======
-    /// 学科管理
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
+    /// 预算类型
     /// </summary>
-    public class SR_SUBJECT : BBaseQuery
+    public class SR_BUDGET_TYPE : BBaseQuery
     {
         /// <summary>
         /// 单例
         /// </summary>
-        public static SR_SUBJECT Instance = new SR_SUBJECT();
+        public static SR_BUDGET_TYPE Instance = new SR_BUDGET_TYPE();
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public SR_SUBJECT()
+        public SR_BUDGET_TYPE()
         {
             this.IsAddIntoCache = true;
-            this.TableName = "SR_SUBJECT";
-<<<<<<< HEAD
-            this.ItemName = "学科项目";
-=======
-            this.ItemName = "学科管理";
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
+            this.TableName = "SR_BUDGET_TYPE";
+            this.ItemName = "预算类型";
             this.KeyField = "ID";
             this.OrderbyFields = "ID";
         }
 
         #region 实体
-
         /// <summary>
         /// 实体
         /// </summary>
@@ -51,10 +42,6 @@ namespace CS.BLL.SR
             [Field(IsPrimaryKey = true, IsAutoIncrement = true, IsNotNull = true, Comment = "ID ")]
             public int ID { get; set; }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
             /// <summary>
             /// 父节点
             /// </summary>
@@ -79,10 +66,6 @@ namespace CS.BLL.SR
             [Field(IsNotNull = true, Comment = "创建时间")]
             public DateTime CREATE_TIME { get; set; }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
             /// <summary>
             /// 更新时间
             /// </summary>
@@ -102,38 +85,6 @@ namespace CS.BLL.SR
             public int UPDATE_UID { get; set; }
 
         }
-
         #endregion
-<<<<<<< HEAD
-        #region 方法
-        /// <summary>
-        /// 获得所有学科列表
-        /// </summary>
-        /// <param name="topicId"></param>
-        /// <returns></returns>
-        public List<Entity> GetSubjectList()
-        {
-            return GetList<Entity>().ToList();
-        }
-        #endregion
-    }
-
-    public class SubjectDto 
-    {
-        /// <summary>
-        /// id
-        /// </summary>
-        public int id { get; set; }
-        /// <summary>
-        /// name
-        /// </summary>
-        public string name { get; set; }
-        /// <summary>
-        /// 子节点
-        /// </summary>
-        public List<SubjectDto> children { get; set; }
-=======
-
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
     }
 }
