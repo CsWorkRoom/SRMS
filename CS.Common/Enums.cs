@@ -93,5 +93,16 @@ namespace CS.Common
             抢盘 = 2,
             获取分享 = 3
         }
+
+        /// <summary>
+        /// 课题结题状态
+        /// </summary>
+        public enum TopicEndStatus
+        {
+            //默认值
+            未完成 = 0,
+            成功 = 1,
+            失败 = 2
+        }
     }
 }

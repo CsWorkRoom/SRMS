@@ -212,3 +212,22 @@ create table SR_TOPIC_TASK_DONE
    UPDATE_TIME          TIMESTAMP,
    constraint PK_SR_TOPIC_TASK_DONE primary key (ID)
 );
+
+--------øŒÃ‚Ω·Ã‚---------------
+create table SR_TOPIC_END 
+(
+   ID                   INTEGER              not null,
+   TOPIC_ID             INTEGER              not null,
+   END_STATUS           INTEGER              not null,
+   CONTENT              VARCHAR(1024)        not null,
+   REMARK               VARCHAR(1024),
+   FILES                VARCHAR(1024)        not null,
+   CREATE_UID           INTEGER,
+   UPDATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_TIME          TIMESTAMP,
+   AUDIT_STATUS         INTEGER default 0 not null,
+   AUDIT_UID            INTEGER default 0,
+   AUDIT_TIME          TIMESTAMP,
+   constraint PK_SR_TOPIC_END primary key (ID)
+);
