@@ -9,11 +9,7 @@ using System.Threading.Tasks;
 namespace CS.BLL.SR
 {
     /// <summary>
-<<<<<<< HEAD
     /// 科教学科
-=======
-    /// 学科管理
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
     /// </summary>
     public class SR_SUBJECT : BBaseQuery
     {
@@ -29,11 +25,7 @@ namespace CS.BLL.SR
         {
             this.IsAddIntoCache = true;
             this.TableName = "SR_SUBJECT";
-<<<<<<< HEAD
             this.ItemName = "学科项目";
-=======
-            this.ItemName = "学科管理";
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
             this.KeyField = "ID";
             this.OrderbyFields = "ID";
         }
@@ -50,11 +42,6 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsPrimaryKey = true, IsAutoIncrement = true, IsNotNull = true, Comment = "ID ")]
             public int ID { get; set; }
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
             /// <summary>
             /// 父节点
             /// </summary>
@@ -79,10 +66,6 @@ namespace CS.BLL.SR
             [Field(IsNotNull = true, Comment = "创建时间")]
             public DateTime CREATE_TIME { get; set; }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
             /// <summary>
             /// 更新时间
             /// </summary>
@@ -104,7 +87,6 @@ namespace CS.BLL.SR
         }
 
         #endregion
-<<<<<<< HEAD
         #region 方法
         /// <summary>
         /// 获得所有学科列表
@@ -132,8 +114,5 @@ namespace CS.BLL.SR
         /// 子节点
         /// </summary>
         public List<SubjectDto> children { get; set; }
-=======
-
->>>>>>> 3de7f7524a780410d4d38c2bce7f05261c57d147
     }
 }

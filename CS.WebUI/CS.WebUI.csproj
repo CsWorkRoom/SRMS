@@ -2165,6 +2165,11 @@
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
     <Content Include="Views\SrTopic\CSS\common_style.css" />
+    <Content Include="Views\SrTopicBudget\JS\Edit.js" />
+    <Content Include="Views\SrTopicDetail\JS\Edit.js" />
+    <Content Include="Views\SrTopicTask\JS\Done.js" />
+    <Content Include="Views\SrTopicTask\JS\Edit.js" />
+    <Content Include="Views\SrTopicFunds\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\Edit.css" />
     <Content Include="Views\SrTopic\CSS\ExpertScore.css" />
     <Content Include="Views\SrTopic\JS\TopicScore.js" />
@@ -2179,6 +2184,10 @@
     <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrTopicTaskController.cs" />
+    <Compile Include="Controllers\SR\SrTopicFundsController.cs" />
+    <Compile Include="Controllers\SR\SrTopicBudgetController.cs" />
+    <Compile Include="Controllers\SR\SrTopicDetailController.cs" />
     <Compile Include="Controllers\SR\SrTopicController.cs" />
     <Compile Include="Controllers\UpFileController.cs" />
     <Compile Include="Controllers\FW\ABaseController.cs" />
@@ -2398,6 +2407,11 @@
     <Content Include="Views\SrTopic\Set.cshtml" />
     <Content Include="Views\SrTopic\ExpertScore.cshtml" />
     <Content Include="Views\SrTopic\TopicScore.cshtml" />
+    <Content Include="Views\SrTopicDetail\Edit.cshtml" />
+    <Content Include="Views\SrTopicBudget\Edit.cshtml" />
+    <Content Include="Views\SrTopicFunds\Edit.cshtml" />
+    <Content Include="Views\SrTopicTask\Edit.cshtml" />
+    <Content Include="Views\SrTopicTask\Done.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
