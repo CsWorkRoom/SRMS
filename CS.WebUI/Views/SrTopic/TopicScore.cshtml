@@ -1,0 +1,300 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@using System.Collections
+@model CS.BLL.SR.SR_TOPIC.Entity
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="ID" name="ID" value="@Model.ID"/>
+    <input type="hidden" id="Subitems"  value=""/>
+    <div class="form-top-content">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>课题基础信息</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课题名称<span class="imust">*</span></label>
+            <div class="layui-input-block">
+                <input type="text" id="NAME"  value="@Model.NAME" placeholder="请输入课题名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课题类型</label>
+            <div class="layui-input-block" >
+                <input id="TopicTypeName" class="layui-input"  value="@ViewBag.TopicTypeName"/>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始时间<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="START_TIME"  value="@Model.START_TIME" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">结束时间<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="END_TIME"  value="@Model.END_TIME"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">第一负责人<span class="imust">*</span></label>
+            <div class="layui-input-block"  style="padding-top: 10px;">
+				@foreach (var it in ViewBag.SelectLibaleUsers as IEnumerable<CS.BLL.SR.TopicUser>)
+				{
+				    <span class="layui-badge layui-bg-blue">@it.USER_NAME</span>
+				}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">其他参与人员<span class="imust">*</span></label>
+            <div class="layui-input-block" style="padding-top: 10px;">
+                @foreach (var it in ViewBag.SelectNoLibaleUsers as IEnumerable<CS.BLL.SR.TopicUser>)
+                {
+                    <span class="layui-badge layui-bg-gray">@it.USER_NAME</span>
+                }
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">课题备注<span class="imust">*</span></label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入公告内容" id="REMARK" rows="8" style="width:100%"   class="layui-textarea">@Model.REMARK</textarea>
+            </div>
+        </div>
+      
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>评分情况</legend>
+        </fieldset>
+        <div class="layui-form-item" style="padding-left:10px; color: red">
+            *备注:权重得分表示所有评分规则分值*相应权重后相加的总和得分;总得分表示所有评分项未乘以权重的总和得分。
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <input type="hidden" id="ScoreItems" name="ScoreItems"  value="@ViewBag.ScoreItems"/>
+            </div>
+            <div>
+                <div class="notice-list" style="padding-left:20px;min-height:200px;" id="tab-expert">
+
+                </div>
+            </div>
+        </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>综合评定</legend>
+           
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input type="hidden" id="TOTAL_SCORE" name="TOTAL_SCORE"  value="@ViewBag.AllScore"/>
+                <input type="hidden" id="MAX_SCORE" name="MAX_SCORE"  value="@ViewBag.MaxScore"/>
+                <input type="hidden" id="MIN_SCORE" name="MIN_SCORE"  value="@ViewBag.MinScore"/>
+                <input type="hidden" id="AVG_SCORE" name="AVG_SCORE"  value="@ViewBag.AvgScore"/>
+                <span class="layui-badge layui-bg-green font-size14" title="所有评审老师打分的权重得分之和" style="cursor:pointer;width: 100px;height: 35px; padding-top: 15px; margin-left: 10px;">总得分:@ViewBag.AllScore</span>
+                <span class="layui-badge layui-bg-orange font-size14 " title="所有评审老师中权重得分最高分" style="cursor:pointer;width: 100px;height:  35px; padding-top: 15px;margin-left: 10px;">最高分:@ViewBag.MaxScore</span>
+                <span class="layui-badge layui-bg-gray font-size14" title="所有评审老师中权重得分最高低分" style="cursor:pointer;width: 100px;height:  35px; padding-top: 15px;margin-left: 10px;">最低分:@ViewBag.MinScore</span>
+                <span class="layui-badge layui-bg-blue font-size14" title="所有评审老师的权重得分的平均得分" style="cursor:pointer;width: 100px;height: 35px; padding-top: 15px;margin-left: 10px;">平均得分:@ViewBag.AvgScore</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否通过<span class="imust">*</span></label>
+            <div class="layui-input-block">
+				@if (ViewBag.IS_APPROVAL == -1)
+				{
+				    <input type="radio" name="IS_APPROVAL" value="1" title="通过"  lay-filter="IS_APPROVAL"/>
+				    <input type="radio" name="IS_APPROVAL" value="-1" title="不通过" checked="" lay-filter="IS_APPROVAL"/>
+				}
+				else
+				{
+				    <input type="radio" name="IS_APPROVAL" value="1" title="通过" checked="" lay-filter="IS_APPROVAL"/>
+				    <input type="radio" name="IS_APPROVAL" value="-1" title="不通过" lay-filter="IS_APPROVAL"/>
+				}
+                
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注说明</label>
+            <div class="layui-input-block" >
+                <textarea name="APPROVAL_REMARK" ID="APPROVAL_REMARK" class="layui-input"  style="height: 100px;" rows="10">
+                    @ViewBag.APPROVAL_REMARK
+                    </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary">关闭</button>
+        </div>
+    </div>
+	
+    <div class="modal-body" id="scorediv" style="display: none; opacity: 0.5; top: 10px;overflow:hidden">
+        <div class="layui-col-md12" style="margin:5px;">
+            <b>评审专家:<label id="lblExpertName"></label></b>
+        </div>
+        <div class="layui-col-md12">
+            <form class="layui-form" id="subitemForm">
+                <table class="layui-table" id="subitemTable" lay-skin="nob">
+                    <colgroup>
+                        <col width="100" height="15"/>
+                        <col width="150" height="15"/>
+                        <col width="50" height="15"/>
+                        <col width="50" height="15"/>
+                        <col width="80" height="15"/>
+                        <col width="200" height="15"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>
+                            <label id="subName">所属学科</label></th>
+                        <th>
+                            <label id="subitemName">评分项</label></th>
+                        <th>
+                            <label id="subitemWeight">权重%</label></th>
+                        <th>
+                            <label id="subitemWeight">得分</label></th>
+                        <th>
+                            <label id="subitemWeight">权重得分</label></th>
+                        <th>
+                            <label id="subitemRemark">备注</label></th>
+                    </tr>
+                    </thead>
+                    <tbody id="subItemBody">
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-xs12" style="text-align: center; margin-bottom: 3px;">
+                <button id="scoreClose" type="button" class="layui-btn" onclick="closeTab()"><i class=" layui-icon layui-icon-bianji"></i>关闭</button>
+            </div>
+
+        </div>
+    </div>
+</form>
+<link href="~/Views/SrTopic/CSS/Edit.css?v=201905" rel="stylesheet" />
+<link href="~/Views/SrTopic/CSS/ExpertScore.css?v=201905" rel="stylesheet" />
+<link href="~/Views/SrTopic/CSS/common_style.css?v=201905" rel="stylesheet" />
+<script src="~/Views/SrTopic/JS/TopicScore.js?v=201903"></script>
+<style>
+
+</style>
+
+<script>
+    var tree,laytpl;
+    var data;
+    layui.use([ 'laytpl','tree','layer', 'form', 'jquery', 'element', 'table'], function () {
+        tree = layui.tree;
+        laytpl = layui.laytpl;
+        layer = layui.layer;
+        form = layui.form;
+        tab = layui.tab;
+        $ = layui.$;
+        element = layui.element;
+        table = layui.table;
+        initSubItemRow();
+    });
+
+	function closeTab() {
+	    layer.closeAll();
+	}
+    //添加新的评分标准
+    function initSubItemRow() {       
+        var index = layer.load(1, {
+            shade: [0.1,'#fff'] //0.1透明度的白色背景
+        });
+        layui.use(['laytpl','form'], function() {
+            $.post("../SrTopic/GetTopicExpertByTopic",
+                {
+                    topicId: $("#ID").val()
+                },
+                function(_r) {
+                    var data = { //数据
+                        "list": _r
+                    }
+                    console.log(_r);
+                    var getTpl = subitemTemplate.innerHTML, view = $("#tab-expert");
+                    view.html("");
+                    laytpl(getTpl).render(data,
+                        function(html) {
+                            view.append(html);
+                        });
+                    if (_r === undefined || _r.length == 0) {
+                        $("#subItemBody").html("暂未设置评分项");
+                    }
+                    form.render();
+                    layer.close(index);
+                },
+                "json");
+        })
+    }
+
+</script>
+<script id="subitemTemplate" type="text/html">
+    {{#  layui.each(d.list, function(index, item){ }}
+    <div class="col-xs-3 goals_give_content">
+        <div class="bg_white col-xs-12  rowbox borders" style="cursor:pointer;" goals_clicked="no" onclick="target_clicked(this,{{item.USER_ID}},{{item.TOPIC_ID}},'{{item.EXPERT_NAME}}');">        
+            {{# if(index==0&&item.IS_SCORE==1){}}
+            <div class=" layui-badge width_15 height_15 bt_color3 inline-block text-center" style="margin-top: 5px; margin-left: 5px;">top</div>
+            {{#}else{}}
+            <div class=" layui-badge width_15 height_15 bg_gray inline-block text-center" style="margin-top: 5px; margin-left: 5px;">nor</div>
+            {{#}}}
+           
+            <div class="padding5 inline-block" title="{{item.EXPERT_NAME}}">{{item.EXPERT_NAME}}</div>
+            {{# if(item.IS_SCORE==1){}}
+            <img class="yxd pull-right" src="/Content/Images/yxd.png" />
+            {{#}else{}}
+            <img class="yxd pull-right" src="/Content/Images/wxd.png" />
+            {{#}}}
+            <div>
+                <span class="padding5 color-gray margin_left15 bg_gray font-size12">{{item.CITY_NAME}}</span>
+                <span class="padding5 color-gray margin_left15 bg_gray font-size12">评审专家</span>
+            </div>
+            <div class="line marging10"></div>
+            <div class="col-xs-6 inline-block " style="width: 45%;text-align: center">
+                <div class="right_line margingY10 Num3_font_color">
+                    <p class="font-size12">权重得分</p>
+                    <p class="font-size12">{{item.SCORE}}</p>
+                </div>
+            </div>
+            <div class="col-xs-6 text-center inline-block" style="width: 45%;text-align: center">
+                <div class="margingY10 Num1_font_color">
+                    <p class="font-size12">总评分</p>
+                    <p class="font-size12">{{item.ALL_SCORE}}</p>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="top_line padding10 conctrol-oragn" >
+                    <span class="height_30">评分时间：</span>                  
+                    {{# if(item.IS_SCORE==1){}}
+                    {{item.OPER_TIME}}
+                    {{#}else{}}
+                    暂无评分记录
+                    {{#}}}
+                </div>
+            </div>
+             
+        </div>
+    </div>
+    {{#  }); }}
+</script>
+
+<script id="scoreTemplate" type="text/html">
+    {{#  layui.each(d.list, function(index, item){ }}
+    <tr>
+        <td>
+            {{item.SUBJECT_NAME}}          
+        </td>
+        <td>
+            {{item.SUB_ITEM_NAME}}
+        </td>
+        <td> {{item.WEIGHT}}%</td>
+        <td>{{item.SCORE}}</td>
+        <td>{{item.ACT_SCORE}}</td>
+        <td>{{item.REMARK}}</td>
+    </tr>
+    {{#  }); }}
+</script>
+
+

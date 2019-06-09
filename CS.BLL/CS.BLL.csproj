@@ -114,6 +114,12 @@
     <Compile Include="FW\BF_FIELD.cs" />
     <Compile Include="FW\SystemSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SR\SR_SUBJECT.cs" />
+    <Compile Include="SR\SR_SUB_ITEM.cs" />
+    <Compile Include="SR\SR_TOPIC_SCORE.cs" />
+    <Compile Include="SR\SR_TOPIC_SUB_ITEM.cs" />
+    <Compile Include="SR\SR_TOPIC_EXPERT.cs" />
+    <Compile Include="SR\SR_TOPIC_USER.cs" />
     <Compile Include="SR\SR_FILES.cs" />
     <Compile Include="SR\SR_ACCOUNTING_TYPE.cs" />
     <Compile Include="SR\SR_TOPIC_BUDGET.cs" />
@@ -124,7 +130,6 @@
     <Compile Include="SR\SR_TOPIC_FUNDS.cs" />
     <Compile Include="SR\SR_TOPIC_DETAIL_COMPANY.cs" />
     <Compile Include="SR\SR_TOPIC_DETAIL.cs" />
-    <Compile Include="SR\SR_SUBJECT.cs" />
     <Compile Include="SR\SR_TOPIC_TYPE.cs" />
     <Compile Include="SR\SR_BUDGET_TYPE.cs" />
     <Compile Include="SR\SR_TOPIC.cs" />

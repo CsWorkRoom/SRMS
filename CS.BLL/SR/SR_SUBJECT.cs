@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CS.BLL.SR
 {
     /// <summary>
-    /// 学科管理
+    /// 科教学科
     /// </summary>
     public class SR_SUBJECT : BBaseQuery
     {
@@ -25,7 +25,7 @@ namespace CS.BLL.SR
         {
             this.IsAddIntoCache = true;
             this.TableName = "SR_SUBJECT";
-            this.ItemName = "学科管理";
+            this.ItemName = "学科项目";
             this.KeyField = "ID";
             this.OrderbyFields = "ID";
         }
@@ -42,7 +42,6 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsPrimaryKey = true, IsAutoIncrement = true, IsNotNull = true, Comment = "ID ")]
             public int ID { get; set; }
-
             /// <summary>
             /// 父节点
             /// </summary>
@@ -88,6 +87,32 @@ namespace CS.BLL.SR
         }
 
         #endregion
+        #region 方法
+        /// <summary>
+        /// 获得所有学科列表
+        /// </summary>
+        /// <param name="topicId"></param>
+        /// <returns></returns>
+        public List<Entity> GetSubjectList()
+        {
+            return GetList<Entity>().ToList();
+        }
+        #endregion
+    }
 
+    public class SubjectDto 
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public int id { get; set; }
+        /// <summary>
+        /// name
+        /// </summary>
+        public string name { get; set; }
+        /// <summary>
+        /// 子节点
+        /// </summary>
+        public List<SubjectDto> children { get; set; }
     }
 }
