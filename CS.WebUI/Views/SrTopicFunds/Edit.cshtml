@@ -1,4 +1,5 @@
 ﻿@using System.Web.Mvc.Html
+@using CS.WebUI.Controllers.FW
 @using CS.Base.Config
 @{
     Layout = "~/Views/Shared/_Content.cshtml";
@@ -65,7 +66,8 @@
                     <option value="-1">--请选择--</option>
                     @if (ViewBag.Banks != "[]")
                     {
-                        foreach (var item in ViewBag.Banks)
+                        var bankList = CS.Common.FW.JSON.EncodeToEntity<List<CS.BLL.SR.SR_BANK.Entity>>(ViewBag.Banks);
+                        foreach (var item in bankList)
                         {
                             <option value="@item.ID">@(item.BANK_NAME + "(" + item.BANK_NO + ")")</option>
                         }
@@ -136,5 +138,5 @@
         </div>
     </div>
 </form>
-<script src="~/Views/SrTopicFunds/JS/Edit.js?v=20190603"></script>
+<script src="~/Views/SrTopicFunds/JS/Edit.js?v=20190609"></script>
 <script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
