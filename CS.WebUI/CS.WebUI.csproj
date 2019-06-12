@@ -184,6 +184,7 @@
     <Content Include="Content\images\verifyimg.jpg" />
     <Content Include="Content\images\wxd.png" />
     <Content Include="Content\images\yxd.png" />
+    <Content Include="Content\jquery-ui\jquery-ui-1.10.0.custom.min.js" />
     <Content Include="Content\jquery-ui\jquery-ui-1.11.4.js" />
     <Content Include="Content\jquery-ui\jquery-ui.min.css" />
     <Content Include="Content\jquery-ui\jquery-ui.min.js" />

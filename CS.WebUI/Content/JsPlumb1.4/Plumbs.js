@@ -2,7 +2,7 @@
 Plumbs.UI = Plumbs.UI || {};
 Plumbs.UI.Views = Plumbs.UI.Views || {};
 Plumbs.UI.Views.Plumb = {
-    init: function() {
+    init: function () {
         jsPlumb.importDefaults({
             // default drag options
             DragOptions: { cursor: 'pointer', zIndex: 2000 },
@@ -19,7 +19,7 @@ Plumbs.UI.Views.Plumb = {
         });
     },
 
-    addPannel: function(e) {
+    addPannel: function (e) {
         jsPlumb.makeSource($(e),
             {
                 filter: ".ep",
@@ -27,21 +27,21 @@ Plumbs.UI.Views.Plumb = {
                 connector: "Flowchart", // "Straight",
                 connectorStyle: { strokeStyle: nextColour(), lineWidth: 2 },
                 maxConnections: 30,
-                onMaxConnections: function(info, e) {
+                onMaxConnections: function (info, e) {
                     alert("最大不能超过 (" + info.maxConnections + ") 条连接");
                 }
             });
 
         jsPlumb.bind("connection",
-            function(info) {
+            function (info) {
                 info.connection.setPaintStyle({ strokeStyle: nextColour() });
                 var joinType = info.connection.target.attr("tips");
-                if (joinType == "" || typeof(joinType) == "undefined") {
+                if (joinType == "" || typeof (joinType) == "undefined") {
                     joinType = "提交";
                 }
                 var cline;
                 var connects = $(jsPlumb.getAllConnections().jsPlumb_DefaultScope);
-                connects.each(function() {
+                connects.each(function () {
                     if (this.target == info.connection.target && this.source == info.connection.source) {
                         cline = this;
                         cline.title = joinType;
@@ -58,7 +58,7 @@ Plumbs.UI.Views.Plumb = {
                             title: info.connection.id,
                             tip: "流转提示",
                             events: {
-                                click: function(labelOverlay, originalEvent) {
+                                click: function (labelOverlay, originalEvent) {
                                     dialogWindow_Line(labelOverlay, joinType, info.connection.id);
                                 }
                             }
@@ -82,7 +82,7 @@ Plumbs.UI.Views.Plumb = {
                 anchor: "AutoDefault"
             });
         jsPlumb.bind("dblclick",
-            function(c) {
+            function (c) {
                 //清空连线       
                 jsPlumb.detach(c);
                 //更新逻辑关系
@@ -123,14 +123,13 @@ Plumbs.UI.Views.Plumb = {
 
     },
 
-    delPannel: function(id) {
+    delPannel: function (id) {
         jsPlumb.removeAllEndpoints(id);
+    },
+    reload: function () {
         jsPlumb.repaint();
     },
-    reload: function(){
-    jsPlumb.repaint();
-   },
-ConnectNode: function (sourceid, targetid,jointype) {
+    ConnectNode: function (sourceid, targetid, jointype) {
         $("#" + targetid).attr("tips", jointype);
         jsPlumb.connect({
             source: sourceid, target: targetid

@@ -90,13 +90,13 @@ namespace CS.BLL.FW
             /// 横坐标
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "0", Comment = "横坐标")]
-            public int DIV_X { get; set; }
+            public double DIV_X { get; set; }
 
             /// <summary>
             /// 纵坐标
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "0", Comment = "纵坐标")]
-            public int DIV_Y { get; set; }
+            public double DIV_Y { get; set; }
 
             /// <summary>
             /// 节点说明

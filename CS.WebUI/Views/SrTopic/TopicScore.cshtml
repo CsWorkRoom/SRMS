@@ -244,7 +244,7 @@
 <script id="subitemTemplate" type="text/html">
     {{#  layui.each(d.list, function(index, item){ }}
     <div class="col-xs-3 goals_give_content">
-        <div class="bg_white col-xs-12  rowbox borders" style="cursor:pointer;" goals_clicked="no" onclick="target_clicked(this,{{item.USER_ID}},{{item.TOPIC_ID}},'{{item.EXPERT_NAME}}');">        
+        <div class="bg_white col-xs-12  rowbox borders" style="cursor:pointer;" title="点击查看详情" goals_clicked="no" onclick="target_clicked(this,{{item.USER_ID}},{{item.TOPIC_ID}},'{{item.EXPERT_NAME}}');">        
             {{# if(index==0&&item.IS_SCORE==1){}}
             <div class=" layui-badge width_15 height_15 bt_color3 inline-block text-center" style="margin-top: 5px; margin-left: 5px;">top</div>
             {{#}else{}}
