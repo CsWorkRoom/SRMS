@@ -1,0 +1,74 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_TOPIC_END.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="TopicSelect" value="@ViewBag.TopicSelect" /> <!--课题下拉项-->
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-tab-content">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">课题<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="TOPIC_ID" id="TOPIC_ID" lay-verify="topicVer" value="@Model.TOPIC_ID">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">科研成果状态</label>
+                    <div class="layui-input-inline">
+                        <select id="END_STATUS" name="END_STATUS" lay-filter="selectGroup">
+                            <option value="-1">-请选择-</option>
+                            @foreach (var item in ViewBag.EndStatusSelectList)
+                            {
+                                if (item.Value == Model.END_STATUS.ToString())
+                                {
+                                    <option value="@item.Value" selected>@item.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">科研成功描述<span class="imust">*</span></label>
+                <div class="layui-input-block">
+                    <textarea name="CONTENT" class="layui-input reportH" lay-verify="required" placeholder="请填写科研成功描述">@Model.CONTENT</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注信息</label>
+                <div class="layui-input-block">
+                    <textarea name="REMARK" class="layui-input reportH" placeholder="请填写备注信息">@Model.REMARK</textarea>
+                </div>
+            </div>
+
+            <fieldset class="layui-elem-field">
+                <legend>科研资料</legend>
+            </fieldset>
+            <!--引入外导文件视图-->
+            @Html.Partial("PVUpFile",
+                       new CS.WebUI.Models.FileMsg
+                       {
+                           PathName = "TopicEndPath",//存放文件的目录名.在web.config中配置
+                           FILES = Model.FILES,
+                           IsRequire = true//是否必填项（true=必填，false=非必填）,默认非必填
+                       })
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/SrTopicEnd/JS/Edit.js?v=20190606"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>

@@ -169,25 +169,15 @@ namespace CS.Common
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static IList<SelectItem> GetSelectList<T>(T obj = default(T))
+        public static IList<SelectItem> GetSelectListFromEnum<T>()
         {
-            Type _enumType = obj.GetType();
-            var allAttr = _enumType.GetCustomAttributes(true);
-
-            string[] nameArr = Enum.GetNames(_enumType);
-            var valuesArr = Enum.GetValues(_enumType);
-            IList<SelectItem> re = new List<SelectItem>();
-            for (int i = 0; i < nameArr.Count(); i++)
+            IList<SelectItem> selectItemList = new List<SelectItem>();
+            foreach (T mode in Enum.GetValues(typeof(T)))
             {
-                string name = nameArr[i];
-                int value = (int)valuesArr.GetValue(i);
-                FieldInfo fi = _enumType.GetField(name);
-                DescriptionAttribute dna = null;
-                dna = (DescriptionAttribute)Attribute.GetCustomAttribute(fi, typeof(DescriptionAttribute));
-                re.Add(new SelectItem() { Text = dna.Description, Value = value.ToString() });
+                selectItemList.Add(new SelectItem { Text = mode.ToString(), Value = (mode.GetHashCode()).ToString() });
             }
 
-            return re;
+            return selectItemList;
         }
         /// <summary>
         /// 计算MD5

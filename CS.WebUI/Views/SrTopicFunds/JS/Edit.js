@@ -60,15 +60,9 @@ layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function (
         funds.ChangeBankSelect();
     });
 
-    //#region 三个下拉绑定
+    //#region 课题下拉绑定
     var topicNodes = JSON.parse($("#TopicSelect").val());
     $.comboztree("TOPIC_ID", { ztreenode: topicNodes });
-
-    //var deptNodes = JSON.parse($("#DepartmentSelect").val());
-    //$.comboztree("DEPARTMENT_ID", { ztreenode: deptNodes });
-
-    //var acountTypeNodes = JSON.parse($("#AccountingTypeSelect").val());
-    //$.comboztree("ACCOUNTING_TYPE_ID", { ztreenode: acountTypeNodes });
     //#endregion
 
     funds.fundsDetailArr = funds.getFundsDetailArr();

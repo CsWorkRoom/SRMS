@@ -2165,6 +2165,7 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrTopicEnd\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\common_style.css" />
     <Content Include="Views\SrTopicBudget\JS\Edit.js" />
     <Content Include="Views\SrTopicDetail\JS\Edit.js" />
@@ -2185,6 +2186,7 @@
     <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrTopicEndController.cs" />
     <Compile Include="Controllers\SR\SrTopicTaskController.cs" />
     <Compile Include="Controllers\SR\SrTopicFundsController.cs" />
     <Compile Include="Controllers\SR\SrTopicBudgetController.cs" />
@@ -2413,6 +2415,7 @@
     <Content Include="Views\SrTopicFunds\Edit.cshtml" />
     <Content Include="Views\SrTopicTask\Edit.cshtml" />
     <Content Include="Views\SrTopicTask\Done.cshtml" />
+    <Content Include="Views\SrTopicEnd\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
