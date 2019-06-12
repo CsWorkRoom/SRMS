@@ -13,9 +13,9 @@
     <input type="hidden" id="SysCsMainFun" value="@Model.SysCsMainFun" /><!--流程主页面主函数-->
     <input type="hidden" id="sysCsMainTableKey" value="@Model.sysCsMainTableKey" /><!--表单的主键ID-->
 
-    <div class="form-top-content">
-        <iframe scrolling="no" id="FlowMainPage" frameborder="0" src="@Model.SysCsMainPage"
-                style="min-height:600px;width:100%;height:100%;"></iframe>
+    <div class="form-top-content" id="parentdiv" style="overflow: hidden; border: 0px; min-height: 450px; width: 100%">
+        <iframe scrolling="no" frameborder="no" onload="this.height=this.contentWindow.document.body.scrollHeight"  border="0" id="FlowMainPage"  src="@Model.SysCsMainPage" 
+                style="height: 450px; width: 100%;overflow-x: hidden"></iframe>
     </div>
     <div class="form-bottom-submit">
         <div class="layui-inline">
@@ -37,14 +37,9 @@
   }
   //根据ID获取iframe对象
   var ifr = document.getElementById('FlowMainPage')
-  ifr.onload = function() {
-  	  //解决打开高度太高的页面后再打开高度较小页面滚动条不收缩
-  	  ifr.style.height='0px';
-      var iDoc = ifr.contentDocument || ifr.document
-      var height = calcPageHeight(iDoc)
-      if(height < 850){
-      	height = 850;
-      }
-      ifr.style.height = height + 'px'
-  }
+  var ifrdiv = document.getElementById('parentdiv');
+ 
+
+  
+
 </script>

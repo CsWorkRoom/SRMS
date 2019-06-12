@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_Content.cshtml";
 }
 @model CS.BLL.SR.SR_TOPIC.Entity
-<form id="form" class="layui-form" action="" method="post">
+<form id="form" class="layui-form" action="" method="post" >
     <input type="hidden" id="TypeSelect"  value="@ViewBag.TypeSelect"/>
     <input type="hidden" id="ID" name="ID" value="@Model.ID"/>
     <input type="hidden" id="CREATE_USER_ID" name="CREATE_USER_ID" value="@Model.CREATE_USER_ID"/>
@@ -74,7 +74,7 @@
             })
     </div>
     </div>
-    <div class="form-bottom-submit">
+    <div class="form-bottom-submit" style="display: none;">
         <div class="layui-inline">
             <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
             <button type="reset" class="layui-btn layui-btn-primary">关闭</button>
