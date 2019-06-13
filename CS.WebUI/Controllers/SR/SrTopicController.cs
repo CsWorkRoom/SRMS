@@ -118,6 +118,7 @@ namespace CS.WebUI.Controllers.SR
                 SR_TOPIC_USER.Instance.SaveUserListJoins(topicId, userList, out addCount, out updateCount, out deleteCount);
                 result.IsSuccess = true;
                 result.Message = "保存成功";
+                result.Result = topicId.ToString();
                 WriteOperationLog(BLog.LogLevel.INFO, true, Modular, (entity.ID > 0 ? "修改" : "添加"), "", (entity.ID > 0 ? "修改" : "添加") + "ID为" + entity.ID + "的课题成功！");
             }
             catch (Exception ex)

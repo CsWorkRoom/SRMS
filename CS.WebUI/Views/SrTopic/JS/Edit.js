@@ -12,7 +12,39 @@ function save() {
         return;
     });
 }
+async  function SaveFlowForm() {
+    var url = "../SrTopic/Edit";
+    var nodes = getNodeUsers();
+    $("#SelectUser").val(nodes);
+    var data = {
+        ID: $("#ID").val(),
+        CREATE_USER_ID: $("#CREATE_USER_ID").val(),
+        CREATE_TIME: $("#CREATE_TIME").val(),
+        NAME: $("#NAME").val(),
+        TOPIC_TYPE_ID: $("#TOPIC_TYPE_ID").val(),
+        START_TIME: $("#START_TIME").val(),
+        END_TIME: $("#END_TIME").val(),
+        REMARK: $("#REMARK").val(),
+        SelectUser: $("#SelectUser").val()
+    };
 
+    var p = new Promise((resolve, reject) => $.post(url, data,
+        function (_r) {
+            var obj = {
+                ID: _r.Result
+            };
+            var res = {
+                IsSuccess: _r.IsSuccess,
+                Message: _r.Message,
+                Result: obj
+            };
+            resolve(res);
+        },
+        "json"));
+    return await p
+   
+    
+}
 function getNodeUsers() {
     var result = [];
     $("#ulUsers li").each(function () {
