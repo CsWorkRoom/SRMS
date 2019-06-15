@@ -178,8 +178,9 @@ namespace CS.BLL.FW
                 //获得流程的所有节点信息
                 var allNodeList = BF_FLOW_NODE.Instance.GetList<BF_FLOW_NODE.Entity>("FLOW_ID=?", flow.ID);
                 var allNodeJoinList = BF_FLOW_NODE_JOIN.Instance.GetList<BF_FLOW_NODE_JOIN.Entity>("FLOW_ID=?", flow.ID);
+
                 //已审批通过的节点实例集合
-                var allNodeCaseList = BF_FLOW_NODE_CASE.Instance.GetList<BF_FLOW_NODE_CASE.Entity>("FLOW_ID=? AND FLOW_CASE_ID=? AUDIT_STATUS=?", flow.ID, flowCaseId, CS.Common.Enums.AuditStatus.通过.GetHashCode());
+                var allNodeCaseList = BF_FLOW_NODE_CASE.Instance.GetList<BF_FLOW_NODE_CASE.Entity>("FLOW_ID=? AND FLOW_CASE_ID=? AND AUDIT_STATUS=?", flow.ID, flowCaseId, CS.Common.Enums.AuditStatus.通过.GetHashCode());
 
                 //先获得当前节点下个走向节点集合
                 var nodeJoinList = allNodeJoinList.Where(p => p.FROM_NODE_ID == currFlowNode.ID).ToList();
