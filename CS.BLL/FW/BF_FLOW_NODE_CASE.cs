@@ -303,8 +303,8 @@ namespace CS.BLL.FW
             
             var userIds = flowNodeCase.USER_IDS.Split(new char[] { ',' }, StringSplitOptions.None).ToList();
 
-            var caseRecordList = BF_FLOW_NODE_CASE_RECORD.Instance.GetList<BF_FLOW_NODE_CASE_RECORD.Entity>("FLOW_NODE_CASE_ID=? AND AUDIT_STATUS=?",
-                flowNodeCaseId, CS.Common.Enums.AuditStatus.通过.GetHashCode());
+            var caseRecordList = BF_FLOW_NODE_CASE_RECORD.Instance.GetList<BF_FLOW_NODE_CASE_RECORD.Entity>(string.Format(@"FLOW_NODE_CASE_ID={0} AND AUDIT_STATUS={1}",
+                flowNodeCaseId, CS.Common.Enums.AuditStatus.通过.GetHashCode()));
             if (caseRecordList != null && caseRecordList.Count > 0)
             {
                 if (flowNodeCase.DEAL_WAY ==(short) CS.Common.Enums.DealWay.多人全部审批.GetHashCode())

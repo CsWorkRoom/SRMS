@@ -164,6 +164,8 @@ namespace CS.WebUI.Controllers.FW
                 var flow = BF_FLOW.Instance.GetEntityByKey<BF_FLOW.Entity>(record.FLOW_ID);
                 var currFlowNode = BF_FLOW_NODE.Instance.GetEntityByKey<BF_FLOW_NODE.Entity>(record.FLOW_NODE_ID);
                 #region 01.保存审批记录
+                record.AUDIT_TIME=DateTime.Now;
+                record.AUDIT_UID = SystemSession.UserID;
                 BF_FLOW_NODE_CASE_RECORD.Instance.Add(record);
                 #endregion
 
