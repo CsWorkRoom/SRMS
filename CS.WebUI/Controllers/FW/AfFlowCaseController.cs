@@ -78,7 +78,7 @@ namespace CS.WebUI.Controllers.FW
                     FLOW_TYPE_ID = flow.FLOW_TYPE_ID,
                     IS_ARCHIVE = 0,
                     IS_ENABLE = 1,
-                    MAIN_PAGE = (flow.MAIN_PAGE.IndexOf('?') >= 0) ? (flow.MAIN_PAGE + "&id=" + sysCsMainTableKey) : (flow.MAIN_PAGE + "?id=" + sysCsMainTableKey),
+                    MAIN_PAGE = ((flow.MAIN_PAGE.IndexOf('?') >= 0) ? (flow.MAIN_PAGE + "&id=" + sysCsMainTableKey) : (flow.MAIN_PAGE + "?id=" + sysCsMainTableKey)).Replace("id=0&",""),
                     MAIN_TABLE = flow.MAIN_TABLE,
                     PRIMARY_KEY = sysCsMainTableKey,
                     NAME = flow.NAME
