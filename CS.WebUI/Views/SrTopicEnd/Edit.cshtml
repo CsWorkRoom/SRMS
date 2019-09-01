@@ -21,7 +21,7 @@
                     <label class="layui-form-label">科研成果状态</label>
                     <div class="layui-input-inline">
                         <select id="END_STATUS" name="END_STATUS" lay-filter="selectGroup">
-                            <option value="-1">-请选择-</option>
+                            <option value="-1">--请选择--</option>
                             @foreach (var item in ViewBag.EndStatusSelectList)
                             {
                                 if (item.Value == Model.END_STATUS.ToString())

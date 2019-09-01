@@ -10,17 +10,12 @@ namespace CS.Common.ApiRequest
 {
     public static class Request
     {
-        public static object PostHttp2(string url,string body)
+        public static string PostHttp2(string url,string body)
         {
-
-            //byte[] bs = Encoding.UTF8.GetBytes(Wsdlxml(loginLog));
             byte[] bs = Encoding.UTF8.GetBytes(body);
-            //HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create("http://10.109.209.90:21010/gather/services/AioxPort");
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
-
             myRequest.Method = "POST";
-            myRequest.ContentType = "text/xml; charset=utf-8";
-            myRequest.Headers.Add("SOAPAction", "http://tempuri.org/mediate");
+            myRequest.ContentType = "application/x-www-form-urlencoded";
             myRequest.ContentLength = bs.Length;
 
             //Console.WriteLine("完成准备工作");

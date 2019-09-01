@@ -43,21 +43,34 @@ function FlowSubmit() {
         //#endregion
         
         //#region 调用子页面约定函数
-        var p= $("#FlowMainPage")[0].contentWindow.SaveFlowForm();//调用子页面提交函数获得主键信息
+        var data= $("#FlowMainPage")[0].contentWindow.SaveFlowForm();//调用子页面提交函数获得主键信息
         //#endregion
         //#endregion
 
-        p.then(function(data) {
-            if (data.IsSuccess)
-            {
-                //保存流程流转信息
-                sysCsFlowSave(data.Result.ID);//保存外部流程信息
-            }
-            else//保存失败
-            {
-                layer.alert(data.Message, { icon: 2 });
-            }
-        });
+
+        if (data.IsSuccess)
+        {
+            //保存流程流转信息
+            sysCsFlowSave(data.Result);//保存外部流程信息
+        }
+        else//保存失败
+        {
+            layer.alert(data.Message, { icon: 2 });
+        }
+
+
+
+        //p.then(function(data) {
+        //    if (data.IsSuccess)
+        //    {
+        //        //保存流程流转信息
+        //        sysCsFlowSave(data.Result.ID);//保存外部流程信息
+        //    }
+        //    else//保存失败
+        //    {
+        //        layer.alert(data.Message, { icon: 2 });
+        //    }
+        //});
     });
 }
 
