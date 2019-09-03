@@ -63,7 +63,8 @@ layui.use(['jquery', 'layer'], function () {
                 'background-color': 'white',
                 'left': '0px',
                 'right': '0px',
-                'padding': '5px 20px 5px 20px'
+                'padding': '5px 20px 5px 20px',
+                'z-index': 1000,
             });
         }
     });

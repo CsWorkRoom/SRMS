@@ -231,3 +231,41 @@ create table SR_TOPIC_END
    AUDIT_TIME          TIMESTAMP,
    constraint PK_SR_TOPIC_END primary key (ID)
 );
+
+--------文章类型---------------
+create table SR_ARTICLE_TYPE 
+(
+   ID                   INTEGER              not null,
+   PARENT_ID            INTEGER,
+   NAME                 VARCHAR2(128),
+   REMARK               VARCHAR2(256),
+   CREATE_UID           INTEGER              not null,
+   UPDATE_UID           INTEGER              not null,
+   CREATE_TIME          TIMESTAMP            not null,
+   UPDATE_TIME          TIMESTAMP            not null,
+   constraint PK_SR_ARTICLE_TYPE primary key (ID)
+);
+
+
+--------论文备案---------------
+create table SR_PAPER_RECORD 
+(
+   ID                   INTEGER              not null,
+   NAME                 VARCHAR(128),
+   JOURNAL_NAME         VARCHAR(64),
+   JOURNAL_NO           VARCHAR(64),
+   ARTICLE_TYPE_ID      CHAR(10),
+   TOPIC_ID             INTEGER,
+   SUBJECT_ID           INTEGER,
+   FIRST_AUTHOR         VARCHAR(64),
+   PAGE_FEE             DECIMAL(10, 2),
+   CONTENT              CLOB,
+   FILES                VARCHAR(2048),
+   CREATE_UID           INTEGER,
+   UPDATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_TIME          TIMESTAMP,
+   AUDIT_STATUS         SMALLINT,
+   AUDIT_TIME           TIMESTAMP,
+   constraint PK_SR_PAPER_RECORD primary key (ID)
+);

@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -111,6 +113,77 @@ namespace CS.WebUI.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 当前服务于富文本中的图片上传
+        /// 文件夹名和key名一致
+        /// </summary>
+        /// <param name="pathName"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ImgUpload(string pathName, HttpPostedFileBase file)
+        {
+            JsonResultData result = new JsonResultData();
+            if (file != null)
+            {
+                #region  附件上传
+                //文件上传
+                string fileName = string.Empty;
+                try
+                {
+                    fileName = Path.GetFileName(file.FileName);
+                    string path = Base.Config.BConfig.GetConfigToString(pathName);//获取文件目录
+                    if (string.IsNullOrWhiteSpace(path))
+                    {
+                        throw new Exception("未找到配置目录【" + pathName + "】");
+                    }
+                    if (Directory.Exists(path) == false)
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    path = new DirectoryInfo(path).FullName;
+                    //格式说明：{时间}-{用户}-{文件字节大小}_{文件原名}
+                    fileName = string.Format("{0}-{1}-{2}_&&_{3}", DateTime.Now.ToString("yyyyMMdd-HHmmss"), SystemSession.UserName, file.ContentLength, fileName);
+                    string saveName = string.Format("{0}\\{1}", path, fileName);
+                    file.SaveAs(saveName);
+                    ZoomImg(550, saveName);//等比缩放图片(传入图片宽度即可)
+                    result.IsSuccess = true;
+                    result.Result = pathName + "/" + fileName;
+                    result.Message = "上传成功";
+                }
+                catch (Exception ex)
+                {
+                    result.IsSuccess = false;
+                    result.Message = ex.Message;
+                }
+                #endregion
+            }
+            else
+            {
+                result.IsSuccess = false;
+                result.Message = "客户端未上载文件！";
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 按指定宽等比缩放图片
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="fileName"></param>
+        private void ZoomImg(int width, string saveName)
+        {
+            Bitmap oldImage = new Bitmap(saveName);
+            int height = oldImage.Height * width / oldImage.Width;
+            Bitmap newImage = new Bitmap(width, height);
+            Graphics g = Graphics.FromImage(newImage);
+            Rectangle rect = new Rectangle(0, 0, width, height);
+            g.DrawImage(oldImage, rect);
+            oldImage.Dispose();
+            System.IO.File.Delete(saveName);//删除原图片
+            newImage.Save(saveName, ImageFormat.Jpeg);//保存新图片
+        }
 
         /// <summary>
         /// 序列化格式设置
