@@ -2108,6 +2108,7 @@
     <Content Include="Views\AfFile\JS\Edit.js" />
     <Content Include="Views\AfFile\JS\Index.js" />
     <Content Include="Views\AfFile\JS\Upload.js" />
+    <Content Include="Views\AfFlowCase\JS\ProcessCreate.js" />
     <Content Include="Views\AfFlowCase\JS\Create.js" />
     <Content Include="Views\AfFlowCase\JS\Deal.js" />
     <Content Include="Views\AfFlow\CSS\cyStyle.css" />
@@ -2434,6 +2435,7 @@
     <Content Include="Views\SrTopicTask\Done.cshtml" />
     <Content Include="Views\SrTopicEnd\Edit.cshtml" />
     <Content Include="Views\SrPaperRecord\Edit.cshtml" />
+    <Content Include="Views\AfFlowCase\ProcessCreate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
