@@ -15,6 +15,18 @@ namespace CS.WebUI.Models.FW
         /// 系统_流程ID
         /// </summary>
         public int SysCsFlowID { get; set; }
+
+        #region 流程关联创建下个流程的首次处理（专属）
+        /// <summary>
+        /// 系统_流程实例ID
+        /// </summary>
+        public int SysCsFlowCaseID { get; set; }
+        /// <summary>
+        /// 系统_流程首个节点实例ID
+        /// </summary>
+        public int SysCsFirstFlowNodeCaseID { get; set; }
+        #endregion
+
         /// <summary>
         /// 系统_流程类型ID
         /// </summary>
