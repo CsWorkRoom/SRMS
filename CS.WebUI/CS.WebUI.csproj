@@ -2182,6 +2182,8 @@
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
     <Content Include="Views\SrPaperRecord\JS\Edit.js" />
+    <Content Include="Views\SrPatent\JS\Edit.js" />
+    <Content Include="Views\SrPatent\JS\FlowEdit.js" />
     <Content Include="Views\SrTopicEnd\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\common_style.css" />
     <Content Include="Views\SrTopicBudget\JS\Edit.js" />
@@ -2238,6 +2240,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Flow\FlowCaseNewModel.cs" />
+    <Compile Include="Models\Flow\FlowNodeCaseModel.cs" />
+    <Compile Include="Models\Flow\FlowNodeModel.cs" />
     <Compile Include="Models\FW\FlowCaseModel.cs" />
     <Compile Include="Models\FW\ZTreeModel.cs" />
     <Compile Include="Models\SR\TreeModel.cs" />
@@ -2436,6 +2441,10 @@
     <Content Include="Views\SrTopicEnd\Edit.cshtml" />
     <Content Include="Views\SrPaperRecord\Edit.cshtml" />
     <Content Include="Views\AfFlowCase\ProcessCreate.cshtml" />
+    <Content Include="Views\SrPatent\Edit.cshtml" />
+    <Content Include="Views\SrPatent\FlowEdit.cshtml" />
+    <Content Include="Views\SrTopic\FlowEdit.cshtml" />
+    <Content Include="Views\AfFlowCase\DealFlow.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2445,6 +2454,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
+    <Folder Include="Views\SrPatent\CSS\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CS.BLL\CS.BLL.csproj">
