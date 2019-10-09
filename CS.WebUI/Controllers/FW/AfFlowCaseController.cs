@@ -25,13 +25,13 @@ namespace CS.WebUI.Controllers.FW
             var flow = BF_FLOW.Instance.GetEntityByKey<BF_FLOW.Entity>(flowId);
             if (flow == null)
             {
-                ShowAlert(string.Format(@"未找到编号为[{0}]的流程项目", flowId));
+                return ShowAlert(string.Format(@"未找到编号为[{0}]的流程项目", flowId));
             }
             else
             {
                 if (flow.IS_ENABLE == 0)
                 {
-                    ShowAlert(string.Format(@"编号为[{0}]的流程项目未启用,若需要请联系管理员处理。", flowId));
+                    return ShowAlert(string.Format(@"编号为[{0}]的流程项目未启用,若需要请联系管理员处理。", flowId));
                 }
                 else
                 {
@@ -309,15 +309,131 @@ namespace CS.WebUI.Controllers.FW
         }
         #endregion
 
+        #region 流程关联创建下个流程的首次处理
+        /// <summary>
+        /// 关联流程：首个节点处理页
+        /// </summary>
+        /// <param name="flowCaseId">流程实例ID</param>
+        /// <param name="FirstFlowNodeCaseId">流程首个节点实例ID</param>
+        /// <returns></returns>
+        public ActionResult ProcessCreate(int flowCaseId = 0,int FirstFlowNodeCaseId=0)
+        {
+            int flowId = 0;
+            #region 获得流程编号
+            var flowCase = BF_FLOW_CASE.Instance.GetEntityByKey<BF_FLOW_CASE.Entity>(flowCaseId);
+            if (flowCase != null && flowCase.FLOW_ID > 0)
+            {
+                flowId = flowCase.FLOW_ID;
+            }
+            else
+            {
+                return ShowAlert(string.Format(@"未找到编号为[{0}]的流程项目实例", flowCaseId));
+            }
+            #endregion
+            //声明系统流程实例
+            Models.FW.FlowCaseModel sysFlow = new Models.FW.FlowCaseModel();
 
+            var flow = BF_FLOW.Instance.GetEntityByKey<BF_FLOW.Entity>(flowId);
+            if (flow == null)
+            {
+                return ShowAlert(string.Format(@"未找到编号为[{0}]的流程项目", flowId));
+            }
+            else
+            {
+                if (flow.IS_ENABLE == 0)
+                {
+                    return ShowAlert(string.Format(@"编号为[{0}]的流程项目未启用,若需要请联系管理员处理。", flowId));
+                }
+                else
+                {
+                    sysFlow.SysCsFlowID = flow.ID;
+                    sysFlow.SysCsFlowTypeID = flow.FLOW_TYPE_ID;
+                    sysFlow.SysCsFlowName = flow.NAME;
+                    sysFlow.SysCsMainPage = flow.MAIN_PAGE;
+                    sysFlow.SysCsMainTable = flow.MAIN_TABLE;
+                    sysFlow.SysCsRemark = flow.REMARK;
+                    sysFlow.sysCsIsEnable = flow.IS_ENABLE;
+                    sysFlow.SysCsMainFun = flow.MAIN_FUN;//主函数
+
+                    #region 关联流程的信息
+                    sysFlow.SysCsFlowCaseID = flowCaseId;
+                    sysFlow.SysCsFirstFlowNodeCaseID = FirstFlowNodeCaseId;
+                    #endregion
+                }
+            }
+            #region 验证是否具有发起流程表单的权限(暂未实现)
+            //BF_FLOW_NODE获得主节点，验证用户权限。
+            #endregion
+            return View(sysFlow);
+        }
+        /// <summary>
+        /// 关联流程：首个节点处理post
+        /// </summary>
+        /// <param name="SysCsFlowCaseID">流程实例ID</param>
+        /// <param name="SysCsFirstFlowNodeCaseID">流程首个节点实例ID</param>
+        /// <param name="sysCsMainTableKey">表单表返回的主键值</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult ProcessCreate(int SysCsFlowCaseID, int SysCsFirstFlowNodeCaseID,int sysCsMainTableKey)
+        {
+            //限定开始节点是主节点，并且只能有一个
+            JsonResultData result = new JsonResultData();
+            result.IsSuccess = true;
+            try
+            {
+                //流程实例
+                var flowCase= BF_FLOW_CASE.Instance.GetEntityByKey<BF_FLOW_CASE.Entity>(SysCsFlowCaseID);
+                //流程
+                var flow = BF_FLOW.Instance.GetEntityByKey<BF_FLOW.Entity>(flowCase.FLOW_ID);
+
+                #region 修改流程实例主键字段值
+                Dictionary<string, object> dic = new Dictionary<string, object>();
+                dic.Add("PRIMARY_KEY", sysCsMainTableKey);
+                dic.Add("MAIN_PAGE", (sysCsMainTableKey > 0) ? ((flow.MAIN_PAGE.IndexOf('?') >= 0) ? (flow.MAIN_PAGE + "&id=" + sysCsMainTableKey) : (flow.MAIN_PAGE + "?id=" + sysCsMainTableKey)) : flow.MAIN_TABLE);
+                BF_FLOW_CASE.Instance.UpdateByKey(dic, SysCsFlowCaseID);
+                #endregion
+
+                var firstFlowNodeCase= BF_FLOW_NODE_CASE.Instance.GetEntityByKey<BF_FLOW_NODE_CASE.Entity>(SysCsFirstFlowNodeCaseID);
+                #region 修改主节点实例信息
+                Dictionary<string, object> nodeDic = new Dictionary<string, object>();
+                nodeDic.Add("AUDIT_STATUS", Convert.ToInt16(CS.Common.Enums.AuditStatus.通过.GetHashCode()));
+                nodeDic.Add("DEAL_WAY", 1);
+                nodeDic.Add("IS_FINISH", 1);
+                nodeDic.Add("FINISH_TIME", DateTime.Now);
+                BF_FLOW_NODE_CASE.Instance.UpdateByKey(nodeDic, SysCsFirstFlowNodeCaseID);
+                #endregion
+
+                #region 保存主节点处理(填报)人信息
+                BF_FLOW_NODE_CASE_RECORD.Entity mainFlowNodeCaseRecord = new BF_FLOW_NODE_CASE_RECORD.Entity
+                {
+                    ID = BF_FLOW_NODE_CASE_RECORD.Instance.GetNextValueFromSeqDef(),
+                    AUDIT_CONTENT = string.Format(@"关联流程：[{0}]发起的主节点填报信息，该条信息仅记录，不存在审批", SystemSession.FullUserName),
+                    AUDIT_STATUS = Convert.ToInt16(CS.Common.Enums.AuditStatus.通过.GetHashCode()),//默认通过1
+                    AUDIT_TIME = DateTime.Now,
+                    AUDIT_UID = SystemSession.UserID,//审批人即填报人
+                    FLOW_ID = flow.ID,
+                    FLOW_CASE_ID = SysCsFlowCaseID,
+                    FLOW_NODE_CASE_ID = SysCsFirstFlowNodeCaseID
+                };
+                #endregion
+                #endregion
+
+                //主节点
+                var mainNode = BF_FLOW_NODE.Instance.GetEntityByKey<BF_FLOW_NODE.Entity>(firstFlowNodeCase.FLOW_NODE_ID);
+                #region 03.生成（下个）节点待办信息.
+                var isSuccess = BF_FLOW_CASE.Instance.CreateNextNodesCase(flow, mainNode, SysCsFlowCaseID);
+                #endregion
+
+                result.IsSuccess = true;
+                result.Message = "关联流程：初始节点表单填报成功！";
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Message = "关联流程：初始节点表单填报出错：" + ex.Message;
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         //验证节点权限(暂未实现)
-
-
-        #region 校验是否有正在运行中的流程实例（暂未实现）
-        #endregion
-
-        #region 创建下个节点的实例(在实体类中)
-
-        #endregion
     }
 }

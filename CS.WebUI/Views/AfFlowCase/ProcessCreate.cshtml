@@ -1,0 +1,48 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.WebUI.Models.FW.FlowCaseModel
+
+<form id="flowForm" class="layui-form" action="" method="post">
+    <!--为避免与表单表中的控件重名，此处不设置name属性-->
+    <input type="hidden" id="SysCsFlowID" value="@Model.SysCsFlowID" /> <!--流程ID-->
+    <input type="hidden" id="SysCsMainTable" value="@Model.SysCsMainTable" /><!--流程主表单表-->
+    <input type="hidden" id="SysCsMainPage" value="@Model.SysCsMainPage" /><!--流程主表单页面-->
+    <input type="hidden" id="SysCsMainFun" value="@Model.SysCsMainFun" /><!--流程主页面主函数-->
+    <input type="hidden" id="sysCsMainTableKey" value="@Model.sysCsMainTableKey" /><!--表单的主键ID-->
+
+    <input type="hidden" id="SysCsFlowCaseID" value="@Model.SysCsFlowCaseID" /><!--流程实例ID-->
+    <input type="hidden" id="SysCsFirstFlowNodeCaseID" value="@Model.SysCsFirstFlowNodeCaseID" /><!--流程首个节点实例ID-->
+
+    <div class="form-top-content" id="parentdiv" style="overflow: hidden; border: 0px; min-height: 450px; width: 100%">
+        <iframe scrolling="no" frameborder="no" onload="this.height=this.contentWindow.document.body.scrollHeight"  border="0" id="FlowMainPage"  src="@Model.SysCsMainPage" 
+                style="height: 450px; width: 100%;overflow-x: hidden"></iframe>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" id="btnsub" class="layui-btn" lay-submit onclick="FlowSubmit()">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/AfFlowCase/JS/ProcessCreate.js?v=20190907"></script>
+<script type="text/javascript" src="~/Content/FW/aes.js"></script>
+
+<script>
+  // 计算页面的实际高度，iframe自适应会用到
+  function calcPageHeight(doc) {
+      var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+      var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+      var height  = Math.max(cHeight, sHeight)
+      return height
+  }
+  //根据ID获取iframe对象
+  var ifr = document.getElementById('FlowMainPage')
+  var ifrdiv = document.getElementById('parentdiv');
+ 
+
+  
+
+</script>
