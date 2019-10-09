@@ -1,0 +1,112 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_PATENT.Entity
+<form id="form" class="layui-form" action="" method="post" >
+    <input type="hidden" id="TypeSelect"  value="@ViewBag.TypeSelect"/>
+    <input type="hidden" id="SubjectSelect"  value="@ViewBag.SubjectSelect"/>
+    <input type="hidden" id="ID" name="ID" value="@Model.ID"/>
+    <input type="hidden" id="CREATE_USER_ID" name="CREATE_USER_ID" value="@Model.CREATE_USER_ID"/>
+    <input type="hidden" id="CREATE_TIME" name="CREATE_TIME" value="@Model.CREATE_TIME"/>
+    <div class="form-top-content">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>成果专利基础信息</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">成果名称<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="ACHIEVEMENTS_NAME" name="ACHIEVEMENTS_NAME" value="@Model.ACHIEVEMENTS_NAME" lay-verify="name" placeholder="请输入成果名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">成果专利类型<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="TYPE_ID" id="TYPE_ID" value="@Model.TYPE_ID">
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+        <div class="layui-form-item">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">专利号<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="PATENT_NAME" name="PATENT_NAME" value="@Model.PATENT_NAME" lay-verify="name" placeholder="请输入专利号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">期刊名称<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="PERIODICAL_NAME" id="PERIODICAL_NAME" value="@Model.PERIODICAL_NAME" lay-verify="name" placeholder="请输入期刊名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属课题<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <select name="TOPIC_ID" id="TOPIC_ID" lay-filter="TOPIC_ID" lay-search="">
+                            @foreach (var item in ViewBag.Topics) 
+                            {
+                                if (Model.TOPIC_ID == item.Key)
+                                {
+                                    <option value="@item.Key" selected="selected">@item.Value</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属学科<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="SUBJECT_ID" id="SUBJECT_ID" value="@Model.SUBJECT_ID">
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="REMARK" class="layui-input reportH" placeholder="请输入内容">@Model.REMARK</textarea> 
+            </div>
+        </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>相关文件</legend>
+        </fieldset>
+    <div class="layui-form-item" >
+        <!--引入外导文件视图-->
+        @Html.Partial("PVUpFile",
+            new CS.WebUI.Models.FileMsg
+            {
+                PathName = "TopicDetailPath",//存放文件的目录名.在web.config中配置
+                FILES = Model.FILES,
+                IsRequire = false//是否必填项（true=必填，false=非必填）,默认非必填
+            })
+    </div>
+    </div>
+    <div class="form-bottom-submit" style="display: none;">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary">关闭</button>
+        </div>
+    </div>
+
+</form>
+<script src="~/Views/SrPatent/JS/Edit.js?v=20190707"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20180927"></script>

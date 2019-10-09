@@ -10,7 +10,7 @@
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>课题基础信息</legend>
         </fieldset>
-		 <div class="layui-collapse" lay-filter="test">
+       <div class="layui-collapse" lay-filter="test">
         <div class="layui-colla-item">
             <h2 class="layui-colla-title">@Model.NAME</h2>
             <div class="layui-colla-content">
@@ -87,61 +87,10 @@
         </div>          </div>
         </div>
 		</div>
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-            <legend>专家评分</legend>
-        </fieldset>
-        <div class="layui-form-item" style="padding-left:10px; color: red">
-            *备注:单项得分为当前打分值*当前项的权重值;总得分为所有单项得分的总和;单项以百分制打分。
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-inline">
-                <input type="hidden" id="ScoreItems" name="ScoreItems"  value="@ViewBag.ScoreItems"/>
-            </div>
-            <div class="layui-col-md12">
-                <form class="layui-form" id="subitemForm">
-                    <table class="layui-table" id="subitemTable" lay-skin="nob">
-                        <colgroup>
-                            <col width="50" height="15"/>
-                            <col width="80" height="15"/>
-                            <col width="30" height="15"/>
-                            <col width="60" height="15"/>
-                            <col width="120" height="15"/>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th>
-                                <label id="subName">所属学科</label></th>
-                            <th>
-                                <label id="subitemName">评分项</label></th>
-                            <th>
-                                <label id="subitemWeight">权重%</label></th>
-                            <th>
-                                <label id="subitemWeight">得分</label></th>
-                            <th>
-                                <label id="subitemRemark">备注</label></th>
-                        </tr>
-                        </thead>
-                        <tbody id="subItemBody">
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="form-bottom-submit">
-        <div class="layui-inline">
-            @if(ViewBag.isPing==0){
-                <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
-            }
-            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
-        </div>
     </div>
 </form>
-<link href="~/Views/SrTopic/CSS/Edit.css?v=201905" rel="stylesheet" />
-<script src="~/Views/SrTopic/JS/ExpertScore.js?v=201903"></script>
-<style>
 
-</style>
+
 
 <script>
     var tree,laytpl;
@@ -155,52 +104,9 @@
         $ = layui.$;
         element = layui.element;
         table = layui.table;
-        initSubItemRow();
+     
     });
 
-    //添加新的评分标准
-    function initSubItemRow() {       
-        layui.use(['laytpl','form'], function() {
-            $.post("../SrTopic/GetSubItemsByUserAndTopic",
-                {
-                    topicId: $("#ID").val()
-                },
-                function(_r) {
-                    var data = { //数据
-                        "list": _r
-                    }
-                    console.log(_r);
-                    var getTpl = subitemTemplate.innerHTML, view = $("#subItemBody");
-                    laytpl(getTpl).render(data,
-                        function(html) {
-                            view.append(html);
-                        });
-                    if (_r === undefined || _r.length == 0) {
-                        $("#subItemBody").html("暂未设置评分项");
-                    }
-                },
-                "json");
-        })
-    }
 
 </script>
-<script id="subitemTemplate" type="text/html">
-    {{#  layui.each(d.list, function(index, item){ }}
-    <tr>
-        <td>
-            {{item.SUBJECT_NAME}}
-            <input type="hidden" id="topicSubItemId{{index}}" name="topicSubItemId{{index}}" value="{{item.ID}}">
-            <input type="hidden" id="subItemId{{index}}" name="subItemId{{index}}" value="{{item.SUB_ITEM_ID}}">
-            <input type="hidden" id="weight{{index}}" name="weight{{index}}" value="{{item.WEIGHT}}">
-        </td>
-        <td>
-            {{item.SUB_ITEM_NAME}}<i class=" layui-icon layui-icon-xiangqing2"  style="cursor:pointer;" title="{{item.REMARK}}"></i>
-        </td>
-        <td> {{item.WEIGHT}}%</td>
-        <td> <input id="txtScore{{index}}" class="layui-input" name="txtScore{{index}}" value="{{item.SCORE}}"/></td>
-        <td> <input id="txtRemark{{index}}" class="layui-input" name="txtRemark{{index}}" value="{{item.SCORE_REMARK}}"/></td>
-    </tr>
-    {{#  }); }}
-</script>
-
 

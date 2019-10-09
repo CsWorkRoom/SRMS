@@ -12,24 +12,30 @@
             <legend>课题基础信息</legend>
         </fieldset>
         <div class="layui-form-item">
-            <label class="layui-form-label">课题名称<span class="imust">*</span></label>
-            <div class="layui-input-block">
-                <input type="text" id="NAME" name="NAME" value="@Model.NAME" lay-verify="name" placeholder="请输入课题名称" autocomplete="off" class="layui-input">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">课题名称<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="NAME" name="NAME" value="@Model.NAME" lay-verify="name" placeholder="请输入课题名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">课题类型<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="TOPIC_TYPE_ID" id="TOPIC_TYPE_ID" value="@Model.TOPIC_TYPE_ID">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">课题类型</label>
-            <div class="layui-input-block" style="height:100px;overflow-y:auto;overflow-x: hidden">
-                <input id="TOPIC_TYPE_ID" name="TOPIC_TYPE_ID" type="hidden" lay-verify="type" value="@Model.TOPIC_TYPE_ID"/>
-                <ul id="ztreeId" class="ztree"></ul>
-            </div>
-        </div>
+       
         <div class="layui-row">
             <div class="layui-col-xs6">
                 <div class="layui-form-item">
                     <label class="layui-form-label">开始时间<span class="imust">*</span></label>
                     <div class="layui-input-block">
-                        <input type="text" id="START_TIME" name="START_TIME" value="@Model.START_TIME" lay-verify="time" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                        <input type="text" id="START_TIME" name="START_TIME" value="@Model.START_TIME"  placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>
@@ -37,13 +43,13 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">结束时间<span class="imust">*</span></label>
                     <div class="layui-input-block">
-                        <input type="text" id="END_TIME" name="END_TIME" value="@Model.END_TIME" lay-verify="time" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                        <input type="text" id="END_TIME" name="END_TIME" value="@Model.END_TIME" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                     </div>
                 </div>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">课题备注<span class="imust">*</span></label>
+            <label class="layui-form-label">课题备注</label>
             <div class="layui-input-block">
                 <textarea name="REMARK" class="layui-input reportH" placeholder="请输入内容">@Model.REMARK</textarea> 
             </div>

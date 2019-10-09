@@ -2165,6 +2165,8 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrPatent\JS\Edit.js" />
+    <Content Include="Views\SrPatent\JS\FlowEdit.js" />
     <Content Include="Views\SrTopicEnd\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\common_style.css" />
     <Content Include="Views\SrTopicBudget\JS\Edit.js" />
@@ -2174,6 +2176,7 @@
     <Content Include="Views\SrTopicFunds\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\Edit.css" />
     <Content Include="Views\SrTopic\CSS\ExpertScore.css" />
+    <Content Include="Views\SrTopic\JS\FlowEdit.js" />
     <Content Include="Views\SrTopic\JS\TopicScore.js" />
     <Content Include="Views\SrTopic\JS\ExpertScore.js" />
     <Content Include="Views\SrTopic\JS\Set.js" />
@@ -2186,6 +2189,7 @@
     <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrPatentController.cs" />
     <Compile Include="Controllers\SR\SrTopicEndController.cs" />
     <Compile Include="Controllers\SR\SrTopicTaskController.cs" />
     <Compile Include="Controllers\SR\SrTopicFundsController.cs" />
@@ -2220,6 +2224,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Flow\FlowCaseNewModel.cs" />
+    <Compile Include="Models\Flow\FlowNodeModel.cs" />
+    <Compile Include="Models\Flow\FlowNodeCaseModel.cs" />
     <Compile Include="Models\FW\FlowCaseModel.cs" />
     <Compile Include="Models\FW\ZTreeModel.cs" />
     <Compile Include="Models\SR\TreeModel.cs" />
@@ -2416,6 +2423,10 @@
     <Content Include="Views\SrTopicTask\Edit.cshtml" />
     <Content Include="Views\SrTopicTask\Done.cshtml" />
     <Content Include="Views\SrTopicEnd\Edit.cshtml" />
+    <Content Include="Views\SrTopic\FlowEdit.cshtml" />
+    <Content Include="Views\AfFlowCase\DealFlow.cshtml" />
+    <Content Include="Views\SrPatent\Edit.cshtml" />
+    <Content Include="Views\SrPatent\FlowEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2425,6 +2436,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
+    <Folder Include="Views\SrPatent\CSS\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CS.BLL\CS.BLL.csproj">

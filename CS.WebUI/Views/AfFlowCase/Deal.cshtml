@@ -1,4 +1,5 @@
-﻿@using System.Web.Mvc.Html
+﻿@using System.Activities.Expressions
+@using System.Web.Mvc.Html
 @using CS.Base.Config
 @{
     Layout = "~/Views/Shared/_Content.cshtml";
@@ -13,12 +14,10 @@
 
     <div class="form-top-content">
         <div class="layui-tab-content">
-            <!--嵌入表单展示页面-->
-            <div class="layui-form-item">
-                <iframe scrolling="no" id="MainFormPage" frameborder="0" src="@ViewBag.MainFormPage"
-                        style="min-height:300px;width:100%;"></iframe>
-            </div>
             <!--以下是审批信息-->
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>审批操作</legend>
+            </fieldset>
             <div class="layui-form-item">
                 <label class="layui-form-label">审批状态</label>
                 <div class="layui-input-block">
@@ -35,6 +34,83 @@
                 <div class="layui-input-block">
                     <textarea placeholder="请输入审批说明" class="layui-textarea" name="AUDIT_CONTENT" id="AUDIT_CONTENT" lay-verify="required">@Model.AUDIT_CONTENT</textarea>
                 </div>
+            </div>
+            <!--审批过程-->
+            <div class="layui-form-item">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                    <legend>审批过程</legend>
+                </fieldset>
+                <ul class="layui-timeline">
+                    <div class="layui-collapse" lay-filter="test">
+                        @{
+                            int i = 1;
+						    foreach (var item in ViewBag.dealNodeCaseAllList as IEnumerable<CS.WebUI.Models.Flow.FlowCaseNewModel>)
+						     {
+						         <div class="layui-colla-item">
+						             <h2 class="layui-colla-title">@item.NAME   第 @i 次发起   时间:@item.CREATE_TIME</h2>
+						             <div class="layui-colla-content">
+						                 <ul class="layui-timeline">
+						                     @foreach (var node in @item.FlowNodeModes as IEnumerable<CS.WebUI.Models.Flow.FlowNodeModel>)
+						                     {
+						                         <li class="layui-timeline-item">
+						                             <i class="layui-icon layui-timeline-axis"></i>
+						                             <div class="layui-timeline-content layui-text">
+														 @if (@node.IS_MAIN == 1)
+														 {
+														     <h3 class="layui-timeline-title">@node.NAME  (开始节点)</h3>
+														 }
+														 else
+														 {
+														     <h3 class="layui-timeline-title">@node.NAME  (@(node.DEAL_WAY==0?"单人审核":"全员审核"))</h3>
+														 }
+						                                 @if (@node.FlowNodes != null && @node.FlowNodes.Count > 0)
+						                                 {
+						                                     <p>
+						                                         @foreach (var nodeCase in @node.FlowNodes as IEnumerable<CS.WebUI.Models.Flow.FlowNodeCaseModel>)
+						                                         {
+						                                             <p>
+																	     
+						                                                 @if (@node.IS_MAIN == 1)
+						                                                 {
+						                                                     <p><b>处理人</b>: @nodeCase.UserName        <b>状态</b>: 已提交 </p>
+						                                                 }
+						                                               else if (@nodeCase.FlowNodeCaseRecords != null && @nodeCase.FlowNodeCaseRecords.Count > 0)
+																	 {
+																		 <p>
+																	     @foreach (var nodeRecord in @nodeCase.FlowNodeCaseRecords as IEnumerable<CS.BLL.FW.BF_FLOW_NODE_CASE_RECORD.Entity>)
+																	      {
+																	          <p><b>处理人</b>: @nodeCase.UserName        <b>状态</b>: @(nodeRecord.AUDIT_STATUS==1?"审核通过":"审核不通过")        <b>处理时间</b>:@nodeRecord.AUDIT_TIME        <b>备注</b>: @nodeRecord.AUDIT_CONTENT</p>
+																	      }
+																		 </p>
+																	 }
+																	 else
+																	 {
+																	     <p><b>处理人</b>: @nodeCase.UserName        <b>状态</b>: 未处理 </p>
+																	 }
+						                                             </p>
+
+						                                         }
+						                                     </p>
+
+						                                 }
+
+						                             </div>
+						                         </li>
+						                     }
+						                 </ul>
+						             </div>
+						         </div>
+						         i++;
+						     }
+						}
+                    </div>
+                </ul>
+
+            </div>
+            <!--嵌入表单展示页面-->
+            <div class="layui-form-item">
+                <iframe scrolling="no" id="MainFormPage" frameborder="0" src="@ViewBag.MainFormPage"
+                        style="min-height:300px;width:100%;"></iframe>
             </div>
         </div>
     </div>

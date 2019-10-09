@@ -10,11 +10,27 @@
     <div class="form-top-content">
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
-                <li class="layui-this">基本信息</li>
-                <li>流程配置</li>
+				@if (Model.ID > 0)
+				{
+				    <li >基本信息</li>
+				    <li class="layui-this">流程配置</li>
+				}
+				else
+				{
+				    <li class="layui-this">基本信息</li>
+				    <li >流程配置</li>
+				}
+               
             </ul>
-            <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">
+        <div class="layui-tab-content">
+        
+                @if (Model.ID > 0)
+                {
+                    @:<div class="layui-tab-item">
+                }
+                else{
+                    @:<div class="layui-tab-item   layui-show">
+                }
                     <div class="layui-form-item">
                         <div class="layui-inline">
                             <label class="layui-form-label">流程名<span class="imust">*</span></label>
@@ -65,7 +81,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">是否启用</label>
                             <div class="layui-input-inline">
-                                <input type="hidden" id="IS_ENABLE" name="IS_ENABLE" value="@Model.IS_ENABLE" />
+                                <input type="hidden" id="IS_ENABLE" name="IS_ENABLE" value="@Model.IS_ENABLE"/>
                                 @if (Model.IS_ENABLE == 1)
                                 {
                                     <input type="checkbox" checked="checked" lay-skin="switch" lay-filter="switchUse" lay-text="启用|停用">
@@ -79,17 +95,24 @@
                     </div>
                 </div>
 
-                <div class="layui-tab-item">
-                    <input type="hidden" id="FlowNodes" name="FlowNodes" value="@ViewBag.FlowNodes" /><!--流程节点信息-->
-                    <input type="hidden" id="FlowNodeJoins" name="FlowNodeJoins" value="@ViewBag.FlowNodeJoins" /><!--流程节点关系信息-->
-                    <blockquote class="layui-elem-quote">
-                        用于配置流程<br />
-                    </blockquote>
-                    <button type="button" class="layui-btn"  onclick="newnode()">新增节点</button>
-                    <div id="editWFStepNodeModal">
-                    </div>
-                    <input type="hidden" name="nodeIndex" id="nodeIndex" value="0" />
+            
+                @if (Model.ID > 0)
+                {
+                    @:<div class="layui-tab-item   layui-show">
+                }
+                else{
+                    @:<div class="layui-tab-item">
+                }
+                <input type="hidden" id="FlowNodes" name="FlowNodes" value="@ViewBag.FlowNodes"/><!--流程节点信息-->
+                <input type="hidden" id="FlowNodeJoins" name="FlowNodeJoins" value="@ViewBag.FlowNodeJoins"/><!--流程节点关系信息-->
+                <blockquote class="layui-elem-quote">
+                    用于配置流程<br/>
+                </blockquote>
+                <button type="button" class="layui-btn" onclick="newnode()">新增节点</button>
+                <div id="editWFStepNodeModal">
                 </div>
+                <input type="hidden" name="nodeIndex" id="nodeIndex" value="0"/>
+            </div>
             </div>
         </div>
     </div>
@@ -134,14 +157,28 @@
                 <td width="100" align="right" style="height: 50px;">节点名称：</td>
                 <td align="left">
                     <input type="text" id="nodeName" style="background-color: transparent; border: 0; border-bottom: 1px solid #808080; height: 27px; width: 350px;" />
-                    </td>
-           </tr>
+                </td>
+            </tr>
+            <tr>
+                <td width="100" align="right" style="height: 50px;">是否开始节点：</td>
+                <td align="left">
+                    <input type="radio" name="isMain" value="1" title="是"  lay-filter="isMain"/>
+                    <input type="radio" name="isMain" value="0" title="否" checked="true" lay-filter="isMain"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="100" align="right" style="height: 50px;">处理方式：</td>
+                <td align="left">
+                    <input type="radio" name="dealWay" value="0" title="一人审核" checked="true" lay-filter="dealWay"/>
+                    <input type="radio" name="dealWay" value="1" title="全审核"  lay-filter="dealWay"/>
+                </td>
+            </tr>
             <tr>
                     <td width="100" align="right" style="height: 50px;">节点类型：</td>
                 <td align="left">
                     <input type="radio" name="nodeType" value="user" title="用户" checked="" lay-filter="nodetype"/>
-                    <input type="radio" name="nodeType" value="role" title="角色" lay-filter="nodetype"/>
-                    <input type="radio" name="nodeType" value="district" title="部门" lay-filter="nodetype"/>
+                    <!--<input type="radio" name="nodeType" value="role" title="角色" lay-filter="nodetype"/>
+                    <input type="radio" name="nodeType" value="district" title="部门"   lay-filter="nodetype"/>-->
                 </td>
             </tr>
             <tr>
@@ -189,6 +226,8 @@
 <script src="~/Content/JsPlumb1.4/1.4.0/jquery.jsPlumb-1.4.0-RC1.js"></script>
 <script>
     var rdovalue = 'user';
+    var rdoMain = '0';
+    var rdoDeal = '1';
     layui.use(['layer', 'form', 'jquery', 'element'],
         function() {
             var layer = layui.layer;
@@ -200,8 +239,15 @@
                      rdovalue = data.value;
                     bindentity(rdovalue,"");
                 });
+            form.on('radio(isMain)',
+                function(data) {
+                    rdoMain = data.value;
+                });
+            form.on('radio(dealWay)',
+                function(data) {
+                    rdoDeal = data.value;
+                });
             bindNodes();
-
         });
 
 	 //编辑流程是绑定节点
@@ -227,7 +273,9 @@
 	        var node= {
 	            name:obj.NAME,
 	            type:nodetype,
-	            ids:ids
+	            ids:ids,
+				ismain:obj.IS_MAIN,
+				dealway:obj.DEAL_WAY
 	        }
 	   
 	       var currIndex = getNodeIndex();
@@ -260,23 +308,29 @@
         var ids = $("#ids_values").val();
         var nodedivid = $("#hidNodeDivId").val();//编辑状态下
         var nodetype = rdovalue;
+        var ismain =rdoMain;
+        var dealway =rdoDeal;
         if (nodename == "") {
             layer.msg("节点名称不能为空");
         }
-		else if (ids == null || ids == "") {
-            layer.msg("节点名处理对象不能为空");
+		else if (ismain==0&&(ids == null || ids == "")) {
+            layer.msg("节点处理对象不能为空");
         }
         else {
             var node= {
                 name:nodename,
                 type:nodetype,
-				ids:ids
+				ids:ids,
+                ismain:ismain,
+				dealway:dealway
             }
             //判断是更新节点还是新增节点
             if (divIsExists(nodedivid)) {
                 //更新
                 var node = $(".inner[name='" + nodedivid + "']");
                 node.attr("nodetype", nodetype);
+                node.attr("ismain", ismain);
+                node.attr("dealway", dealway);
                 node.attr("ids", ids);
                 node.attr("title", nodename);
                 node.find("strong").text(nodename);
@@ -291,7 +345,15 @@
     }
 
 	function newnode() {
+	     rdovalue = 'user';
+	     rdoMain = '0';
+	     rdoDeal = '1';
 	    clearObj();
+	    $("input[name=isMain][value=0]").prop('checked', true);
+	    $("input[name=isMain][value=1]").prop('checked', false);
+	    $("input[name=dealWay][value=1]").prop('checked', true);
+	    $("input[name=dealWay][value=2]").prop('checked', false);
+	    form.render('radio'); //更新全部   
 	    editnode();
 	}
     function editnode() {
@@ -321,7 +383,7 @@
 		    nodediv = "node_"+flownodeId;
 		}
         html += "<div class='node-panel inner'  id='" + nodediv + "' nodeid='" + flownodeId + "' index='" + nodediv + "' name='" + nodediv 
-            + "'ids='"+ node.ids+   "'nodetype='"+ node.type+  "'title='"+ node.name+ "'style='top:" + top + "px;left:" + left + "px;'><strong>" + node.name + "</strong><div class='ep'></div>"
+            + "'ids='"+ node.ids+   "'nodetype='"+ node.type+  "'title='"+ node.name+ "'ismain='"+ node.ismain+  "'dealway='"+ node.dealway+ "'style='top:" + top + "px;left:" + left + "px;'><strong>" + node.name + "</strong><div class='ep'></div>"
             + " <i class='layui-icon layui-icon-delete delete' onclick= 'onRemoveNode(this)' />"
             + "</div > ";
 
@@ -338,17 +400,33 @@
         $("#nodeName").val('');
         $("#ids_values").val('');
         $("#hidNodeDivId").val("0");
+        bindentity(rdovalue,"");
     }
     //重新绑定节点编辑
-    function setObj(nodeId, nodeName, nodeType, nodeIndex,ids) {
+    function setObj(nodeId, nodeName, nodeType, nodeIndex,ids,isMain,dealWay) {
         $("#nodeName").val(nodeName);
         $("#nodeType").val(nodeType);
         $("#hidNodeDivId").val(nodeId);
         $('[name=nodeType]').each(function (i, item) {
             if ($(item).val() == nodeType) {
                 $(item).prop('checked', true);
+                 rdovalue =nodeType;
                 form.render('radio');
                 bindentity(nodeType,ids);
+            }
+        });
+        $('[name=isMain]').each(function (i, item) {
+            if ($(item).val() == isMain) {
+                $(item).prop('checked', true);
+                 rdoMain = isMain;
+                form.render('radio');
+            }
+        });
+        $('[name=dealWay]').each(function (i, item) {
+            if ($(item).val() == dealWay) {
+                $(item).prop('checked', true);
+                 rdoDeal = dealWay;
+                form.render('radio');
             }
         });
 
@@ -360,7 +438,7 @@
             layer.confirm('确定要删除该节点吗？', {
                 btn: ['是','否'] //按钮
             }, function(index){
-				console.log(selectNode.attr("id"))
+				
                 Plumbs.UI.Views.Plumb.delPannel(selectNode.attr("id"));//selectNode.attr("id")
                 selectNode.remove();
                 layer.close(index);
@@ -410,13 +488,15 @@
     function onRegistDblclick(node) {
         node.dblclick(function () {
             var nodeName = node.attr("title");
+            var isMain = node.attr("ismain");
+            var dealway = node.attr("dealway");
             var nodeType = node.attr("nodetype");
             var ids = node.attr("ids");
             var nodeIndex = node.attr("index");
             var nodedivId = node.attr("id");
             var url = $("#editWFStepNodeModal-body");
             clearObj(node);
-            setObj(nodedivId, nodeName, nodeType, nodeIndex,ids);
+            setObj(nodedivId, nodeName, nodeType, nodeIndex,ids,isMain,dealway);
             editnode();
 
         });
@@ -521,7 +601,8 @@
 			}
             var node = {
                 NAME:n.attr("title"),
-				IS_MAIN:1,
+				IS_MAIN:n.attr("ismain"),
+                DEAL_WAY:n.attr("dealway"),
                 DIV_X:n.css("top").replace('px',''),
                 DIV_Y:n.css("left").replace('px',''),
 				USER_IDS:uids,

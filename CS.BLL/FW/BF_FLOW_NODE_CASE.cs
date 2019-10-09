@@ -175,7 +175,7 @@ namespace CS.BLL.FW
                     AUDIT_STATUS = Convert.ToInt16(CS.Common.Enums.AuditStatus.通过.GetHashCode()),//默认通过1
                     CREATE_TIME = DateTime.Now,
                     CREATE_UID = SystemSession.UserID,
-                    USER_IDS = mainNode.USER_IDS,
+                    USER_IDS = SystemSession.UserID.ToString(),
                     DPT_IDS = mainNode.DPT_IDS,
                     ROLE_IDS = mainNode.ROLE_IDS,
                     FLOW_CASE_ID = flowCaseId,
@@ -310,7 +310,7 @@ namespace CS.BLL.FW
                 if (flowNodeCase.DEAL_WAY ==(short) CS.Common.Enums.DealWay.多人全部审批.GetHashCode())
                 {
                     var dealUserIds = caseRecordList.Select(p => p.AUDIT_UID.ToString()).ToList();
-                    if (userIds.Where(p => dealUserIds.Contains(p)).Count() > userIds.Count)
+                    if (userIds.Where(p => dealUserIds.Contains(p)).Count() >= userIds.Count)
                     {
                         resBool = true;
                     }

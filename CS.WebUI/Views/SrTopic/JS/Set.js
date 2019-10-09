@@ -7,10 +7,21 @@ function save() {
         //#endregion
         var nodes = getNodeUsers();
         $("#SelectExpert").val(nodes);
-        //获取锁配置的评审规则
-        var items = getNodeSubItems();
-        $("#SubItems").val(items);
-        SaveForm('form', url);
+        
+        if (nodes != null & nodes != "[]") {
+            //获取锁配置的评审规则
+            var items = getNodeSubItems();
+           
+            if (items != "[]" && items != "null") {
+                $("#SubItems").val(items);
+                SaveForm('form', url);
+            } else if (items == "[]") {
+                layer.alert("必须设置评分项", { icon: 2 });
+            }
+          
+        } else {
+            layer.alert("必须选择评分专家", { icon: 2 });
+        }
         return;
     });
 }
@@ -19,12 +30,28 @@ function save() {
 function getNodeSubItems() {
     var result = [];
     var trs = $("#subitemTable tbody").find('tr');
+    var total = 0;
     trs.each(function (index) {
         index = index + 1;
         var sub = $('#selectID' + index);
         var subItem = $('#selectItem' + index); 
         var weight = $('#txtWeight' + index); 
-        var remark = $('#txtRemark' + index); 
+        var remark = $('#txtRemark' + index);
+        if (subItem.val() == 0 || subItem.val() == null) {
+            layer.alert("必须选择评分项", { icon: 2 });
+            result = null;
+            return ;
+        }
+        if (weight.val() == 0 || weight.val() == null) {
+            layer.alert("权重值不能为空", { icon: 2 });
+            result = null;
+            return ;
+        }
+        if (!/^\d+|\d+\.\d{1,2}$/gi.test(weight.val())) {
+            layer.alert("权重值只能是数字类型", { icon: 2 });
+            result = null
+            return;
+        }
         var node = {
             ID: 0,
             TOPIC_ID: 0,
@@ -32,6 +59,12 @@ function getNodeSubItems() {
             WEIGHT: weight.val(),
             REMARK: remark.val()
         };
+        total = total + parseFloat(weight.val());
+        if (total>100) {
+            layer.alert("权重值总和不能大于100", { icon: 2 });
+            result = null;
+            return;
+        }
         result.push(node);
     });
     return JSON.stringify(result);
@@ -91,6 +124,14 @@ layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
     var form = layui.form, layer = layui.layer, $ = layui.jquery
     layedit = layui.layedit, laydate = layui.laydate;
     var remark = layedit.build('REMARK');
+    //自定义验证规则
+    form.verify({
+        num: function (value) {
+            if (value.length >0) {
+                return '权重不能为空且必须为数字';
+            }
+        }
+    });
     $("#tipUser").on("click",
         function() {
             var url = $("#add_users");

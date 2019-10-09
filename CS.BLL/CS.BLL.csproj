@@ -117,10 +117,12 @@
     <Compile Include="SR\SR_SUBJECT.cs" />
     <Compile Include="SR\SR_SUB_ITEM.cs" />
     <Compile Include="SR\SR_PAPER.cs" />
+    <Compile Include="SR\SR_PATENT.cs" />
     <Compile Include="SR\SR_TOPIC_FUNDS.cs" />
     <Compile Include="SR\SR_TOPIC_SCORE.cs" />
     <Compile Include="SR\SR_TOPIC_SUB_ITEM.cs" />
     <Compile Include="SR\SR_TOPIC_EXPERT.cs" />
+    <Compile Include="SR\SR_PATENT_TYPE.cs" />
     <Compile Include="SR\SR_TOPIC_USER.cs" />
     <Compile Include="SR\SR_FILES.cs" />
     <Compile Include="SR\SR_ACCOUNTING_TYPE.cs" />

@@ -29,6 +29,7 @@ function encode() {
     layui.use(['jquery'], function () {
         var $ = jQuery = layui.jquery;
         var psd = $("#password").val();
+        console.log(psd);
         var len = psd.length;
         var p = String.fromCharCode(60 + len);
         var n = 100;

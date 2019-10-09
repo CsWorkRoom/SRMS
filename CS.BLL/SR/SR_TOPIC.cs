@@ -101,6 +101,11 @@ namespace CS.BLL.SR
             public int FLOW_STATE { get; set; }
 
             /// <summary>
+            /// 是否审批通过
+            /// </summary>
+            [Field(IsNotNull = true, DefaultValue = "0", Comment = "是否审批通过")]
+            public int IS_ADOPT { get; set; }
+            /// <summary>
             /// 是否立项
             /// </summary>
             [Field(IsNotNull = false, DefaultValue = "0", Comment = "是否立项")]
@@ -214,6 +219,24 @@ namespace CS.BLL.SR
         public void GetTopicTreeByUser()
         {
 
+        }
+
+        /// <summary>
+        /// 获取可用课题
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, string> GetDictionary()
+        {
+            Dictionary<int, string> dic = new Dictionary<int, string>();
+            var topics = SR_TOPIC.Instance.GetList<SR_TOPIC.Entity>("IS_APPROVAL=1").ToList();
+            if (topics != null&& topics.Count>0)
+            {
+                foreach (var kvp in topics)
+                {
+                    dic.Add(kvp.ID, kvp.NAME);
+                }
+            }
+            return dic;
         }
 
     }

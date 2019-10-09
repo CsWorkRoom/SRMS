@@ -32,7 +32,7 @@ namespace CS.WebUI.Controllers.SR
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public ActionResult Edit(int id = 5)
+        public ActionResult Edit(int id = 0)
         {
             ViewBag.Result = false;
             ViewBag.Message = string.Empty;
@@ -47,7 +47,13 @@ namespace CS.WebUI.Controllers.SR
                 {
                     ViewBag.Message = "课题不存在！";
                     model.ID = -1;
+                   
                 }
+            }
+            else
+            {
+                model.START_TIME = DateTime.Now;
+                model.END_TIME = DateTime.Now;
             }
             #region 加载课题参与人员
             var userList = BLL.SR.SR_TOPIC_USER.Instance.GetList<BLL.SR.SR_TOPIC_USER.Entity>("TOPIC_ID=?", id);
@@ -105,6 +111,7 @@ namespace CS.WebUI.Controllers.SR
                     entity.ID = topicId;
                     entity.CREATE_USER_ID = SystemSession.UserID;
                     entity.CREATE_TIME = DateTime.Now;
+                    entity.APPROVAL_REMARK = "";
                     SR_TOPIC.Instance.Add(entity, true);
                 }
                 else
@@ -417,10 +424,13 @@ namespace CS.WebUI.Controllers.SR
         #endregion
 
         #region 专家单项评分
-        public ActionResult ExpertScore(int topicid = 5)
+        public ActionResult ExpertScore(int id=0)
         {
             ViewBag.Result = false;
             ViewBag.Message = string.Empty;
+            BLL.SR.SR_TOPIC_EXPERT.Entity expert =
+                BLL.SR.SR_TOPIC_EXPERT.Instance.GetEntityByKey<BLL.SR.SR_TOPIC_EXPERT.Entity>(id);
+            int topicid = expert.TOPIC_ID;
             BLL.SR.SR_TOPIC.Entity model =
                 BLL.SR.SR_TOPIC.Instance.GetEntityByKey<BLL.SR.SR_TOPIC.Entity>(topicid);
             BLL.SR.SR_TOPIC_TYPE.Entity topicType = BLL.SR.SR_TOPIC_TYPE.Instance.GetEntityByKey<BLL.SR.SR_TOPIC_TYPE.Entity>(model.TOPIC_TYPE_ID);
@@ -440,6 +450,8 @@ namespace CS.WebUI.Controllers.SR
             #region 加载课题评审规则
             var subItemList = BLL.SR.SR_TOPIC_SUB_ITEM.Instance.GetList<BLL.SR.SR_TOPIC_SUB_ITEM.Entity>("TOPIC_ID=?", topicid);
             ViewBag.Subitems = SerializeObject(subItemList.ToList());
+
+            ViewBag.IsPing = expert.IS_SCORE;
             #endregion
 
 
@@ -543,7 +555,7 @@ namespace CS.WebUI.Controllers.SR
 
             if (topicSubItem != null)
             {
-                return "评分规则:"+ topicSubItem.RULE + "\n评分说明:"+ topicSubItem.REMARK + "\n设置备注:"+ remark ;
+                return "评分规则:"+ topicSubItem.RULE + "\n评分说明:"+ topicSubItem.REMARK + "\n评分备注:"+ remark ;
             }
             else
             {
@@ -661,19 +673,30 @@ namespace CS.WebUI.Controllers.SR
                     result.Message = "课题项不存在，不可编辑";
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
+                IList<BLL.SR.SR_TOPIC_EXPERT.Entity> allList = BLL.SR.SR_TOPIC_EXPERT.Instance
+                    .GetTopicExpertList(entity.ID);
+                var opList = allList.Where(x => x.IS_SCORE == 0);
+                if (opList != null && opList.Count() > 0)
+                {
+                    result.IsSuccess = false;
+                    result.Message = "保存失败！还有专家未完成评分";
+                }
+                else
+                {
+                    var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(entity.ID);
+                    topic.IS_APPROVAL = entity.IS_APPROVAL;
+                    topic.APPROVAL_REMARK = entity.APPROVAL_REMARK.Trim();
+                    topic.TOTAL_SCORE = entity.TOTAL_SCORE;
+                    topic.MAX_SCORE = entity.MAX_SCORE;
+                    topic.MIN_SCORE = entity.MIN_SCORE;
+                    topic.AVG_SCORE = entity.AVG_SCORE;
+                    topic.APPROVAL_TIME = DateTime.Now;
+                    SR_TOPIC.Instance.UpdateByKey(topic, topic.ID);//修改
+                    result.IsSuccess = true;
+                    result.Message = "保存成功";
+                    WriteOperationLog(BLog.LogLevel.INFO, true, Modular, (entity.ID > 0 ? "修改" : "添加"), "", (entity.ID > 0 ? "修改" : "添加") + "ID为" + entity.ID + "的课题成功！");
 
-                var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(entity.ID);
-                topic.IS_APPROVAL = entity.IS_APPROVAL;
-                topic.APPROVAL_REMARK = entity.APPROVAL_REMARK;
-                topic.TOTAL_SCORE = entity.TOTAL_SCORE;
-                topic.MAX_SCORE = entity.MAX_SCORE;
-                topic.MIN_SCORE = entity.MIN_SCORE;
-                topic.AVG_SCORE = entity.AVG_SCORE;
-                topic.APPROVAL_TIME = DateTime.Now;
-                SR_TOPIC.Instance.UpdateByKey(topic, topic.ID);//修改
-                result.IsSuccess = true;
-                result.Message = "保存成功";
-                WriteOperationLog(BLog.LogLevel.INFO, true, Modular, (entity.ID > 0 ? "修改" : "添加"), "", (entity.ID > 0 ? "修改" : "添加") + "ID为" + entity.ID + "的课题成功！");
+                }
             }
             catch (Exception ex)
             {
@@ -774,6 +797,33 @@ namespace CS.WebUI.Controllers.SR
 
                 return null;
 
+        }
+        #endregion
+
+        #region 流程处理页面
+        public ActionResult FlowEdit(int id = 0)
+        {
+            ViewBag.Result = false;
+            ViewBag.Message = string.Empty;
+            BLL.SR.SR_TOPIC.Entity model =
+                BLL.SR.SR_TOPIC.Instance.GetEntityByKey<BLL.SR.SR_TOPIC.Entity>(id);
+            BLL.SR.SR_TOPIC_TYPE.Entity topicType = BLL.SR.SR_TOPIC_TYPE.Instance.GetEntityByKey<BLL.SR.SR_TOPIC_TYPE.Entity>(model.TOPIC_TYPE_ID);
+            ViewBag.TopicTypeName = topicType.NAME;
+            //参加的人员
+            List<BLL.SR.SR_TOPIC_USER.Entity> topicUsers = BLL.SR.SR_TOPIC_USER.Instance.GetTopicUserList(id);
+            var libaleList = topicUsers.Where(x => x.IS_PERSON_LIABLE == 1).Select(x => new TopicUser()
+            {
+                USER_NAME = BLL.FW.BF_USER.Instance.GetStringValueByKey(x.USER_ID, "FULL_NAME")
+            });
+            var libaleNoList = topicUsers.Where(x => x.IS_PERSON_LIABLE == 0).Select(x => new TopicUser()
+            {
+                USER_NAME = BLL.FW.BF_USER.Instance.GetStringValueByKey(x.USER_ID, "FULL_NAME")
+            });
+            ViewBag.SelectLibaleUsers = libaleList.ToList();
+            ViewBag.SelectNoLibaleUsers = libaleNoList.ToList();
+         
+            ModelState.Clear();
+            return View(model);
         }
         #endregion
     }

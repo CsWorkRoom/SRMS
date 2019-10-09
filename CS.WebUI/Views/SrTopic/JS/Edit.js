@@ -16,7 +16,27 @@ function SaveFlowForm() {
     var url = "../SrTopic/Edit";
     var nodes = getNodeUsers();
     $("#SelectUser").val(nodes);
-    var data =$("#form").serialize();
+    var data = $("#form").serialize();
+    var stopicName = $("#NAME").val();
+    if (stopicName.length == 0) {
+        layer.alert("课题名称不能为空", { icon: 2 });
+        return;
+    }
+    var stopicUser=$("#SelectUser").val();
+    if (stopicUser.length == 0) {
+        layer.alert("课题参与人员不能为空", { icon: 2 });
+        return;
+    }
+    var startTime = $("#START_TIME").val()
+    if (startTime.length == 0) {
+        layer.alert("课题开始时间不能为空", { icon: 2 });
+        return;
+    }
+    var endTime = $("#END_TIME").val()
+    if (endTime.length == 0) {
+        layer.alert("课题参结束时间不能为空", { icon: 2 });
+        return;
+    }
     //var data = {
     //    ID: $("#ID").val(),
     //    CREATE_USER_ID: $("#CREATE_USER_ID").val(),
@@ -79,18 +99,33 @@ layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
     layedit = layui.layedit, laydate = layui.laydate;
 
     var currDay = getCurrDay();
+    ////初始化开始时间
+    //laydate.render({
+    //    elem: '#START_TIME',
+    //    value: currDay
+    //    , isInitValue: true
+    //});
+    ////初始化结束时间
+    //laydate.render({
+    //    elem: '#END_TIME',
+    //    format: 'yyyy-MM-dd',
+    //    isInitValue: true,
+    //    value: currDay
+    //});
+
     //初始化开始时间
     laydate.render({
         elem: '#START_TIME',
-        value: currDay
-        , isInitValue: true
+        format: 'yyyy/MM/dd HH:mm:ss',
+        type: 'datetime',
+        value: new Date(1534766888000)
     });
     //初始化结束时间
     laydate.render({
         elem: '#END_TIME',
-        format: 'yyyy-MM-dd',
-        isInitValue: true,
-        value: currDay
+        format: 'yyyy/MM/dd HH:mm:ss',
+        type: 'datetime',
+        value: new Date(1534766888000)
     });
     var remark = layedit.build('REMARK');
 
@@ -127,10 +162,6 @@ layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
             if (value.length == 0) {
                 return '课题类型不能为空';
             }
-        },
-        remark:
-        function (value) {
-            layedit.sync(remark);
         }
     });
     //提交
@@ -198,8 +229,15 @@ function isExsit(uid) {
 //ztree树形结构
 $(function () {
     var zNodes = JSON.parse($("#TypeSelect").val());
-    $.fn.zTree.init($("#ztreeId"), setting, zNodes);
-    FuncInitZtreeValue("TOPIC_TYPE_ID", "ztreeId");
+    //$.fn.zTree.init($("#ztreeId"), setting, zNodes);
+    //FuncInitZtreeValue("TOPIC_TYPE_ID", "ztreeId");
+    $.comboztree("TOPIC_TYPE_ID", {
+        ztreenode: zNodes,
+        onClick: function (event, treeId, treeNode) {
+            console.log(treeId);
+            console.log(treeNode);
+        }
+    });
 });
 
 var setting = {
