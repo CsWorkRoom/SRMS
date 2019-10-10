@@ -115,7 +115,7 @@ namespace CS.WebUI.Controllers
 
         /// <summary>
         /// 当前服务于富文本中的图片上传
-        /// 文件夹名和key名一致
+        /// 文件路径应放置于网站相对目录
         /// </summary>
         /// <param name="pathName"></param>
         /// <param name="file"></param>
@@ -132,7 +132,9 @@ namespace CS.WebUI.Controllers
                 try
                 {
                     fileName = Path.GetFileName(file.FileName);
-                    string path = Base.Config.BConfig.GetConfigToString(pathName);//获取文件目录
+                    //string path = Base.Config.BConfig.GetConfigToString(pathName);
+                    string path = Server.MapPath(Request.ApplicationPath)+ pathName;//存储在网站相对根目录
+
                     if (string.IsNullOrWhiteSpace(path))
                     {
                         throw new Exception("未找到配置目录【" + pathName + "】");

@@ -167,10 +167,37 @@
             }
             //点击空白处事件
             function onBodyDown(event) {
+                //var obj = $(event.target);
+                //var parentobj = obj.parents(".tree-content");
+                ////还存在问题
+                //if (parentobj.html() == null) {
+                //    FuncHideMenu();
+                //}
+
                 var obj = $(event.target);
-                var parentobj = obj.parents(".tree-content");
-                //还存在问题
-                if (parentobj.html() == null) {
+
+                var istc = false;
+                var isst = false;
+                $.each($(".tree-content"), function (i, n) {
+                    if (n == obj.get(0)) {
+                        istc = true;
+                        return false;
+                    }
+                });
+
+                $.each($(".select-tree"), function (i, n) {
+                    if (n == obj.get(0)) {
+                        isst = true;
+                        return false;
+                    }
+                });
+
+                var parentobj1 = obj.parents(".tree-content");
+                var parentobj2 = obj.parents(".select-tree");
+                if (parentobj1.html() == null
+                    && parentobj2.html() == null
+                    && !istc
+                    && !isst) {
                     FuncHideMenu();
                 }
             }
@@ -185,6 +212,9 @@
             var idArrays = val.split(",");
             var ztree = $.fn.zTree.getZTreeObj(this.ztreeId);
             for (var i = 0; i < idArrays.length; i++) {
+                if (idArrays[i] == "" || idArrays[i] == null || idArrays[i] == undefined || idArrays[i] == "undefined") {
+                    continue;
+                }
                 //获取节点
                 var node = ztree.getNodesByParam("value", idArrays[i])[0];
                 if (node == undefined) {
@@ -195,7 +225,7 @@
                     ztree.selectNode(node);
                 else {
                     //勾选单个节点
-                    if (node === null) return;
+                    if (node === null || node == undefined) return;
                     ztree.checkNode(node, true, false);
                 }
             }
