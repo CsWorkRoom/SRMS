@@ -196,6 +196,9 @@ namespace CS.BLL.FW
                         {
                             var curToNode = allNodeList.FirstOrDefault(p => p.ID == toNode.TO_NODE_ID);
                             int curToNodeCase = BF_FLOW_NODE_CASE.Instance.AddFlowNodeCase(curToNode, flowCaseId, flow.ID, toNode.FROM_NODE_ID);
+                            //修改原表的状态信息,下发到下一个节点
+                            var flowCase=BF_FLOW_CASE.Instance.GetEntityByKey<BF_FLOW_CASE.Entity>(flowCaseId);
+                            UpdateMainTableState(flowCase.PRIMARY_KEY, flowCase.MAIN_TABLE, curToNode.ID.ToString(), "0");
                         }
                     }
                 }
@@ -211,7 +214,8 @@ namespace CS.BLL.FW
                         flowCase.IS_ENABLE = 1;
                         flowCase.ARCHIVE_TIME = DateTime.Now;
                         BF_FLOW_CASE.Instance.UpdateByKey(flowCase, flowCaseId);
-
+                        //修改原表的状态信息-当前流程结束
+                        UpdateMainTableState(flowCase.PRIMARY_KEY, flowCase.MAIN_TABLE, "0", "1");
                         //验证和触发下个流程
                         var flowRefList = BF_FLOW_REF.Instance.GetNextFlow(flow.ID);
                         if(flowRefList!=null&&flowRefList.Count>0)
@@ -225,6 +229,7 @@ namespace CS.BLL.FW
                         else
                         {
                             remark = "未找到下级走向节点";
+                           
                         }
 
                         #region 加入走向说明
@@ -301,6 +306,21 @@ namespace CS.BLL.FW
             };
             BF_FLOW_NODE_CASE.Instance.Add(mainFlowNodeCase);
             return mainFlowNodeCaseId;
+        }
+
+        /// <summary>
+        /// 更新源表的状态
+        /// </summary>
+        /// <param name="entityId"></param>
+        /// <param name="mainTable"></param>
+        /// <param name="flowState"></param>
+        /// <param name="isAdopt">-1:表示未通过；1表示通过</param>
+        public void UpdateMainTableState(int entityId,string mainTable, string flowState, string isAdopt)
+        {
+            string updateSql = string.Format(@"update {0} set flow_state={1}, is_adopt={2} where id={3}", mainTable, flowState, isAdopt,entityId);
+
+            BF_DATABASE.Instance.ExecuteSQL(0, "lb@em", updateSql, null);
+
         }
     }
 }

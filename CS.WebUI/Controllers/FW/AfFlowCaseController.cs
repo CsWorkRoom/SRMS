@@ -174,6 +174,8 @@ namespace CS.WebUI.Controllers.FW
 
             return View(record);
         }
+        
+
         /// <summary>
         ///  流转记录
         /// </summary>
@@ -276,6 +278,9 @@ namespace CS.WebUI.Controllers.FW
 
                     //退回流程至流程主节点
                     BF_FLOW_NODE_CASE.Instance.ReturnFlowNodeCase(record.FLOW_NODE_ID, record.FLOW_CASE_ID);
+                    //修改原表的状态信息
+                    var flowCase = BF_FLOW_CASE.Instance.GetEntityByKey<BF_FLOW_CASE.Entity>(flowNodeCase.FLOW_CASE_ID);
+                    BF_FLOW_CASE.Instance.UpdateMainTableState(flowCase.PRIMARY_KEY, flowCase.MAIN_TABLE, "0", "-1");
                 }
                 else
                 {
@@ -295,7 +300,7 @@ namespace CS.WebUI.Controllers.FW
                 #region 03.触发下个节点流转
                 if (isPass)
                 {
-                    var resBool = BF_FLOW_CASE.Instance.CreateNextNodesCase(flow, currFlowNode, record.FLOW_CASE_ID);
+                    var resBool = BF_FLOW_CASE.Instance.CreateNextNodesCase(flow, currFlowNode, record.FLOW_CASE_ID);      
                 }
                 #endregion
             }
