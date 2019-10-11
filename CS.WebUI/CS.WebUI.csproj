@@ -2419,6 +2419,7 @@
     <Content Include="Content\zTree_v3\css\awesomeStyle\awesome.less" />
     <Content Include="Content\zTree_v3\css\awesomeStyle\fa.less" />
     <Content Include="Content\zTree_v3\README.md" />
+    <Content Include="Content\layui\font\iconfont.woff2" />
     <None Include="Properties\PublishProfiles\QSS.pubxml" />
     <Content Include="Views\Shared\PVUpFile.cshtml" />
     <Content Include="Views\Shared\PVTree.cshtml" />
