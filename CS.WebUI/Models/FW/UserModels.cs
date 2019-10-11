@@ -80,6 +80,17 @@ namespace CS.WebUI.Models.FW
         /// 备用3
         /// </summary>
         public string EXTEND_3 { get; set; }
+
+        #region 科研系统特有
+        /// <summary>
+        /// 职称ID
+        /// </summary>
+        public int TITLE_ID { get; set; }
+        /// <summary>
+        /// 级别
+        /// </summary>
+        public string TEC_LEVEL { get; set; }
+        #endregion
     }
 
     /// <summary>
@@ -176,5 +187,16 @@ namespace CS.WebUI.Models.FW
         /// 最后登录时间
         /// </summary>
         public DateTime LAST_LOGIN_TIME { get; set; }
+
+        #region 科研系统特有
+        /// <summary>
+        /// 职称ID
+        /// </summary>
+        public int TITLE_ID { get; set; }
+        /// <summary>
+        /// 级别
+        /// </summary>
+        public string TEC_LEVEL { get; set; }
+        #endregion
     }
 }

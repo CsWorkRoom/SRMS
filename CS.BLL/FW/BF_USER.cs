@@ -185,6 +185,20 @@ namespace CS.BLL.FW
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "NOW", Comment = "修改时间")]
             public DateTime UPDATE_TIME { get; set; }
+
+            #region 科研管理系统新增字段
+            /// <summary>
+            /// 级别
+            /// </summary>
+            [Field(Comment = "级别")]
+            public string TEC_LEVEL { get; set; }
+
+            /// <summary>
+            /// 职称ID
+            /// </summary>
+            [Field(Comment = "职称ID")]
+            public int TITLE_ID { get; set; }
+            #endregion
         }
 
         #endregion
@@ -379,6 +393,34 @@ namespace CS.BLL.FW
 
             return Add(entity);
         }
+        public int Add(string name, string fullName, int deptID, string roleIds, string phoneNumber, string email, string qq, Int16 flag1, Int16 flag2, Int16 flag3, string extend1, string extend2, string extend3, string TEC_LEVEL, int TITLE_ID)
+        {
+            CheckInput(0, name, fullName, deptID, roleIds);
+            Entity entity = new Entity();
+            entity.NAME = name;
+            entity.FULL_NAME = fullName;
+            entity.PASSWORD = GetDefaultPassword(name);
+            entity.DEPT_ID = deptID;
+            entity.ROLE_IDS = roleIds;
+            entity.IS_ENABLE = 1;
+            entity.PHONE_NUMBER = phoneNumber;
+            entity.E_MAIL = email;
+            entity.QQ = qq;
+            entity.CREATE_TIME = DateTime.Now;
+            entity.UPDATE_TIME = DateTime.Now;
+            entity.CREATE_UID = SystemSession.UserID;
+            entity.UPDATE_UID = SystemSession.UserID;
+            entity.FLAG_1 = flag1;
+            entity.FLAG_2 = flag2;
+            entity.FLAG_3 = flag3;
+            entity.EXTEND_1 = extend1;
+            entity.EXTEND_2 = extend2;
+            entity.EXTEND_3 = extend3;
+            entity.TEC_LEVEL = TEC_LEVEL;
+            entity.TITLE_ID = TITLE_ID;
+
+            return Add(entity);
+        }
 
         /// <summary>
         /// 更新用户信息
@@ -437,6 +479,30 @@ namespace CS.BLL.FW
             dic.Add("EXTEND_3", extend3);
             dic.Add("UPDATE_TIME", DateTime.Now);
             dic.Add("UPDATE_UID", SystemSession.UserID);
+
+            return UpdateByKey(dic, id);
+        }
+
+        public int Update(int id, string fullName, int deptID, string roleIds, string phoneNumber, string email, string qq, Int16 flag1, Int16 flag2, Int16 flag3, string extend1, string extend2, string extend3, string TEC_LEVEL, int TITLE_ID)
+        {
+            CheckInput(id, "-", fullName, deptID, roleIds);
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("FULL_NAME", fullName);
+            dic.Add("DEPT_ID", deptID);
+            dic.Add("ROLE_IDS", roleIds);
+            dic.Add("PHONE_NUMBER", phoneNumber);
+            dic.Add("E_MAIL", email);
+            dic.Add("QQ", qq);
+            dic.Add("FLAG_1", flag1);
+            dic.Add("FLAG_2", flag2);
+            dic.Add("FLAG_3", flag3);
+            dic.Add("EXTEND_1", extend1);
+            dic.Add("EXTEND_2", extend2);
+            dic.Add("EXTEND_3", extend3);
+            dic.Add("UPDATE_TIME", DateTime.Now);
+            dic.Add("UPDATE_UID", SystemSession.UserID);
+            dic.Add("TEC_LEVEL", TEC_LEVEL);
+            dic.Add("TITLE_ID", TITLE_ID);
 
             return UpdateByKey(dic, id);
         }

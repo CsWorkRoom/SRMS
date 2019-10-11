@@ -116,6 +116,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SR\SR_ARTICLE_TYPE.cs" />
     <Compile Include="SR\SR_PATENT.cs" />
+    <Compile Include="SR\SR_TITLE.cs" />
     <Compile Include="SR\SR_PATENT_TYPE.cs" />
     <Compile Include="SR\SR_SUBJECT.cs" />
     <Compile Include="SR\SR_SUB_ITEM.cs" />

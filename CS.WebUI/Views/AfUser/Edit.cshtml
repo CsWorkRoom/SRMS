@@ -62,7 +62,42 @@
                 <input type="text" name="E_MAIL" value="@Model.E_MAIL" autocomplete="off" class="layui-input">
             </div>
         </div>
+        <!--以下：科研管理系统增加的字段-->
         <div class="layui-form-item">
+            <label class="layui-form-label">级别</label>
+            <div class="layui-input-inline">
+                <select id="TEC_LEVEL" name="TEC_LEVEL">
+                    <option value="无">--请选择--</option>
+                    <option value="初级">初级</option>
+                    <option value="中级">中级</option>
+                    <option value="高级">高级</option>
+                </select>
+            </div>
+            <label class="layui-form-label">职称</label>
+            <div class="layui-input-inline">
+                <select id="TITLE_ID" name="TITLE_ID" lay-filter="selectGroup">
+                    <option value="-1">--请选择--</option>
+                    @if (ViewBag.TitleList != null)
+                    {
+                        foreach (var item in ViewBag.TitleList)
+                        {
+                            if (item.ID.ToString() == Model.TITLE_ID.ToString())
+                            {
+                            <option value="@item.ID" selected>@item.NAME</option>
+                            }
+                            else
+                            {
+                            <option value="@item.ID">@item.NAME</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <!--以上：科研管理系统增加的字段-->
+
+        <!--以下隐藏-->
+        <div class="layui-form-item" style="display:none">
             <label class="layui-form-label">备用标志1</label>
             <div class="layui-input-inline">
                 <input type="text" name="FLAG_1" value="@Model.FLAG_1" autocomplete="off" class="layui-input" placeholder="填写整数，根据项目具体情况约定其作用">
@@ -72,7 +107,7 @@
                 <input type="text" name="EXTEND_1" value="@Model.EXTEND_1" autocomplete="off" class="layui-input" placeholder="填写文本，根据项目具体情况约定其作用">
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" style="display:none">
             <label class="layui-form-label">备用标志2</label>
             <div class="layui-input-inline">
                 <input type="text" name="FLAG_2" value="@Model.FLAG_2" autocomplete="off" class="layui-input" placeholder="填写整数，根据项目具体情况约定其作用">
@@ -82,7 +117,7 @@
                 <input type="text" name="EXTEND_2" value="@Model.EXTEND_2" autocomplete="off" class="layui-input" placeholder="填写文本，根据项目具体情况约定其作用">
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" style="display:none">
             <label class="layui-form-label">备用标志3</label>
             <div class="layui-input-inline">
                 <input type="text" name="FLAG_3" value="@Model.FLAG_3" autocomplete="off" class="layui-input" placeholder="填写整数，根据项目具体情况约定其作用">
@@ -92,7 +127,8 @@
                 <input type="text" name="EXTEND_3" value="@Model.EXTEND_3" autocomplete="off" class="layui-input" placeholder="填写文本，根据项目具体情况约定其作用">
             </div>
         </div>
-    </div>
+        <!--以上隐藏-->
+     </div>
 
     <div class="form-bottom-submit">
         <input type="hidden" id="msg" value="@ViewBag.Message" />

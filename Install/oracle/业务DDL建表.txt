@@ -269,3 +269,16 @@ create table SR_PAPER_RECORD
    AUDIT_TIME           TIMESTAMP,
    constraint PK_SR_PAPER_RECORD primary key (ID)
 );
+
+--------÷∞≥∆π‹¿Ì---------------
+create table SR_TITLE 
+(
+   ID                   INTEGER              not null,
+   NAME                 VARCHAR2(128),
+   REMARK               VARCHAR2(256),
+   CREATE_UID           INTEGER              not null,
+   UPDATE_UID           INTEGER              not null,
+   CREATE_TIME          TIMESTAMP            not null,
+   UPDATE_TIME          TIMESTAMP            not null,
+   constraint PK_SR_TITLE primary key (ID)
+);

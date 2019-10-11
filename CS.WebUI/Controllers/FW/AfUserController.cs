@@ -163,6 +163,10 @@ namespace CS.WebUI.Controllers.FW
                 }
             }
 
+            #region 科研管理系统特有
+            //职称下拉
+            ViewBag.TitleList = CS.BLL.SR.SR_TITLE.Instance.GetList<CS.BLL.SR.SR_TITLE.Entity>();
+            #endregion
 
             #region 组织树下拉
             var departmentList = BLL.FW.BF_DEPARTMENT.Instance.GetList<BLL.FW.BF_DEPARTMENT.Entity>();
@@ -228,11 +232,11 @@ namespace CS.WebUI.Controllers.FW
             {
                 if (id > 0)
                 {
-                    i = BLL.FW.BF_USER.Instance.Update(id, userModel.FULL_NAME, userModel.DEPT_ID, userModel.ROLE_IDS, userModel.PHONE_NUMBER, userModel.E_MAIL, userModel.QQ, userModel.FLAG_1, userModel.FLAG_2, userModel.FLAG_3, userModel.EXTEND_1, userModel.EXTEND_2, userModel.EXTEND_3);
+                    i = BLL.FW.BF_USER.Instance.Update(id, userModel.FULL_NAME, userModel.DEPT_ID, userModel.ROLE_IDS, userModel.PHONE_NUMBER, userModel.E_MAIL, userModel.QQ, userModel.FLAG_1, userModel.FLAG_2, userModel.FLAG_3, userModel.EXTEND_1, userModel.EXTEND_2, userModel.EXTEND_3,userModel.TEC_LEVEL, userModel.TITLE_ID);
                 }
                 else
                 {
-                    i = BLL.FW.BF_USER.Instance.Add(userModel.NAME, userModel.FULL_NAME, userModel.DEPT_ID, userModel.ROLE_IDS, userModel.PHONE_NUMBER, userModel.E_MAIL, userModel.QQ, userModel.FLAG_1, userModel.FLAG_2, userModel.FLAG_3, userModel.EXTEND_1, userModel.EXTEND_2, userModel.EXTEND_3);
+                    i = BLL.FW.BF_USER.Instance.Add(userModel.NAME, userModel.FULL_NAME, userModel.DEPT_ID, userModel.ROLE_IDS, userModel.PHONE_NUMBER, userModel.E_MAIL, userModel.QQ, userModel.FLAG_1, userModel.FLAG_2, userModel.FLAG_3, userModel.EXTEND_1, userModel.EXTEND_2, userModel.EXTEND_3, userModel.TEC_LEVEL, userModel.TITLE_ID);
                 }
 
                 if (i > 0)
