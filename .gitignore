@@ -11,6 +11,7 @@ bin/
 obj/
 tmp/
 log/
+ArticlePath/
 ExportFile/
 UpFiles/
 PublishProfiles/
