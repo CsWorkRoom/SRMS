@@ -17,7 +17,7 @@ namespace CS.WebUI.Controllers.FW
         public string Modular = "流程流转管理";
 
         #region 流程实例触发发起
-        public ActionResult Create(int flowId = 0)
+        public ActionResult Create(int flowId = 0,int Id=0,string type="0")
         {
             //声明系统流程实例
             Models.FW.FlowCaseModel sysFlow = new Models.FW.FlowCaseModel();
@@ -38,7 +38,9 @@ namespace CS.WebUI.Controllers.FW
                     sysFlow.SysCsFlowID = flow.ID;
                     sysFlow.SysCsFlowTypeID = flow.FLOW_TYPE_ID;
                     sysFlow.SysCsFlowName = flow.NAME;
-                    sysFlow.SysCsMainPage = flow.MAIN_PAGE.Split(';')[0];
+                    string mainPage = flow.MAIN_PAGE.Split(';')[0];
+                    mainPage = mainPage.Replace("=0", "=" + Id);
+                    sysFlow.SysCsMainPage = mainPage;
                     sysFlow.SysCsMainTable = flow.MAIN_TABLE;
                     sysFlow.SysCsRemark = flow.REMARK;
                     sysFlow.sysCsIsEnable = flow.IS_ENABLE;

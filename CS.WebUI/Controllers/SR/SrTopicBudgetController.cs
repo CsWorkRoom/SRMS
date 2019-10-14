@@ -70,7 +70,9 @@ namespace CS.WebUI.Controllers.FW
                     totalFee = budgetList.Sum(p => p.FEE);
                 }
                 #endregion
-
+                #region 保存预算流程信息表
+                SR_TOPIC_BUDGET_MAIN.Instance.SaveBudgetMain(topicId);
+                #endregion
                 #region 02.修改课题表的预算总金额
                 var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(topicId);
                 if (topic != null && topic.ID > 0)

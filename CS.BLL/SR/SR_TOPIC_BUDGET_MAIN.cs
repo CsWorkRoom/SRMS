@@ -1,4 +1,5 @@
-﻿using CS.Library.BaseQuery;
+﻿using CS.BLL.FW;
+using CS.Library.BaseQuery;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,23 +10,23 @@ using System.Threading.Tasks;
 namespace CS.BLL.SR
 {
     /// <summary>
-    /// 课题结题
+    /// 课题预算信息
     /// </summary>
-    public class SR_TOPIC_END : BBaseQuery
+    public class SR_TOPIC_BUDGET_MAIN : BBaseQuery
     {
         /// <summary>
         /// 单例
         /// </summary>
-        public static SR_TOPIC_END Instance = new SR_TOPIC_END();
+        public static SR_TOPIC_BUDGET_MAIN Instance = new SR_TOPIC_BUDGET_MAIN();
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public SR_TOPIC_END()
+        public SR_TOPIC_BUDGET_MAIN()
         {
             this.IsAddIntoCache = true;
-            this.TableName = "SR_TOPIC_END";
-            this.ItemName = "课题结题";
+            this.TableName = "SR_TOPIC_BUDGET_MAIN";
+            this.ItemName = "课题预算信息主表";
             this.KeyField = "ID";
             this.OrderbyFields = "ID";
         }
@@ -47,33 +48,8 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsNotNull = true, Comment = "课题ID")]
             public int TOPIC_ID { get; set; }
+            
 
-            /// <summary>
-            /// 结题状态（成功，失败）
-            /// </summary>
-            [Field(IsNotNull = true, Comment = "结题状态")]
-            public int END_STATUS { get; set; }
-
-            /// <summary>
-            /// 课题成功描述
-            /// </summary>
-            [Field(IsNotNull = true, Comment = "课题成功描述")]
-            public string CONTENT { get; set; }
-
-            /// <summary>
-            /// 备注
-            /// </summary>
-            [Field(IsNotNull = false, Comment = "备注")]
-            public string REMARK { get; set; }
-
-            /// <summary>
-            /// 附件IDS(编号以英文逗号分隔)
-            /// 使用附件控件自动存储
-            /// </summary>
-            [Field(IsNotNull = false, Comment = "附件IDS")]
-            public string FILES { get; set; }
-
-            #region 创建信息
             /// <summary>
             /// 创建时间
             /// </summary>
@@ -93,14 +69,6 @@ namespace CS.BLL.SR
             public int CREATE_UID { get; set; }
 
             /// <summary>
-            /// 修改人
-            /// </summary>
-            [Field(IsNotNull = true, Comment = "修改人")]
-            public int UPDATE_UID { get; set; }
-            #endregion
-
-            #region 审核信息
-            /// <summary>
             /// 审批状态
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "0", Comment = "审批状态")]
@@ -111,9 +79,28 @@ namespace CS.BLL.SR
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "0", Comment = "是否审批通过")]
             public int IS_ADOPT { get; set; }
-            #endregion
         }
         #endregion
 
+        public void SaveBudgetMain(int topicId)
+        {
+           
+           var budgetMain = Instance.GetList<Entity>("TOPIC_ID=?", topicId).FirstOrDefault();
+            if (budgetMain != null && budgetMain.ID > 0)
+            {
+                budgetMain.UPDATE_TIME=DateTime.Now;
+                SR_TOPIC_BUDGET_MAIN.Instance.UpdateByKey(budgetMain, budgetMain.ID);
+            }
+            else
+            {
+                Entity entity=new Entity();
+                entity.ID = SR_TOPIC_BUDGET_MAIN.Instance.GetNextValueFromSeqDef();
+                entity.CREATE_UID = SystemSession.UserID;
+                entity.CREATE_TIME = DateTime.Now;
+                entity.UPDATE_TIME = DateTime.Now;
+                entity.TOPIC_ID = topicId;
+                SR_TOPIC_BUDGET_MAIN.Instance.Add(entity, true);
+            }
+        }
     }
 }

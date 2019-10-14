@@ -2447,6 +2447,7 @@
     <Content Include="Views\SrPatent\FlowEdit.cshtml" />
     <Content Include="Views\SrTopic\FlowEdit.cshtml" />
     <Content Include="Views\AfFlowCase\DealFlow.cshtml" />
+    <Content Include="Views\SrPaperRecord\FeeEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

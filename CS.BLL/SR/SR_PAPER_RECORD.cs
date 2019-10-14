@@ -131,15 +131,16 @@ namespace CS.BLL.SR
 
             #region 审批状态
             /// <summary>
-            /// 审批状态：0=未审批 1=通过 2=退回
+            /// 审批状态
             /// </summary>
-            [Field(IsNotNull = true, Comment = "课题ID")]
-            public int AUDIT_STATUS { get; set; }
+            [Field(IsNotNull = true, DefaultValue = "0", Comment = "审批状态")]
+            public int FLOW_STATE { get; set; }
+
             /// <summary>
-            /// 审批时间
+            /// 是否审批通过
             /// </summary>
-            [Field(IsNotNull = true, Comment = "审批时间")]
-            public DateTime AUDIT_TIME { get; set; }
+            [Field(IsNotNull = true, DefaultValue = "0", Comment = "是否审批通过")]
+            public int IS_ADOPT { get; set; }
             #endregion
         }
         #endregion

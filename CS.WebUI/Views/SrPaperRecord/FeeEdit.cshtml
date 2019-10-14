@@ -3,25 +3,20 @@
 @{
     Layout = "~/Views/Shared/_Content.cshtml";
 }
-@model CS.BLL.SR.SR_TOPIC_FUNDS.Entity
-
-<!--增删-->
-<script type="text/html" id="addDelFundsDetail">
-    <span class="layui-badge layui-bg-green" href="#" onclick="funds.addFundsDetail({{d.LAY_TABLE_INDEX + 1}});">+</span>
-    <span class="layui-badge layui-bg-green" href="#" onclick="funds.deleteFundsDetail({{d.LAY_TABLE_INDEX}});">-</span>
-</script>
+@model CS.BLL.SR.SR_PAGE_RECORD_FUNDS.Entity
+<link href="~/Content/simditor/styles/simditor.css" rel="stylesheet" />
 
 <form id="form" class="layui-form" action="" method="post">
-    <input type="hidden" id="TopicSelect" value="@ViewBag.TopicSelect" /> <!--课题下拉项-->
-    <input type="hidden" id="Banks" value="@ViewBag.Banks" /> <!--银行卡列表-->
     <input type="hidden" id="ID" name="ID" value="@Model.ID" />
-    <div class="form-top-content">
+    <input type="hidden" id="ID" name="PAPER_RECORD_ID" value="@Model.PAPER_RECORD_ID" />
+    <input type="hidden" id="Banks" value="@ViewBag.Banks" /> <!--银行卡列表-->
+     <div class="form-top-content">
         <div class="layui-tab-content">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">课题<span class="imust">*</span></label>
+                    <label class="layui-form-label">论文名称<span class="imust">*</span></label>
                     <div class="layui-input-inline">
-                        <input type="text" name="TOPIC_ID" id="TOPIC_ID" lay-verify="topicVer" value="@Model.TOPIC_ID">
+                        <input type="text" name="PAPER_RECORD_NAME" id="PAPER_RECORD_NAME"  readonly="readonly" value="@ViewBag.PAPER_RECORD_NAME" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -110,16 +105,6 @@
                     <textarea name="REMARK" class="layui-input reportH" placeholder="请填写帐号备注信息">@Model.REMARK</textarea>
                 </div>
             </div>
-
-            <fieldset class="layui-elem-field  layui-field-title">
-                <legend>经费详细清单</legend>
-            </fieldset>
-            <blockquote class="layui-elem-quote">
-                提示：当前报销金额之和为 <span id="tipFee" style="font-size:18px;color:red;font-weight:bold">0</span> 元。
-            </blockquote>
-            <table id="tbFundsDetail" class="layui-table" lay-size="sm" lay-filter="tbFundsDetail"></table><!--经费清单列表-->
-            <input type="hidden" id="FundsDetails" name="FundsDetails" value="@ViewBag.FundsDetails" /><!--经费清单信息s-->
-
             <!--引入外导文件视图-->
             @Html.Partial("PVUpFile",
                        new CS.WebUI.Models.FileMsg
@@ -130,12 +115,7 @@
                        })
         </div>
     </div>
-    <div class="form-bottom-submit">
-        <div class="layui-inline">
-            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
-            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
-        </div>
-    </div>
 </form>
 <script src="~/Views/SrTopicFunds/JS/Edit.js?v=20190609"></script>
 <script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
+
