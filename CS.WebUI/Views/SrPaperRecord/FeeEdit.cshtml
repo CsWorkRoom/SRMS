@@ -3,8 +3,7 @@
 @{
     Layout = "~/Views/Shared/_Content.cshtml";
 }
-@model CS.BLL.SR.SR_PAGE_RECORD_FUNDS.Entity
-<link href="~/Content/simditor/styles/simditor.css" rel="stylesheet" />
+@model CS.BLL.SR.SR_PAPER_RECORD_FUNDS.Entity
 
 <form id="form" class="layui-form" action="" method="post">
     <input type="hidden" id="ID" name="ID" value="@Model.ID" />
@@ -109,13 +108,13 @@
             @Html.Partial("PVUpFile",
                        new CS.WebUI.Models.FileMsg
                        {
-                           PathName = "TopicFundsPath",//存放文件的目录名.在web.config中配置
+                           PathName = "PaperRecordFundsPath",//存放文件的目录名.在web.config中配置
                            FILES = Model.FILES,
                            IsRequire = false//是否必填项（true=必填，false=非必填）,默认非必填
                        })
         </div>
     </div>
 </form>
-<script src="~/Views/SrTopicFunds/JS/Edit.js?v=20190609"></script>
+<script src="~/Views/SrPaperRecord/JS/FeeEdit.js?v=20190609"></script>
 <script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
 

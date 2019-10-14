@@ -17,8 +17,10 @@ namespace CS.WebUI.Controllers.FW
         public string Modular = "流程流转管理";
 
         #region 流程实例触发发起
-        public ActionResult Create(int flowId = 0,int Id=0,string type="0")
+        public ActionResult Create(int flowId = 0,int Id=0,string auditType="")
         {
+            ViewBag.MainType = auditType;
+            ViewBag.MainId = Id;
             //声明系统流程实例
             Models.FW.FlowCaseModel sysFlow = new Models.FW.FlowCaseModel();
 
@@ -282,7 +284,7 @@ namespace CS.WebUI.Controllers.FW
                     BF_FLOW_NODE_CASE.Instance.ReturnFlowNodeCase(record.FLOW_NODE_ID, record.FLOW_CASE_ID);
                     //修改原表的状态信息
                     var flowCase = BF_FLOW_CASE.Instance.GetEntityByKey<BF_FLOW_CASE.Entity>(flowNodeCase.FLOW_CASE_ID);
-                    BF_FLOW_CASE.Instance.UpdateMainTableState(flowCase.PRIMARY_KEY, flowCase.MAIN_TABLE, "0", "-1");
+                    BF_FLOW_CASE.Instance.UpdateMainTableState(flowCase.PRIMARY_KEY, flowCase.MAIN_TABLE, "0", "2");
                 }
                 else
                 {

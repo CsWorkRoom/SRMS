@@ -19,8 +19,11 @@
     </div>
     <div class="form-bottom-submit">
         <div class="layui-inline">
-            <button type="button" id="btnsub" class="layui-btn" lay-submit onclick="FlowSubmit()">确定</button>
-            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+			@if (ViewBag.MainId == 0 ||(ViewBag.MainId != 0 && ViewBag.MainType!="auditing" ))
+			{
+			    <button type="button" id="btnsub" class="layui-btn" lay-submit onclick="FlowSubmit()">确定</button>
+			    <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+			}
         </div>
     </div>
 </form>

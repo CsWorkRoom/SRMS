@@ -11,20 +11,20 @@ namespace CS.BLL.SR
     /// <summary>
     /// 经费报销总表
     /// </summary>
-    public class SR_PAGE_RECORD_FUNDS : BBaseQuery
+    public class SR_PAPER_RECORD_FUNDS : BBaseQuery
     {
         /// <summary>
         /// 单例
         /// </summary>
-        public static SR_PAGE_RECORD_FUNDS Instance = new SR_PAGE_RECORD_FUNDS();
+        public static SR_PAPER_RECORD_FUNDS Instance = new SR_PAPER_RECORD_FUNDS();
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public SR_PAGE_RECORD_FUNDS()
+        public SR_PAPER_RECORD_FUNDS()
         {
             this.IsAddIntoCache = true;
-            this.TableName = "SR_PAGE_RECORD_FUNDS";
+            this.TableName = "SR_PAPER_RECORD_FUNDS";
             this.ItemName = "版面费报销总表";
             this.KeyField = "ID";
             this.OrderbyFields = "ID";

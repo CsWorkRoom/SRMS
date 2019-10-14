@@ -2181,6 +2181,7 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrPaperRecord\JS\FeeEdit.js" />
     <Content Include="Views\SrPaperRecord\JS\Edit.js" />
     <Content Include="Views\SrPatent\JS\Edit.js" />
     <Content Include="Views\SrPatent\JS\FlowEdit.js" />
@@ -2193,6 +2194,7 @@
     <Content Include="Views\SrTopicFunds\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\Edit.css" />
     <Content Include="Views\SrTopic\CSS\ExpertScore.css" />
+    <Content Include="Views\SrTopic\JS\FlowEdit.js" />
     <Content Include="Views\SrTopic\JS\TopicScore.js" />
     <Content Include="Views\SrTopic\JS\ExpertScore.js" />
     <Content Include="Views\SrTopic\JS\Set.js" />

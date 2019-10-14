@@ -160,9 +160,9 @@ namespace CS.WebUI.Controllers.FW
         public ActionResult FeeEdit(int Id = 0)
         {
             var pageRecord= SR_PAPER_RECORD.Instance.GetEntityByKey<SR_PAPER_RECORD.Entity>(Id);
-            SR_PAGE_RECORD_FUNDS.Entity funds = new SR_PAGE_RECORD_FUNDS.Entity();
+            SR_PAPER_RECORD_FUNDS.Entity funds = new SR_PAPER_RECORD_FUNDS.Entity();
             funds.TOTAL_FEE = 0;//设置默认报销总额为0
-            var paperRecordFund = SR_PAGE_RECORD_FUNDS.Instance.GetList<SR_PAGE_RECORD_FUNDS.Entity>("PAPER_RECORD_ID=?", Id);
+            var paperRecordFund = SR_PAPER_RECORD_FUNDS.Instance.GetList<SR_PAPER_RECORD_FUNDS.Entity>("PAPER_RECORD_ID=?", Id);
             #region 01.经费总表信息
             if (paperRecordFund!=null && paperRecordFund.Count>0)
             {
@@ -196,7 +196,7 @@ namespace CS.WebUI.Controllers.FW
         /// <param name="entity"></param>
         /// <returns></returns>
         [HttpPost]
-        public JsonResult FeeEdit(SR_PAGE_RECORD_FUNDS.Entity ent, FormCollection collection)
+        public JsonResult FeeEdit(SR_PAPER_RECORD_FUNDS.Entity ent, FormCollection collection)
         {
             JsonResultData result = new JsonResultData();
 
@@ -211,15 +211,15 @@ namespace CS.WebUI.Controllers.FW
                 #region 01.保存经费总表
                 if (ent.ID == 0)
                 {
-                    fundsId = SR_PAGE_RECORD_FUNDS.Instance.GetNextValueFromSeqDef();
+                    fundsId = SR_PAPER_RECORD_FUNDS.Instance.GetNextValueFromSeqDef();
                     ent.CREATE_TIME = DateTime.Now;
                     ent.CREATE_UID = SystemSession.UserID;
                     ent.ID = fundsId;
-                    SR_PAGE_RECORD_FUNDS.Instance.Add(ent);
+                    SR_PAPER_RECORD_FUNDS.Instance.Add(ent);
                 }
                 else
                 {
-                    SR_PAGE_RECORD_FUNDS.Instance.UpdateByKey(ent, ent.ID);
+                    SR_PAPER_RECORD_FUNDS.Instance.UpdateByKey(ent, ent.ID);
                 }
                 #endregion
 
@@ -279,7 +279,7 @@ namespace CS.WebUI.Controllers.FW
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        private void SaveBank(SR_PAGE_RECORD_FUNDS.Entity ent, short isDefault)
+        private void SaveBank(SR_PAPER_RECORD_FUNDS.Entity ent, short isDefault)
         {
             SR_BANK.Entity newBank = new SR_BANK.Entity();
             newBank.ID = SR_BANK.Instance.GetNextValueFromSeqDef();

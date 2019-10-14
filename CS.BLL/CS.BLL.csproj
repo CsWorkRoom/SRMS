@@ -122,7 +122,7 @@
     <Compile Include="SR\SR_SUB_ITEM.cs" />
     <Compile Include="SR\SR_PAPER.cs" />
     <Compile Include="SR\SR_TOPIC_BUDGET_MAIN.cs" />
-    <Compile Include="SR\SR_PAGE_RECORD_FUNDS.cs" />
+    <Compile Include="SR\SR_PAPER_RECORD_FUNDS.cs" />
     <Compile Include="SR\SR_TOPIC_FUNDS.cs" />
     <Compile Include="SR\SR_TOPIC_SCORE.cs" />
     <Compile Include="SR\SR_TOPIC_SUB_ITEM.cs" />
