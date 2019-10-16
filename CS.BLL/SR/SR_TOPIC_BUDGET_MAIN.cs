@@ -82,25 +82,29 @@ namespace CS.BLL.SR
         }
         #endregion
 
-        public void SaveBudgetMain(int topicId)
+        public int SaveBudgetMain(int topicId)
         {
-           
+            int mid = 0;
            var budgetMain = Instance.GetList<Entity>("TOPIC_ID=?", topicId).FirstOrDefault();
             if (budgetMain != null && budgetMain.ID > 0)
             {
+                mid = budgetMain.ID;
                 budgetMain.UPDATE_TIME=DateTime.Now;
                 SR_TOPIC_BUDGET_MAIN.Instance.UpdateByKey(budgetMain, budgetMain.ID);
             }
             else
             {
                 Entity entity=new Entity();
-                entity.ID = SR_TOPIC_BUDGET_MAIN.Instance.GetNextValueFromSeqDef();
+                mid = SR_TOPIC_BUDGET_MAIN.Instance.GetNextValueFromSeqDef();
+                entity.ID = mid;
                 entity.CREATE_UID = SystemSession.UserID;
                 entity.CREATE_TIME = DateTime.Now;
                 entity.UPDATE_TIME = DateTime.Now;
                 entity.TOPIC_ID = topicId;
                 SR_TOPIC_BUDGET_MAIN.Instance.Add(entity, true);
             }
+
+            return mid;
         }
     }
 }

@@ -31,11 +31,12 @@
             <blockquote class="layui-elem-quote">
                 提示：当前预算总额为 <span id="tipFee" style="font-size:18px;color:red;font-weight:bold">0</span> 元。
             </blockquote>
+            <b>@ViewBag.TOPIC_NAME</b>
             <table id="tbBudget" class="layui-table" lay-size="sm" lay-filter="tbBudget"></table><!--参与单位信息-->
             <input type="hidden" id="Budgets" name="Budgets" value="@ViewBag.Budgets" /> <!--预算列表-->
         </div>
     </div>
-    <div class="form-bottom-submit">
+    <div class="form-bottom-submit" style="display: none;">
         <div class="layui-inline">
             <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
             <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>

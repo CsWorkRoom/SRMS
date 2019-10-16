@@ -27,13 +27,16 @@ namespace CS.WebUI.Controllers.FW
         /// <param name="id"></param>
         /// <param name="topicId">课题编号</param>
         /// <returns></returns>
-        public ActionResult Edit(int topicId=0)
+        public ActionResult Edit(int Id=0)
         {
             #region 01.课题基础信息（暂未实现）
+
+            var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(Id);
+            ViewBag.TOPIC_NAME = topic.NAME;
             #endregion
 
             #region 02.预算列表信息
-            var budgetList = SR_TOPIC_BUDGET.Instance.GetList<SR_TOPIC_BUDGET.Entity>("TOPIC_ID=?", topicId);
+            var budgetList = SR_TOPIC_BUDGET.Instance.GetList<SR_TOPIC_BUDGET.Entity>("TOPIC_ID=?", Id);
             ViewBag.Budgets = SerializeObject(budgetList);//预算列表
             #endregion
 
@@ -41,7 +44,8 @@ namespace CS.WebUI.Controllers.FW
             ViewBag.BudgetTypeArr = GetBudgetTypeArr();
             #endregion
 
-            ViewBag.TOPIC_ID = topicId;//课题编号
+            ViewBag.TOPIC_ID = Id;//课题编号
+          
 
             return View(new CS.BLL.SR.SR_TOPIC_BUDGET.Entity());
         }
@@ -71,7 +75,7 @@ namespace CS.WebUI.Controllers.FW
                 }
                 #endregion
                 #region 保存预算流程信息表
-                SR_TOPIC_BUDGET_MAIN.Instance.SaveBudgetMain(topicId);
+                int entId=SR_TOPIC_BUDGET_MAIN.Instance.SaveBudgetMain(topicId);
                 #endregion
                 #region 02.修改课题表的预算总金额
                 var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(topicId);
@@ -81,6 +85,7 @@ namespace CS.WebUI.Controllers.FW
                     SR_TOPIC.Instance.UpdateByKey(topic, topicId);
                 }
                 result.IsSuccess = true;
+                result.Result = entId.ToString();
                 result.Message = string.Format(@"保存预算清单成功：新增【{0}】,修改【{1}】,删除【{2}】", addCount, updateCount, delCount);
                 #endregion
             }

@@ -18,7 +18,7 @@ namespace CS.WebUI
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                defaults: new { controller = "Home", action = "Default", id = UrlParameter.Optional },
                 namespaces: new string[] { "CS.WebUI.Controllers", "CS.WebUI.Controllers.FW" }
             );
             //routes.IgnoreRoute("{API}/{resource}.asmx/{*pathInfo}");

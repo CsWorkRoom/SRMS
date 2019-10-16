@@ -162,6 +162,7 @@ namespace CS.WebUI.Controllers.FW
             var pageRecord= SR_PAPER_RECORD.Instance.GetEntityByKey<SR_PAPER_RECORD.Entity>(Id);
             SR_PAPER_RECORD_FUNDS.Entity funds = new SR_PAPER_RECORD_FUNDS.Entity();
             funds.TOTAL_FEE = 0;//设置默认报销总额为0
+            funds.PAPER_RECORD_ID = Id;
             var paperRecordFund = SR_PAPER_RECORD_FUNDS.Instance.GetList<SR_PAPER_RECORD_FUNDS.Entity>("PAPER_RECORD_ID=?", Id);
             #region 01.经费总表信息
             if (paperRecordFund!=null && paperRecordFund.Count>0)
@@ -267,6 +268,7 @@ namespace CS.WebUI.Controllers.FW
 
                 result.IsSuccess = true;
                 result.Message = string.Format(@"填报经费报销信息成功");
+                result.Result = fundsId.ToString();
             }
             catch (Exception ex)
             {

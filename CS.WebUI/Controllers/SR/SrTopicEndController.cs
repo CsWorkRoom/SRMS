@@ -96,6 +96,7 @@ namespace CS.WebUI.Controllers.FW
                 #endregion
 
                 result.IsSuccess = true;
+                result.Result = entId.ToString();
                 result.Message = "填报结题申请信息成功！";
             }
             catch (Exception ex)

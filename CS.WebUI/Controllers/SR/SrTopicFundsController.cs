@@ -178,6 +178,7 @@ namespace CS.WebUI.Controllers.FW
                 #endregion
 
                 result.IsSuccess = true;
+                result.Result = fundsId.ToString();
                 result.Message =string.Format(@"填报经费报销信息成功：新增【{0}】,修改【{1}】,删除【{2}】",addCount,updateCount,delCount);
             }
             catch (Exception ex)

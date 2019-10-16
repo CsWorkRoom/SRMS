@@ -197,7 +197,65 @@ namespace CS.BLL.SR
             #endregion
 
             #region 拼课题
-            DataTable dt = Instance.GetTable();
+            DataTable dt = Instance.GetTable("IS_APPROVAL=1");
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    obj.Add(
+                        new ZtreeModel
+                        {
+                            id = dr["ID"].ToString().Trim(),
+                            pId = (string.IsNullOrWhiteSpace(dr["TOPIC_TYPE_ID"].ToString()) ? "" : "type_" + dr["TOPIC_TYPE_ID"]),
+                            name = dr["NAME"].ToString(),
+                            icon = "/Content/zTree/img/3.png"//图标
+                        });
+                }
+            }
+            #endregion
+            return obj;
+        }
+        /// <summary>
+        /// 未结题的课题
+        /// </summary>
+        /// <returns></returns>
+        public List<ZtreeModel> GetTopicNoEndTree()
+        {
+            var obj = new List<ZtreeModel>();
+            #region 拼课题类
+            DataTable typeDt = SR_TOPIC_TYPE.Instance.GetTable();
+            if (typeDt != null && typeDt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in typeDt.Rows)
+                {
+                    if (string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()))
+                    {
+                        obj.Add(new ZtreeModel
+                        {
+                            id = "type_" + dr["ID"],
+                            pId = "type_" + (string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"]),
+                            name = dr["NAME"].ToString(),
+                            icon = "/Content/zTree/img/1_open.png"
+                            //value = Convert.ToInt32(dr["ID"])
+                        });
+                    }
+                    else
+                    {
+                        obj.Add(new ZtreeModel
+                        {
+                            id = "type_" + dr["ID"],
+                            pId = "type_" + (string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"]),
+                            name = dr["NAME"].ToString(),
+                            icon = "/Content/zTree/img/7.png"
+                            //value = Convert.ToInt32(dr["ID"])
+                        });
+                    }
+                }
+            }
+            #endregion
+
+            #region 拼课题
+            DataTable dt = Instance.GetTable(" IS_APPROVAL=1 and  ID NOT IN (SELECT  TOPIC_ID FROM SR_TOPIC_END WHERE IS_ADOPT=1)");
             if (dt != null && dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in dt.Rows)

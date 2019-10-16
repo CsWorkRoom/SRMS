@@ -29,7 +29,10 @@ namespace CS.WebUI.Controllers.FW
 
             return View();
         }
-
+        public ActionResult manager()
+        {
+            return View();
+        }
         /// <summary>
         /// 默认标签页
         /// </summary>

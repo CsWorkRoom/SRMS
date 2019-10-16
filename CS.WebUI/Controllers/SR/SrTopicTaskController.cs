@@ -47,8 +47,8 @@ namespace CS.WebUI.Controllers.FW
             }
             #endregion
 
-            #region 02.课题下拉(树状结构)
-            var list = SR_TOPIC.Instance.GetTopicTree();
+            #region 02.课题下拉(树状结构)//修改为只加载没
+            var list = SR_TOPIC.Instance.GetTopicNoEndTree();
             if (list != null && list.Count > 0)
             {
                 foreach (var item in list)
@@ -129,13 +129,13 @@ namespace CS.WebUI.Controllers.FW
         /// <summary>
         /// 编辑及新增
         /// </summary>
-        /// <param name="topicTaskId">课题中期任务编号</param>
+        /// <param name="Id">课题中期任务编号</param>
         /// <returns></returns>
-        public ActionResult Done(int topicTaskId = 0)
+        public ActionResult Done(int Id = 0)
         {
             #region 00.校验任务是否已处理
             string msg = "";
-            if (IsDoneTask(topicTaskId, out msg))
+            if (IsDoneTask(Id, out msg))
             {
                 //ShowAlert(msg);
                 return Content("<script>alert('" + msg + "');window.location.href='about:blank';window.close();</script>");
@@ -147,15 +147,15 @@ namespace CS.WebUI.Controllers.FW
 
             #region 01.任务主体
             ViewBag.BeginEndData = "";
-            if (topicTaskId>0)
+            if (Id>0)
             {
-                SR_TOPIC_TASK.Entity task = SR_TOPIC_TASK.Instance.GetEntityByKey<SR_TOPIC_TASK.Entity>(topicTaskId);
+                SR_TOPIC_TASK.Entity task = SR_TOPIC_TASK.Instance.GetEntityByKey<SR_TOPIC_TASK.Entity>(Id);
                 if (task.BEGIN_TIME != null)
                 {
                     //时间范围
                     ViewBag.BeginEndData = task.BEGIN_TIME.Value.ToString("yyyy-MM-dd") + " - " + task.END_TIME.Value.ToString("yyyy-MM-dd");
                 }
-                done.TOPIC_TASK_ID = topicTaskId;
+                done.TOPIC_TASK_ID = Id;
                 done.TOPIC_ID = task.TOPIC_ID;
                 ViewBag.Task = task;
             }
@@ -201,9 +201,10 @@ namespace CS.WebUI.Controllers.FW
                 #region 01.保存任务执行
                 ent.UPDATE_TIME = DateTime.Now;
                 ent.UPDATE_UID = SystemSession.UserID;
+                int entId = ent.ID;
                 if (ent.ID == 0)
                 {
-                    var entId = SR_TOPIC_TASK_DONE.Instance.GetNextValueFromSeqDef();
+                    entId = SR_TOPIC_TASK_DONE.Instance.GetNextValueFromSeqDef();
                     ent.CREATE_TIME = DateTime.Now;
                     ent.CREATE_UID = SystemSession.UserID;
                     ent.ID = entId;
@@ -217,6 +218,7 @@ namespace CS.WebUI.Controllers.FW
 
 
                 result.IsSuccess = true;
+                result.Result = entId.ToString();
                 result.Message = string.Format(@"中期检查任务处理成功!");
             }
             catch (Exception ex)
