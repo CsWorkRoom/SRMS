@@ -1383,7 +1383,7 @@ namespace CS.WebUI.Controllers.FW
         /// <param name="input">用户自定义输入项</param>
         /// <param name="where">筛选项JSON串</param>
         /// <returns></returns>
-        public ActionResult ExportExcel(int id, string input, string where = "")
+        public ActionResult ExportExcel1(int id, string input, string where = "")
         {
             string sql = string.Empty;
             List<object> paramList = new List<object>();
@@ -1411,6 +1411,68 @@ namespace CS.WebUI.Controllers.FW
             }
         }
 
+        /// <summary>
+        /// 导出到EXCEL文件
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="input">用户自定义输入项</param>
+        /// <param name="where">筛选项JSON串</param>
+        /// <returns></returns>
+        public ActionResult ExportExcel(int id, string input, string where = "")
+        {
+            string sql = string.Empty;
+            List<object> paramList = new List<object>();
+            try
+            {
+                var entity = BF_TB_REPORT.Instance.GetEntityByKey<BF_TB_REPORT.Entity>(id);
+                string name = entity == null ? id.ToString() : entity.NAME;
+                //string queryString = Request.QueryString.ToString();
+                string queryString = HttpUtility.UrlDecode(Request.QueryString.ToString());
+                string filename = HttpUtility.UrlEncode(string.Format("导出报表_{0}_{1}.xlsx", name, DateTime.Now.ToString("yyyyMMddHHmmss")), Encoding.UTF8);
+                int rowsCount = -1;
+
+                var obj = BF_TB_REPORT.QueryCount(id, out sql, out paramList, queryString, input, where);
+                if (obj != null && Convert.ToInt32(obj) > 1500)
+                {
+                    #region 流查询返回csv文本
+                    Base.DBHelper.BDBHelper dbHelper = null;
+                    //此处获得查询流
+                    IDataReader reader = BF_TB_REPORT.QueryDataReader(id, out sql, out paramList, out dbHelper, queryString, input, where);
+
+                    #region 01.获得需要查询的字段
+                    List<BF_FIELD.Entity> listField = JSON.EncodeToEntity<List<BF_FIELD.Entity>>(entity.SHOW_FIELDS);
+                    Dictionary<string, BF_FIELD.Entity> dic = new Dictionary<string, BF_FIELD.Entity>();
+                    foreach (BF_FIELD.Entity field in listField)
+                    {
+                        if (field.IS_SHOW == 1 && !dic.ContainsKey(field.EN_NAME))
+                        {
+                            dic.Add(field.EN_NAME, field);
+                        }
+                    }
+                    #endregion
+                    return ExportCsv(dbHelper, filename, reader, dic);
+                    #endregion
+                }
+                else
+                {
+                    #region DataTable转文本式导出
+                    DataTable dt = BF_TB_REPORT.QueryTable(id, 0, 0, ref rowsCount, out sql, out paramList, queryString, input, where);
+                    //设置中文字段
+                    BF_TB_REPORT.Instance.SetTableCaption(id, dt);
+
+                    //加密
+                    Encrypt(entity, ref dt);
+
+                    return ExportExcel(filename, dt);
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                BLog.Write(BLog.LogLevel.WARN, "导出报表[" + id + "]到Excel出错:" + ex.ToString());
+                return ShowAlert("导出报表出错，详见运行日志：" + ex.Message);
+            }
+        }
         #endregion
 
         #region 数据加密

@@ -406,6 +406,65 @@ namespace CS.WebUI.Controllers.FW
             return ExportFile(fullName, fileName, true);
         }
 
+        protected ActionResult ExportCsv(Base.DBHelper.BDBHelper dbHelper, string fileName, IDataReader reader, Dictionary<string, BF_FIELD.Entity> dic)
+        {
+            #region 01.初始化导出的文件目录及文件名
+            string path = System.Web.HttpContext.Current.Server.MapPath("~/tmp/");
+            string fullName = string.Empty;
+            if (Directory.Exists(path) == false)
+            {
+                Directory.CreateDirectory(path);
+            }
+            fileName = fileName.Replace(".xlsx", ".csv");
+            fullName = path + DateTime.Now.ToString("yyyyMMddHHmmss") + ".csv";
+            #endregion
+
+            #region 02.打开查询流把数据写入csv文件
+            using (FileStream fs = new FileStream(fullName, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, new System.Text.UTF8Encoding(true)))
+                {
+                    #region 02-1.写入表头
+                    foreach (var item in dic)
+                    {
+                        sw.Write("\"" + item.Value.CN_NAME + "\",");
+                    }
+                    sw.WriteLine();
+                    sw.Flush();
+                    #endregion
+
+                    #region 02-2.遍历写入内容
+                    bool isCanRead = reader.Read();
+                    while (isCanRead)
+                    {
+                        foreach (var item in dic)
+                        {
+                            for (int c = 0; c < reader.FieldCount; c++)
+                            {
+                                if (reader.GetName(c) == item.Key)
+                                {
+                                    sw.Write("\"" + reader.GetValue(c) + "\",");
+                                    break;
+                                }
+                            }
+                        }
+                        sw.WriteLine();
+                        sw.Flush();
+                        isCanRead = reader.Read();
+                    }
+                    #endregion
+                }
+            }
+            #endregion
+
+            if (dbHelper != null)
+            {
+                dbHelper.Close();//关闭查询连接
+            }
+
+            return ExportFile(fullName, fileName, true);
+        }
+
         /// <summary>
         /// 导出文件
         /// </summary>

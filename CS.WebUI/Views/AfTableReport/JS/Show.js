@@ -32,7 +32,7 @@ function ShowDebug() {
 function ExportExcel() {
     layui.use(['layer', 'jquery'], function () {
         var layer = layui.layer, $ = layui.$;
-        layer.confirm('确定导出到Excel（记录太多将自动导为txt）？', function (index) {
+        layer.confirm('确定导出到Excel？', function (index) {
             layer.close(index);
             var url = "../AfTableReport/ExportExcel?" + $('#QUERY_STRING').val() + "&input=" + encodeURI(inputstring) + "&where=" + encodeURI(wherestring);
             document.getElementById("iframeExport").src = url;

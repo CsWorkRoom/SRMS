@@ -7,6 +7,7 @@
     <script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
     <input type="hidden" id="DepartmentSelect" value="@ViewBag.DepartmentSelect" />
     <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <input type="hidden" id="IsExpert" name="IsExpert" value="@ViewBag.IsExpert" /><!--是否为专家-->
     <div class="form-top-content">
         <div class="layui-form-item">
             <label class="layui-form-label">登录名</label>
@@ -35,12 +36,25 @@
                 <input type="tel" name="PHONE_NUMBER" value="@Model.PHONE_NUMBER" lay-verify="phone" autocomplete="off" class="layui-input">
             </div>
         </div>
+        @if (Convert.ToInt32(ViewBag.IsExpert) == 1)
+        {
+            if (string.IsNullOrWhiteSpace(Model.ROLE_IDS))
+            {
+                <input type="hidden" name="ROLES" value="2" />
+            }
+            else
+            {
+                <input type="hidden" name="ROLES" value="@Model.ROLE_IDS" />
+            }
+                }
+                else
+                {
         <div class="layui-form-item">
             <label class="layui-form-label">所属角色</label>
             <div class="layui-input-block">
                 @foreach (var item in ViewBag.DIC_ROLES)
                 {
-                    if (("," + Model.ROLE_IDS + ",").Contains("," + item.Key + ","))
+                    if (Model.ROLE_IDS.Contains("," + item.Key + ","))
                     {
                         <input type="checkbox" name="ROLES" value="@item.Key" lay-skin="primary" title="@item.Value" checked="checked">
                     }
@@ -51,7 +65,7 @@
                 }
             </div>
         </div>
-
+        }
         <div class="layui-form-item">
             <label class="layui-form-label">QQ号码</label>
             <div class="layui-input-inline">

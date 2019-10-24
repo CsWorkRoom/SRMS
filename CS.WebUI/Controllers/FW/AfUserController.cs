@@ -126,8 +126,9 @@ namespace CS.WebUI.Controllers.FW
         /// 编辑及新增
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="IsExpert">0=不是，1=是</param>
         /// <returns></returns>
-        public ActionResult Edit(int id = 0)
+        public ActionResult Edit(int id = 0,int IsExpert=0 )
         {
             ViewBag.Result = false;
             ViewBag.Message = string.Empty;
@@ -208,6 +209,8 @@ namespace CS.WebUI.Controllers.FW
             //ViewBag.DepartmentSelect = SerializeObject(obj);
             #endregion
 
+            ViewBag.IsExpert = IsExpert;
+
             ModelState.Clear();
             return View(model);
         }
@@ -225,7 +228,12 @@ namespace CS.WebUI.Controllers.FW
         public ActionResult Edit(Models.FW.UserModelsForEdit userModel, FormCollection collection)
         {
             JsonResultData result = new JsonResultData();
-            userModel.ROLE_IDS = collection["ROLES"];
+            var roles = collection["ROLES"];
+            if (!string.IsNullOrWhiteSpace(roles) && roles.IndexOf(',') > 0)
+            {
+                roles = "," + roles + ",";
+            }
+            userModel.ROLE_IDS = roles;
             int i = 0;
             int id = userModel.ID;
             try

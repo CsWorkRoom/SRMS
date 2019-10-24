@@ -553,6 +553,40 @@ namespace CS.BLL.FW
             return dt;
         }
 
+        public IDataReader ExecuteDataReader(int dbID, string sql, List<object> paramList, out BDBHelper dbHelper)
+        {
+            if (dbID < 0)
+            {
+                throw new Exception("错误的数据库ID");
+            }
+            if (string.IsNullOrWhiteSpace(sql))
+            {
+                throw new Exception("SQL语句不可为空");
+            }
+            string s = sql.Trim();
+            if (s.ToUpper().StartsWith("SELECT ") == false)
+            {
+                throw new Exception("只能执行SLECT语句！");
+            }
+
+            dbHelper = GetBDBHelper(dbID);
+            try
+            {
+                if (paramList == null || paramList.Count < 1)
+                {
+                    return dbHelper.ExecuteReader(sql);
+                }
+                else
+                {
+                    return dbHelper.ExecuteReaderParams(sql, paramList);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("在数据库" + dbID + "执行SQL查询出错：" + ex.Message);
+            }
+        }
+        
         /// <summary>
         /// 在指定数据库执行查询语句
         /// </summary>
@@ -641,6 +675,34 @@ namespace CS.BLL.FW
             return obj;
         }
 
+        public object ExecuteScalar(int dbID, string sql, List<object> paramList)
+        {
+            object obj = 0;
+
+            if (dbID < 0)
+            {
+                throw new Exception("错误的数据库ID");
+            }
+            if (string.IsNullOrWhiteSpace(sql))
+            {
+                throw new Exception("SQL语句不可为空");
+            }
+
+
+            using (BDBHelper dbHelper = GetBDBHelper(dbID))
+            {
+                try
+                {
+                    obj = dbHelper.ExecuteScalarParams(sql, paramList);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("在数据库" + dbID + "执行SQL查询出错：" + ex.Message);
+                }
+            }
+
+            return obj;
+        }
         #endregion
     }
 }

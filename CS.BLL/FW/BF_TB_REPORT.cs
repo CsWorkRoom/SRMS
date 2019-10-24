@@ -563,6 +563,276 @@ namespace CS.BLL.FW
             }
         }
 
+        #region 返回sql查询的数据流
+        /// <summary>
+        /// 查询报表
+        /// </summary>
+        /// <param name="reportID">报表ID</param>
+        /// <param name="pageIndex">页码（从1开始）</param>
+        /// <param name="pageSize">分页大小（默认为10，0表示不分页）</param>
+        /// <param name="count">记录数（如果传入值等于0，则会重新计算此值，反之不计算）</param>
+        /// <param name="sql">SQL语句</param>
+        /// <param name="paramList">参数列表</param>
+        /// <param name="inputJson">自定义输入项的值</param>
+        /// <param name="whereJson">过滤字段</param>
+        /// <returns></returns>
+        public static IDataReader QueryDataReader(int reportID, out string sql, out List<object> paramList, out BDBHelper dbHelper, string getQueryString, string inputJson = "", string whereJson = "", Order order = null)
+        {
+            Entity entity = Instance.GetEntityByKey<Entity>(reportID);
+            if (entity == null)
+            {
+                throw new Exception("报表" + reportID + "不存在");
+            }
+            return QueryDataReader(entity, out sql, out paramList, out dbHelper, getQueryString, inputJson, whereJson, order);
+        }
+
+        /// <summary>
+        /// 查询报表
+        /// </summary>
+        /// <param name="entity">实体</param>
+        /// <param name="pageIndex">页码（从1开始）</param>
+        /// <param name="pageSize">分页大小（默认为10，0表示不分页）</param>
+        /// <param name="count">记录数（如果传入值等于0，则会重新计算此值，反之不计算）</param>
+        /// <param name="sql">SQL语句</param>
+        /// <param name="paramList">参数列表</param>
+        /// <param name="getQueryString">URL中GET参数</param>
+        /// <param name="inputJson">自定义输入项的值</param>
+        /// <param name="whereJson">过滤字段</param>
+        /// <param name="order">排序</param>
+        /// <returns></returns>
+        public static IDataReader QueryDataReader(Entity entity, out string sql, out List<object> paramList, out BDBHelper dbHelper, string getQueryString, string inputJson = "", string whereJson = "", Order order = null)
+        {
+            sql = string.Empty;
+            paramList = new List<object>();
+
+            //DataTable dt = new DataTable();
+            if (entity == null)
+            {
+                throw new Exception("报表不存在");
+            }
+
+            if (entity.IS_ENABLE != 1)
+            {
+                throw new Exception("报表" + entity.NAME + "已停用");
+            }
+            if (string.IsNullOrWhiteSpace(entity.SQL_CODE))
+            {
+                throw new Exception("报表" + entity.NAME + "的SQL语句未配置");
+            }
+
+            Dictionary<string, string> dicInputValues = new Dictionary<string, string>();
+
+            List<InputValueItem> inputList = null;
+            if (string.IsNullOrWhiteSpace(inputJson) == false)
+            {
+                try
+                {
+                    inputList = JsonConvert.DeserializeObject<List<InputValueItem>>(inputJson);
+                }
+                catch
+                {
+                    throw new Exception("输入项错误");
+                }
+            }
+
+            List<QueryFilterItem> filterList = null;
+            if (string.IsNullOrWhiteSpace(whereJson) == false)
+            {
+                try
+                {
+                    filterList = JsonConvert.DeserializeObject<List<QueryFilterItem>>(whereJson);
+                }
+                catch
+                {
+                    throw new Exception("筛选项错误");
+                }
+            }
+
+            try
+            {
+                TransSQL(entity.SQL_CODE, getQueryString, inputList, filterList, out sql, out paramList, order);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("转换SQL语句出错:" + ex);
+            }
+
+            return BF_DATABASE.Instance.ExecuteDataReader(entity.DB_ID, sql, paramList, out dbHelper);
+        }
+
+        #endregion
+
+        #region 返回sql查询第一行第一列
+        public static object QueryScalar(int reportID, out string sql, out List<object> paramList, string getQueryString, string inputJson = "", string whereJson = "", Order order = null)
+        {
+            Entity entity = Instance.GetEntityByKey<Entity>(reportID);
+            if (entity == null)
+            {
+                throw new Exception("报表" + reportID + "不存在");
+            }
+            return QueryScalar(entity, out sql, out paramList, getQueryString, inputJson, whereJson, order);
+        }
+
+        /// <summary>
+        /// 查询报表
+        /// </summary>
+        /// <param name="entity">实体</param>
+        /// <param name="pageIndex">页码（从1开始）</param>
+        /// <param name="pageSize">分页大小（默认为10，0表示不分页）</param>
+        /// <param name="count">记录数（如果传入值等于0，则会重新计算此值，反之不计算）</param>
+        /// <param name="sql">SQL语句</param>
+        /// <param name="paramList">参数列表</param>
+        /// <param name="getQueryString">URL中GET参数</param>
+        /// <param name="inputJson">自定义输入项的值</param>
+        /// <param name="whereJson">过滤字段</param>
+        /// <param name="order">排序</param>
+        /// <returns></returns>
+        public static object QueryScalar(Entity entity, out string sql, out List<object> paramList, string getQueryString, string inputJson = "", string whereJson = "", Order order = null)
+        {
+            sql = string.Empty;
+            paramList = new List<object>();
+
+            //DataTable dt = new DataTable();
+            if (entity == null)
+            {
+                throw new Exception("报表不存在");
+            }
+
+            if (entity.IS_ENABLE != 1)
+            {
+                throw new Exception("报表" + entity.NAME + "已停用");
+            }
+            if (string.IsNullOrWhiteSpace(entity.SQL_CODE))
+            {
+                throw new Exception("报表" + entity.NAME + "的SQL语句未配置");
+            }
+
+            Dictionary<string, string> dicInputValues = new Dictionary<string, string>();
+
+            List<InputValueItem> inputList = null;
+            if (string.IsNullOrWhiteSpace(inputJson) == false)
+            {
+                try
+                {
+                    inputList = JsonConvert.DeserializeObject<List<InputValueItem>>(inputJson);
+                }
+                catch
+                {
+                    throw new Exception("输入项错误");
+                }
+            }
+
+            List<QueryFilterItem> filterList = null;
+            if (string.IsNullOrWhiteSpace(whereJson) == false)
+            {
+                try
+                {
+                    filterList = JsonConvert.DeserializeObject<List<QueryFilterItem>>(whereJson);
+                }
+                catch
+                {
+                    throw new Exception("筛选项错误");
+                }
+            }
+
+            try
+            {
+                TransSQL(entity.SQL_CODE, getQueryString, inputList, filterList, out sql, out paramList, order);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("转换SQL语句出错:" + ex);
+            }
+            return BF_DATABASE.Instance.ExecuteScalar(entity.DB_ID, sql, paramList);
+        }
+        #endregion
+
+        #region 返回sql查询的总量
+        public static object QueryCount(int reportID, out string sql, out List<object> paramList, string getQueryString, string inputJson = "", string whereJson = "", Order order = null)
+        {
+            Entity entity = Instance.GetEntityByKey<Entity>(reportID);
+            if (entity == null)
+            {
+                throw new Exception("报表" + reportID + "不存在");
+            }
+            return QueryCount(entity, out sql, out paramList, getQueryString, inputJson, whereJson, order);
+        }
+
+        /// <summary>
+        /// 查询报表
+        /// </summary>
+        /// <param name="entity">实体</param>
+        /// <param name="pageIndex">页码（从1开始）</param>
+        /// <param name="pageSize">分页大小（默认为10，0表示不分页）</param>
+        /// <param name="count">记录数（如果传入值等于0，则会重新计算此值，反之不计算）</param>
+        /// <param name="sql">SQL语句</param>
+        /// <param name="paramList">参数列表</param>
+        /// <param name="getQueryString">URL中GET参数</param>
+        /// <param name="inputJson">自定义输入项的值</param>
+        /// <param name="whereJson">过滤字段</param>
+        /// <param name="order">排序</param>
+        /// <returns></returns>
+        public static object QueryCount(Entity entity, out string sql, out List<object> paramList, string getQueryString, string inputJson = "", string whereJson = "", Order order = null)
+        {
+            sql = string.Empty;
+            paramList = new List<object>();
+
+            //DataTable dt = new DataTable();
+            if (entity == null)
+            {
+                throw new Exception("报表不存在");
+            }
+
+            if (entity.IS_ENABLE != 1)
+            {
+                throw new Exception("报表" + entity.NAME + "已停用");
+            }
+            if (string.IsNullOrWhiteSpace(entity.SQL_CODE))
+            {
+                throw new Exception("报表" + entity.NAME + "的SQL语句未配置");
+            }
+
+            Dictionary<string, string> dicInputValues = new Dictionary<string, string>();
+
+            List<InputValueItem> inputList = null;
+            if (string.IsNullOrWhiteSpace(inputJson) == false)
+            {
+                try
+                {
+                    inputList = JsonConvert.DeserializeObject<List<InputValueItem>>(inputJson);
+                }
+                catch
+                {
+                    throw new Exception("输入项错误");
+                }
+            }
+
+            List<QueryFilterItem> filterList = null;
+            if (string.IsNullOrWhiteSpace(whereJson) == false)
+            {
+                try
+                {
+                    filterList = JsonConvert.DeserializeObject<List<QueryFilterItem>>(whereJson);
+                }
+                catch
+                {
+                    throw new Exception("筛选项错误");
+                }
+            }
+
+            try
+            {
+                TransSQL(entity.SQL_CODE, getQueryString, inputList, filterList, out sql, out paramList, order);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("转换SQL语句出错:" + ex);
+            }
+            sql = string.Format("SELECT COUNT(*) FROM ({0}) TTT",sql);
+            return BF_DATABASE.Instance.ExecuteScalar(entity.DB_ID, sql, paramList);
+        }
+        #endregion
+
         #region 导出表格设置中文字段名
 
         /// <summary>
