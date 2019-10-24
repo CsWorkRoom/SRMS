@@ -8,6 +8,9 @@ using CS.BLL;
 using CS.Base.Log;
 using CS.WebUI.Models;
 using System.Data;
+using System.Text;
+using CS.WebUI.Models.SR;
+using String = System.String;
 
 namespace CS.WebUI.Controllers.FW
 {
@@ -43,14 +46,172 @@ namespace CS.WebUI.Controllers.FW
             ViewBag.Title = MvcApplication.SystemName + "-" + "首页";
 
             //写其它内容
-            #region 其它内容写到这里以方便剥离
-
+            #region 公告
+            Library.BaseQuery.BBaseQuery.Order order = new Library.BaseQuery.BBaseQuery.Order("ID", "DESC");
+            var bus = BF_BULLETIN.Instance.GetListPage(5, 1, order, "IS_ENABLE=1", null);
+            ViewBag.BF_BULLETINS = bus;
             #endregion
+            #region 流程代办数量统计
+            #endregion
+            #region 流程代办数量统计
+            #endregion
+
             return View();
         }
 
         #region 项目中的个性化内容写到这里，以方便剥离
-        
+        /// <summary>
+        /// 数量统计
+        /// </summary>
+        /// <returns></returns>
+        public string GetTotal()
+        {
+            List<string> legend = new List<string>();
+            legend.Add("科研课题");
+            legend.Add("科研论文");
+            legend.Add("科研专利");
+            List<string> xAxis = new List<string>();
+            var nowDay = DateTime.Now;
+            for (int i = 7; i > -1; i--)
+            {
+                var day = nowDay.AddDays(-i).ToString("yyyy-MM-dd");
+                xAxis.Add(day);
+            }
+            ChartModel chart = new ChartModel();
+            chart.legend = legend;
+            chart.xAxis = xAxis;
+            List<Serie> series = new List<Serie>();
+            string d = string.Join(",", xAxis);
+            Serie stopic = SetSerie("科研课题", d, "SR_TOPIC", "create_user_id");
+            series.Add(stopic);
+            Serie paper = SetSerie("科研论文", d, "SR_PAPER_RECORD", "create_uid");
+            series.Add(paper);
+            Serie patent = SetSerie("科研专利", d, "SR_PATENT", "create_user_id");
+            series.Add(patent);
+            chart.series = series;
+            return SerializeObject(chart).ToLower();
+        }
+
+        private Serie SetSerie(string name, string days, string tablename, string cuserid)
+        {
+            int userID = SystemSession.UserID;
+            var currUser = BF_USER.Instance.GetEntityByKey<BF_USER.Entity>(userID);
+            string cuser = "";
+            if (currUser.NAME.ToLower() != "admin")
+            {
+                cuser = string.Format(@" where {0}={1}", cuserid, userID);
+            }
+
+            string sql = string.Format(@"select  d.ctime,nvl(c.cnt,0) cnt from (
+                        select regexp_substr('{0}','[^,]+', 1, level, 'i') as ctime from dual connect
+                         by level <= length('{0}')-
+                         length(regexp_replace('{0}', ',', ''))+1
+                         ) d left join 
+                         (select ctime,count(1) cnt from (
+                        select id, to_char(create_time,'yyyy-MM-dd') ctime from {1} {2} 
+                        ) t group by   ctime) c
+                        on d.ctime=c.ctime order by ctime", days, tablename, cuser);
+            DataTable dt = BF_DATABASE.Instance.ExecuteSelectSQL(0, sql, null);//series
+            Serie se = new Serie();
+            se.name = name;
+            se.type = "line";
+            List<int> da = new List<int>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                da.Add(Convert.ToInt32(dr["cnt"].ToString()));
+            }
+            se.data = da;
+            return se;
+        }
+
+        /// <summary>
+        /// 费用统计
+        /// </summary>
+        /// <returns></returns>
+        public string GetFee()
+        {
+            List<string> product = new List<string>();
+            product.Add("product");
+            var nowDay = DateTime.Now;
+            List<string> cols = new List<string>();
+            for (int i = 7; i > -1; i--)
+            {
+                var day = nowDay.AddDays(-i).ToString("yyyy-MM-dd");
+                product.Add(day);
+                cols.Add(string.Format(@"sum(case t.ctime
+                                    when '{0}' then t.fee
+                                    else 0
+                                end) a{1}", day, i));
+            }
+            string d = string.Join("','", product);
+            int userID = SystemSession.UserID;
+            var currUser = BF_USER.Instance.GetEntityByKey<BF_USER.Entity>(userID);
+            string suser = "";
+            string puser = "";
+            if (currUser.NAME.ToLower() != "admin")
+            {
+                suser = string.Format(@" and tf.create_uid={0}", userID);
+                puser = string.Format(@" and create_uid={0}", userID);
+            }
+            string sql = string.Format(@"select t.name,{1} from (select name,ctime,sum(total_fee) fee from(
+                        select ty.name,to_char(tf.create_time,'yyyy-MM-dd') ctime,tf.total_fee from sr_topic_funds tf,sr_topic t,sr_topic_type ty
+                        where tf.topic_id=t.id and t.topic_type_id=ty.id  
+                          and to_char(tf.create_time,'yyyy-MM-dd') in ('{0}') {2}
+                        union 
+                        select '论文版面' name,to_char(create_time,'yyyy-MM-dd') ctime,total_fee from sr_paper_record_funds 
+                           where to_char(create_time,'yyyy-MM-dd') in ('{0}') {3}
+                        ) t  group by t.name,t.ctime
+                        ) t group by t.name", d, string.Join(",", cols), suser, puser);
+            DataTable dt = BF_DATABASE.Instance.ExecuteSelectSQL(0, sql, null);//series
+            int rowCnt = dt.Rows.Count;
+            List<dynamic> source = new List<dynamic>();
+            source.Add(product);
+            //source.Add(new List<dynamic> { "Matcha Latte", 41.1, 30.4, 65.1, 53.3, 83.8, 98.7 });
+            //source.Add(new List<dynamic> { "Milk Tea", 86.5, 92.1, 85.7, 83.1, 73.4, 55.1 });
+            //source.Add(new List<dynamic> { "Cheese Cocoa", 24.1, 67.2, 79.5, 86.4, 65.2, 82.5 });
+            //source.Add(new List<dynamic> { "Walnut Brownie", 55.2, 67.1, 69.2, 72.4, 53.9, 39.1 });
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    List<dynamic> item = new List<dynamic>();
+                    for (int i = 0; i < dt.Columns.Count; i++)
+                    {
+                        item.Add(dr[i]);
+                    }
+                    source.Add(item);
+                }
+            }
+            List<dynamic> series = new List<dynamic>();
+            string[] center = { "90%", "25%" };
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                series.Add(new { type = "line", smooth = true, seriesLayoutBy = "row" });
+            }
+            series.Add(new
+            {
+                type = "pie",
+                id = "pie",
+                radius = "40%",
+                center = center,
+                label = new
+                {
+                    formatter = "{b}: {@" + nowDay.ToString("yyyy-MM-dd") + "} ({d}%)"
+                },
+                encode = new
+                {
+                    itemName = "product",
+                    value = nowDay.ToString("yyyy-MM-dd"),
+                    tooltip = nowDay.ToString("yyyy-MM-dd")
+                }
+            });
+
+
+
+            var newObj = new { source = source, series = series, day = nowDay.ToString("yyyy-MM-dd") };
+            return SerializeObject(newObj);
+        }
         #endregion
 
 
@@ -188,11 +349,12 @@ namespace CS.WebUI.Controllers.FW
         /// <param name="menus">可访问菜单</param>
         private void WriteSession(BF_USER.Entity userInfo, Dictionary<int, BF_MENU.Entity> menus)
         {
-            SystemSession.WriteSession(userInfo.ID, userInfo.NAME,userInfo.FULL_NAME, userInfo.DEPT_ID, menus);
+            SystemSession.WriteSession(userInfo.ID, userInfo.NAME, userInfo.FULL_NAME, userInfo.DEPT_ID, menus);
         }
 
         #endregion
 
-        
+
     }
+
 }
