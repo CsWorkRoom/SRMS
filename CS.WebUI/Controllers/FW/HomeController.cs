@@ -52,8 +52,59 @@ namespace CS.WebUI.Controllers.FW
             ViewBag.BF_BULLETINS = bus;
             #endregion
             #region 流程代办数量统计
+            string flowSql = string.Format(@"select count(1) cnt
+                             from 
+                            BF_FLOW_NODE_CASE ncase
+                            left join BF_FLOW_CASE fcase on ncase.flow_case_id=fcase.id
+                            left join BF_FLOW_NODE_CASE_RECORD  cord  on cord.flow_node_case_id=ncase.id and CORD.AUDIT_UID=1 
+                            left join BF_USER U ON U.ID=NCASE.CREATE_UID
+                            where NCASE.AUDIT_STATUS=0 and cord.audit_status is  null
+                            and instr(','||user_ids||',',','||{0}||',')>0", userID);
+            DataTable flowDt=BF_DATABASE.Instance.ExecuteSelectSQL(0, flowSql, null);
+            ViewBag.FlowCnt = flowDt!=null&& flowDt.Rows.Count>0?flowDt.Rows[0][0].ToString():"0";
             #endregion
-            #region 流程代办数量统计
+            #region 课题设置，设置评分项
+
+            string setSql = string.Format(@"SELECT count(1) cnt FROM (
+                                select T.ID,P.NAME TYPE_NAME,T.NAME,T.START_TIME,T.END_TIME,U.FULL_NAME,T.CREATE_TIME,T.FLOW_STATE,T.IS_APPROVAL，
+                                (SELECT DECODE(COUNT(1),0,'未设置','已设置')  FROM SR_TOPIC_EXPERT E WHERE E.TOPIC_ID=T.ID) EXPERT_STATUS
+                                 from SR_TOPIC T,BF_USER U,SR_TOPIC_TYPE P
+                                WHERE U.ID=T.CREATE_USER_ID
+                                AND   P.ID=T.TOPIC_TYPE_ID
+                                AND   T.IS_ADOPT=1
+                                )
+                                WHERE   EXPERT_STATUS='未设置'", userID);
+            DataTable setDt = BF_DATABASE.Instance.ExecuteSelectSQL(0, setSql, null);
+            ViewBag.SetCnt = setDt != null && setDt.Rows.Count > 0 ? setDt.Rows[0][0].ToString() : "0";
+            #endregion
+            #region 专家评分
+            string expertSql = string.Format(@"SELECT count(*) cnt FROM (
+                                select E.ID,P.NAME TYPE_NAME,T.NAME,T.START_TIME,T.END_TIME,U.FULL_NAME,T.CREATE_TIME,
+                                decode(E.IS_SCORE,0,'未评分','已评分') IS_SCORE,E.SCORE,E.OPER_TIME
+                                 from SR_TOPIC_EXPERT E,SR_TOPIC T,BF_USER U,SR_TOPIC_TYPE P
+                                WHERE U.ID=T.CREATE_USER_ID AND E.TOPIC_ID=T.ID
+                                AND P.ID=T.TOPIC_TYPE_ID AND E.USER_ID={0}
+                                )
+                                where  IS_SCORE='未评分'", userID);
+            DataTable expertDt = BF_DATABASE.Instance.ExecuteSelectSQL(0, expertSql, null);
+            ViewBag.ExpertCnt = expertDt != null && expertDt.Rows.Count > 0 ? expertDt.Rows[0][0].ToString() : "0";
+            #endregion
+            #region 中期任务
+            string doSql = string.Format(@"SELECT count(1) cnt FROM (
+                                 select T.ID,P.NAME PNAME,R.NAME TOPIC_NAME,T.NAME TNAME,T.BEGIN_TIME,T.END_TIME,T.REMARK,U.FULL_NAME,T.CREATE_TIME,
+                                F.FLOW_STATE,N.NAME FLOW_NODE_NAME,DECODE(F.IS_ADOPT,NULL,'未填报',0,'审核中...',1,'审核通过...',2,'审核不通过...') IS_ADOPT,
+                                'SR_TOPIC_TASK_DONE' TYPE,case when (F.FLOW_STATE!=0 and F.IS_ADOPT=0) or (F.IS_ADOPT=1) THEN 'auditing' else 'noaudit'   end auidtType
+                                 from SR_TOPIC_TASK T
+                                 LEFT JOIN SR_TOPIC_TASK_DONE F ON F.TOPIC_TASK_ID=T.ID
+                                 left join BF_USER U on U.ID=T.CREATE_UID
+                                 left join SR_TOPIC R on  R.ID=T.TOPIC_ID
+                                 LEFT JOIN SR_TOPIC_TYPE P ON P.ID=R.TOPIC_TYPE_ID
+                                 left join BF_FLOW_NODE N ON F.FLOW_STATE=N.ID
+                                where  T.CREATE_UID=1 
+                                )
+                                where  IS_ADOPT='未填报'");
+            DataTable doDt = BF_DATABASE.Instance.ExecuteSelectSQL(0, doSql, null);
+            ViewBag.DoCnt = doDt != null && doDt.Rows.Count > 0 ? doDt.Rows[0][0].ToString() : "0";
             #endregion
 
             return View();

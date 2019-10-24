@@ -10,24 +10,123 @@
     height: 250px;
     line-height: 24px;
     overflow: auto; /*  新加的 */
+	}
+	.grid-content {
+  display: flex;
+  align-items: center;
+ height:120px;
+}
+.grid-con-icon {
+  font-size: 60px;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+  line-height: 120px;
+  color: #fff;
+  border-radius:4px 0px 0px 4px;
+}
+
+.grid-cont-right {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
+
+.grid-num {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.grid-con-1 .grid-con-icon {
+  background: rgb(45, 140, 240);
+}
+
+.grid-con-1 .grid-num {
+  color: rgb(45, 140, 240);
+}
+
+.grid-con-2 .grid-con-icon {
+  background: rgb(100, 213, 114);
+}
+
+.grid-con-2 .grid-num {
+  color: rgb(100, 213, 114);
+}
+
+.grid-con-3 .grid-con-icon {
+  background: rgb(242, 94, 67);
+}
+
+.grid-con-3 .grid-num {
+  color: rgb(242, 94, 67);
+}
+.grid-con-4 .grid-con-icon {
+  background: #999999;
+}
+
+.grid-con-4 .grid-num {
+  color: #999999;
 }
 </style>
-<div class="larry-container animated fadeIn larry-bg-gray layui-form" style="margin-left: 3px;">
-    <div class="layui-row larry-shortcut layui-col-space15 topDiv" id="shortcut" style="padding-top: 20px;" >
-        <!--<div class="layui-col-xs6 layui-col-sm6 layui-col-md4 layui-col-lg2 larry-col">-->
-        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-friends"></i>口径任务</button>
-        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-shouye4"></i>客户经理</button>
-        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-Calculator"></i>抢盘计算</button>
-
-        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-good"></i>经理积分</button>
-        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-iconfontstop"></i>经理薪酬</button>
-        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-dollar"></i>集团收入</button>
-
-        <button class="layui-btn layui-btn-danger topBut"><i class="layui-icon layui-icon-caidanshejishi"></i>用户管理</button>
-        <button class="layui-btn layui-btn-danger topBut" ><i class="layui-icon layui-icon-laba2"></i>通知公告</button>
-        <button class="layui-btn layui-btn-danger topBut" ><i class="layui-icon layui-icon-903caidan_bangzhu"></i>帮助说明</button>
-
+<div class="layui-fluid animated fadeIn larry-bg-gray layui-form" style="padding-top: 20px;" >
+     <div class="layui-row layui-col-space10" style="padding-left: 10px; padding-right: 10px;">
+        <div class="layui-col-md3">
+            <div class="layui-card" style="border-radius: 4px;">
+                <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                    <div class="grid-content grid-con-1">
+                        <i class="grid-con-icon layui-icon layui-icon-919caidan_xiuli" ></i>
+                        <div class="grid-cont-right">
+                            <div class="grid-num">@ViewBag.FlowCnt</div>
+                            <div>流程待办数量</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="layui-col-md3">
+             <div class="layui-card"  style="border-radius: 4px;">
+                 <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                     <div class="grid-content grid-con-2">
+                         <i class="grid-con-icon layui-icon layui-icon-tianjiaduoyonghu"></i>
+                         <div class="grid-cont-right">
+                             <div class="grid-num">@ViewBag.SetCnt</div>
+                             <div>课题可设置数量</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="layui-col-md3">
+             <div class="layui-card"  style="border-radius: 4px;">
+                 <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                     <div class="grid-content grid-con-3">
+                         <i class="grid-con-icon layui-icon layui-icon-survey1 "></i>
+                         <div class="grid-cont-right">
+                             <div class="grid-num">@ViewBag.ExpertCnt</div>
+                             <div>课题待专家评分数量</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="layui-col-md3">
+             <div class="layui-card"  style="border-radius: 4px;">
+                 <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                     <div class="grid-content grid-con-4">
+                         <i class="grid-con-icon layui-icon layui-icon-rili"></i>
+                         <div class="grid-cont-right">
+                             <div class="grid-num">@ViewBag.DoCnt</div>
+                             <div>课题中期任务数量</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
     </div>
+
+ 
+
     <div class="layui-row layui-col-space15" style="margin-top: 10px">
         <div class="layui-col-md6">
             <div class="layui-card">
@@ -44,16 +143,16 @@
                             <th>公告标题</th>
                             <th>摘要</th>
                             <th>发布时间</th>
-                           
-                        </tr> 
+
+                        </tr>
                         </thead>
                         <tbody>
-                        
-                        @foreach(var it in ViewBag.BF_BULLETINS as IEnumerable<CS.BLL.FW.BF_BULLETIN.Entity>)
+
+                        @foreach (var it in ViewBag.BF_BULLETINS as IEnumerable<CS.BLL.FW.BF_BULLETIN.Entity>)
                         {
                             <tr>
-                                <td title="@it.TITLE"  onclick="openNews(@it.ID)">@(it.TITLE.Length>10?it.TITLE.Substring(0,10)+"...":it.TITLE)</td>
-                                <td title="@it.SUMMARY">@(it.SUMMARY.Length>10?it.TITLE.Substring(0,10)+"...":it.SUMMARY)</td>
+                                <td title="@it.TITLE" onclick="openNews(@it.ID)">@(it.TITLE.Length > 10 ? it.TITLE.Substring(0, 10) + "..." : it.TITLE)</td>
+                                <td title="@it.SUMMARY">@(it.SUMMARY.Length > 10 ? it.TITLE.Substring(0, 10) + "..." : it.SUMMARY)</td>
                                 <td>@it.CREATE_TIME</td>
                             </tr>
                         }
@@ -70,7 +169,7 @@
                 </div>
             </div>
         </div>
-       
+
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-header">每日费用分析统计</div>
