@@ -2181,6 +2181,7 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrSubjectArticle\JS\Edit.js" />
     <Content Include="Views\SrPaperRecord\JS\FeeEdit.js" />
     <Content Include="Views\SrPaperRecord\JS\Edit.js" />
     <Content Include="Views\SrPatent\JS\Edit.js" />
@@ -2207,6 +2208,7 @@
     <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrSubjectArticleController.cs" />
     <Compile Include="Controllers\SR\SrPatentController.cs" />
     <Compile Include="Controllers\SR\SrTopicEndController.cs" />
     <Compile Include="Controllers\SR\SrPaperRecordController.cs" />
@@ -2450,6 +2452,8 @@
     <Content Include="Views\SrTopic\FlowEdit.cshtml" />
     <Content Include="Views\AfFlowCase\DealFlow.cshtml" />
     <Content Include="Views\SrPaperRecord\FeeEdit.cshtml" />
+    <Content Include="Views\SrSubjectArticle\Edit.cshtml" />
+    <Content Include="Views\SrSubjectArticle\Show.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

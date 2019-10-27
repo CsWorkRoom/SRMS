@@ -282,3 +282,18 @@ create table SR_TITLE
    UPDATE_TIME          TIMESTAMP            not null,
    constraint PK_SR_TITLE primary key (ID)
 );
+--------学科资料---------------
+create table SR_SUBJECT_ARTICLE 
+(
+   ID                   INTEGER              not null,
+   NAME                 VARCHAR(128),
+   SUBJECT_ID           INTEGER,
+   CONTENT              CLOB,
+   FILES                VARCHAR(2048),
+   IS_ENABLE            SMALLINT,
+   CREATE_UID           INTEGER,
+   UPDATE_UID           INTEGER,
+   CREATE_TIME          TIMESTAMP,
+   UPDATE_TIME          TIMESTAMP,
+   constraint PK_SR_SUBJECT_ARTICLE primary key (ID)
+);
