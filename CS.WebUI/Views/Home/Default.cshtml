@@ -3,41 +3,201 @@
 }
 <script src="~/Content/plugins/jquery-3.2.1.min.js"></script>
 <link href="~/Views/Home/CSS/default.css" rel="stylesheet" />
+<style>
+	.layui-card-body {
+    position: relative;
+    padding: 10px 15px;
+    height: 250px;
+    line-height: 24px;
+    overflow: auto; /*  新加的 */
+	}
+	.grid-content {
+  display: flex;
+  align-items: center;
+ height:120px;
+}
+.grid-con-icon {
+  font-size: 60px;
+  width: 120px;
+  height: 120px;
+  text-align: center;
+  line-height: 120px;
+  color: #fff;
+  border-radius:4px 0px 0px 4px;
+}
 
-<div class="larry-container animated fadeIn larry-bg-gray layui-form" style="margin-left: 3px;">
-    <!-- 快捷导航 -->
-    <div class="layui-row larry-shortcut layui-col-space15 topDiv" id="shortcut">
-        <!--<div class="layui-col-xs6 layui-col-sm6 layui-col-md4 layui-col-lg2 larry-col">-->
-        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-friends"></i>口径任务</button>
-        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-shouye4"></i>客户经理</button>
-        <button class="layui-btn layui-btn-normal topBut"><i class="layui-icon layui-icon-Calculator"></i>抢盘计算</button>
+.grid-cont-right {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
 
-        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-good"></i>经理积分</button>
-        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-iconfontstop"></i>经理薪酬</button>
-        <button class="layui-btn layui-btn-warm topBut"><i class="layui-icon layui-icon-dollar"></i>集团收入</button>
+.grid-num {
+  font-size: 30px;
+  font-weight: bold;
+}
 
-        <button class="layui-btn layui-btn-danger topBut"><i class="layui-icon layui-icon-caidanshejishi"></i>用户管理</button>
-        <button class="layui-btn layui-btn-danger topBut"><i class="layui-icon layui-icon-laba2"></i>通知公告</button>
-        <button class="layui-btn layui-btn-danger topBut"><i class="layui-icon layui-icon-903caidan_bangzhu"></i>帮助说明</button>
+.grid-con-1 .grid-con-icon {
+  background: rgb(45, 140, 240);
+}
 
-    </div>
-    <!-- 面板 -->
-    <div class="layui-row layui-col-space15">
-        <!-- 待处理工单统计 区县-->
-        <div class="layui-col-xs12 layui-col-sm12 layui-col-md12 layui-col-lg12">
-            <section class="larry-panel" style="width:100%;text-align:center">
-                <img id="FlowChart" src="~/Views/Home/img/Flow.png" usemap="#flowMap" style="width:90%" />
-                <map name="flowMap" id="flowMap">
-                    <area shape="rect" coords="272,18,388,78" href="~/aftablereport/show?id=87" alt="计件管理" />
-                </map>
-            </section>
+.grid-con-1 .grid-num {
+  color: rgb(45, 140, 240);
+}
+
+.grid-con-2 .grid-con-icon {
+  background: rgb(100, 213, 114);
+}
+
+.grid-con-2 .grid-num {
+  color: rgb(100, 213, 114);
+}
+
+.grid-con-3 .grid-con-icon {
+  background: rgb(242, 94, 67);
+}
+
+.grid-con-3 .grid-num {
+  color: rgb(242, 94, 67);
+}
+.grid-con-4 .grid-con-icon {
+  background: #999999;
+}
+
+.grid-con-4 .grid-num {
+  color: #999999;
+}
+</style>
+<div class="layui-fluid animated fadeIn larry-bg-gray layui-form" style="padding-top: 20px;" >
+     <div class="layui-row layui-col-space10" style="padding-left: 10px; padding-right: 10px;">
+        <div class="layui-col-md3">
+            <div class="layui-card" style="border-radius: 4px;">
+                <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                    <div class="grid-content grid-con-1">
+                        <i class="grid-con-icon layui-icon layui-icon-919caidan_xiuli" ></i>
+                        <div class="grid-cont-right">
+                            <div class="grid-num">@ViewBag.FlowCnt</div>
+                            <div>流程待办数量</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- 不合格工单统计 区县-->
-
+         <div class="layui-col-md3">
+             <div class="layui-card"  style="border-radius: 4px;">
+                 <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                     <div class="grid-content grid-con-2">
+                         <i class="grid-con-icon layui-icon layui-icon-tianjiaduoyonghu"></i>
+                         <div class="grid-cont-right">
+                             <div class="grid-num">@ViewBag.SetCnt</div>
+                             <div>课题可设置数量</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="layui-col-md3">
+             <div class="layui-card"  style="border-radius: 4px;">
+                 <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                     <div class="grid-content grid-con-3">
+                         <i class="grid-con-icon layui-icon layui-icon-survey1 "></i>
+                         <div class="grid-cont-right">
+                             <div class="grid-num">@ViewBag.ExpertCnt</div>
+                             <div>课题待专家评分数量</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="layui-col-md3">
+             <div class="layui-card"  style="border-radius: 4px;">
+                 <div class="layui-card-body" style="height: 120px;padding: 0px 0px;">
+                     <div class="grid-content grid-con-4">
+                         <i class="grid-con-icon layui-icon layui-icon-rili"></i>
+                         <div class="grid-cont-right">
+                             <div class="grid-num">@ViewBag.DoCnt</div>
+                             <div>课题中期任务数量</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
     </div>
-    <!-- 报表 -->
-    <div id="container" style="height: 300px"></div>
+
+ 
+
+    <div class="layui-row layui-col-space15" style="margin-top: 10px">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">系统公告</div>
+                <div class="layui-card-body">
+                    <table class="layui-table" lay-skin="nob">
+                        <colgroup>
+                            <col width="200">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>公告标题</th>
+                            <th>摘要</th>
+                            <th>发布时间</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        @foreach (var it in ViewBag.BF_BULLETINS as IEnumerable<CS.BLL.FW.BF_BULLETIN.Entity>)
+                        {
+                            <tr>
+                                <td title="@it.TITLE" onclick="openNews(@it.ID)">@(it.TITLE.Length > 10 ? it.TITLE.Substring(0, 10) + "..." : it.TITLE)</td>
+                                <td title="@it.SUMMARY">@(it.SUMMARY.Length > 10 ? it.TITLE.Substring(0, 10) + "..." : it.SUMMARY)</td>
+                                <td>@it.CREATE_TIME</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">每日数量分析统计</div>
+                <div class="layui-card-body">
+                    <div id="sumTotal" style="height:250px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">每日费用分析统计</div>
+                <div class="layui-card-body" style="min-height: 400px;">
+                    <div id="sumMoney" style="height:400px;  "></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
 </div>
 <!-- 引入 ECharts 文件 -->
-<script type="text/javascript" src="~/Echart/vendors/echarts/echarts-all-3.js?_v_=15105857922"></script>
+<script type="text/javascript" src="~/Echart/vendors/echarts/echarts3.js?_v_=15105857922"></script>
 <script type="text/javascript" src="~/Views/Home/JS/Default.js?2019"></script>
+<script>
+	function openNews(id){
+	var url="../afbulletin/show?id="+id;
+	 layer.open({
+                type: 2,
+                shade: true,
+                offset: ['5%', '10%'],
+                shade: [0.1, '#fff'],
+                area: ['1100px', '550px'],
+                title: '公告详情', //不显示标题
+                content: url //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+
+            });
+	}
+	
+
+</script>

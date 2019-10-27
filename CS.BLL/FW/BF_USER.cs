@@ -915,7 +915,7 @@ namespace CS.BLL.FW
 
             using (BDBHelper dbHelper = new BDBHelper())
             {
-                string strSql = "select menu_ids from bf_user us left join BF_ROLE role on US.ROLE_IDS=ROLE.ID where us.id="+userId;
+                string strSql = "select menu_ids from bf_user us left join BF_ROLE role on instr(us.ROLE_IDS,','||ROLE.ID||',')>0 where us.id=" + userId;
                 object objResult = dbHelper.ExecuteReader(strSql);
                 if (objResult != null)
                     return objResult.ToString();
