@@ -2181,11 +2181,11 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrSubjectArticle\JS\Edit.js" />
     <Content Include="Views\SrPaperRecord\JS\FeeEdit.js" />
     <Content Include="Views\SrPaperRecord\JS\Edit.js" />
     <Content Include="Views\SrPatent\JS\Edit.js" />
     <Content Include="Views\SrPatent\JS\FlowEdit.js" />
-    <Content Include="Views\SrSearch\JS\SearchInfo.js" />
     <Content Include="Views\SrTopicEnd\JS\Edit.js" />
     <Content Include="Views\SrTopic\CSS\common_style.css" />
     <Content Include="Views\SrTopicBudget\JS\Edit.js" />
@@ -2208,7 +2208,7 @@
     <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
-    <Compile Include="Controllers\SR\SrSearchController.cs" />
+    <Compile Include="Controllers\SR\SrSubjectArticleController.cs" />
     <Compile Include="Controllers\SR\SrPatentController.cs" />
     <Compile Include="Controllers\SR\SrTopicEndController.cs" />
     <Compile Include="Controllers\SR\SrPaperRecordController.cs" />
@@ -2250,7 +2250,6 @@
     <Compile Include="Models\Flow\FlowNodeModel.cs" />
     <Compile Include="Models\FW\FlowCaseModel.cs" />
     <Compile Include="Models\FW\ZTreeModel.cs" />
-    <Compile Include="Models\SR\FileModel.cs" />
     <Compile Include="Models\SR\ChartModel.cs" />
     <Compile Include="Models\SR\TreeModel.cs" />
     <Compile Include="Models\SysModel.cs" />
@@ -2454,7 +2453,8 @@
     <Content Include="Views\SrTopic\FlowEdit.cshtml" />
     <Content Include="Views\AfFlowCase\DealFlow.cshtml" />
     <Content Include="Views\SrPaperRecord\FeeEdit.cshtml" />
-    <Content Include="Views\SrSearch\SearchInfo.cshtml" />
+    <Content Include="Views\SrSubjectArticle\Edit.cshtml" />
+    <Content Include="Views\SrSubjectArticle\Show.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

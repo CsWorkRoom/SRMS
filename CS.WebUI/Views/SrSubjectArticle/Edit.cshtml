@@ -1,0 +1,80 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_SUBJECT_ARTICLE.Entity
+<link href="~/Content/simditor/styles/simditor.css" rel="stylesheet" />
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="SubjectSelect" value="@ViewBag.SubjectSelect" /> <!--学科下拉项-->
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-tab-content">
+            <div class="layui-form-item">
+                <div>
+                    <label class="layui-form-label">学习文章名<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="NAME" id="NAME" lay-verify="nameVer" value="@Model.NAME" placeholder="请填写学科学习资料名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">所属学科<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="SUBJECT_ID" id="SUBJECT_ID" lay-verify="subjectVer" value="@Model.SUBJECT_ID">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否启用</label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" id="IS_ENABLE" name="IS_ENABLE" value="@Model.IS_ENABLE" />
+                        @if (Model.IS_ENABLE == 1)
+                        {
+                            <input type="checkbox" checked="checked" lay-skin="switch" lay-filter="switchUse" lay-text="启用|停用">
+                        }
+                        else
+                        {
+                            <input type="checkbox" lay-skin="switch" lay-filter="switchUse" lay-text="启用|停用">
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">文章内容<span class="imust">*</span></label>
+                <div class="layui-input-block" id="contentDiv">
+                    <input type="hidden" id="CONTENT" name="CONTENT" value="@Model.CONTENT" />
+                    <textarea id="editor" class="layui-textarea" lay-verify="content" placeholder="请输入文章内容...">@Model.CONTENT</textarea>
+                </div>
+            </div>
+
+            <fieldset class="layui-elem-field  layui-field-title">
+                <legend>资料附件</legend>
+            </fieldset>
+            <!--引入外导文件视图-->
+            @Html.Partial("PVUpFile",
+                       new CS.WebUI.Models.FileMsg
+                       {
+                           PathName = "SubjectPath",//存放文件的目录名.在web.config中配置
+                           FILES = Model.FILES,
+                           IsRequire = false//是否必填项（true=必填，false=非必填）,默认非必填
+                       })
+        </div>
+    </div>
+    <div class="form-bottom-submit">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
+<script src="~/Content/simditor/scripts/module.js"></script>
+<script src="~/Content/simditor/scripts/hotkeys.js"></script>
+<script src="~/Content/simditor/scripts/uploader.js"></script>
+<script src="~/Content/simditor/scripts/simditor.js"></script>
+<script src="~/Views/SrSubjectArticle/JS/Edit.js?v=20191023"></script>
+

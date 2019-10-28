@@ -1,6 +1,7 @@
 ﻿@model  CS.WebUI.Models.FileMsg
 <input type="hidden" id="pathName" value="@Model.PathName" /> <!--文件所在目录-->
-<div style="padding:10px;">
+@if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
+{
 <table class="layui-table" lay-size="sm">
     <thead>
         <tr>
@@ -50,7 +51,7 @@
         }
     </tbody>
 </table>
-</div>
+}
 
 <script type="text/javascript">
     //下载文件

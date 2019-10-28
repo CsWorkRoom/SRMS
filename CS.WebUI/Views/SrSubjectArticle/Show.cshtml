@@ -1,0 +1,38 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_SUBJECT_ARTICLE.Entity
+<input type="hidden" id="ID" name="ID" value="@Model.ID" />
+<div style="width:850px;margin:10px auto;box-sizing: border-box;">
+    <div style="font-size:xx-large;text-align:center;width:100%">
+        @Model.NAME
+    </div>
+    <fieldset class="layui-elem-field" style="margin-top: 20px;">
+        <legend></legend>
+    </fieldset>
+    <div style="width:100%;text-align:center;margin-bottom:15px;font-size:10px;color:blue">
+        <div style="width:40%;float:left;">
+            <span style="float:left;margin-left:15px">所属学科：@ViewBag.SubjectName</span>
+        </div>
+        <div style="width:30%;float:left;">
+            <span style="float:right">创建人：@ViewBag.CreateUser</span>
+        </div>
+        <div style="width:25%;float:left;margin-left:25px">
+            <span style="float:right">创建时间：@Model.CREATE_TIME</span>
+        </div>
+    </div>
+    <div style="line-height:25px;width:100%;margin-top:35px">
+        @Html.Raw(Model.CONTENT)
+    </div>
+    <div style="padding-top:15px">
+        @Html.Partial("PVShowFile",
+                       new CS.WebUI.Models.FileMsg
+                       {
+                           PathName = "SubjectPath",//存放文件的目录名.在web.config中配置
+                           FILES = Model.FILES,
+                           IsRequire = false//是否必填项（true=必填，false=非必填）,默认非必填
+                       })
+    </div>
+</div>
