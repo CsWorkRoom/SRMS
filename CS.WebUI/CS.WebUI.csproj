@@ -2181,6 +2181,7 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrSearch\JS\SearchInfo.js" />
     <Content Include="Views\SrSubjectArticle\JS\Edit.js" />
     <Content Include="Views\SrPaperRecord\JS\FeeEdit.js" />
     <Content Include="Views\SrPaperRecord\JS\Edit.js" />
@@ -2456,6 +2457,7 @@
     <Content Include="Views\SrPaperRecord\FeeEdit.cshtml" />
     <Content Include="Views\SrSubjectArticle\Edit.cshtml" />
     <Content Include="Views\SrSubjectArticle\Show.cshtml" />
+    <Content Include="Views\SrSearch\SearchInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
