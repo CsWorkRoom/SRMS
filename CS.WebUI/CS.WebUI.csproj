@@ -2251,6 +2251,7 @@
     <Compile Include="Models\FW\FlowCaseModel.cs" />
     <Compile Include="Models\FW\ZTreeModel.cs" />
     <Compile Include="Models\SR\ChartModel.cs" />
+    <Compile Include="Models\SR\FileModel.cs" />
     <Compile Include="Models\SR\TreeModel.cs" />
     <Compile Include="Models\SysModel.cs" />
     <Compile Include="Models\FW\BulletinModels.cs" />
