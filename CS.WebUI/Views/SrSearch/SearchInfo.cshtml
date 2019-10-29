@@ -66,7 +66,7 @@ border-radius:0px 5px 5px 0px;
                 <b><a href="javascript:fileDown('{{item.FILE_PATH}}')">{{item.DISPLAY_NAME}}</a></b>
             </div>
             <div class="layui-card-body">
-                <p style="font-size: 16px;">文件来源-{{item.SOURE}}</p>
+                <span class="layui-badge layui-bg-blue">{{item.SOURE}}</span>
                 {{# if (item.SOURE_OBJ!= null) { }}  
                 <p>名称：{{item.SOURE_OBJ.NAME}}</p>
                 <p>创建人：{{item.SOURE_OBJ.USER_NAME}}</p>
