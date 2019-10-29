@@ -1,0 +1,83 @@
+﻿@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+<style>
+.fly-extend-banner-search {
+    margin-top: 30px;
+    width: 100%;
+    text-align: center;
+	height: 42px;
+}
+.layui-input{
+height: 42px;
+width: 400px;
+border-radius:5px 0px 0px 5px;
+}
+.layui-btn{
+height: 42px;
+width: 80px;
+border-radius:0px 5px 5px 0px;
+}
+</style>
+
+    <div class="larry-bg-gray">
+        <div class="layui-row">
+            <div class="layui-col-md12" >
+                <div class="fly-extend-banner-search">
+                    <div class="layui-inline">
+                        <input placeholder="输入关键字进行搜索..." id="key" autocomplete="off" value="" class="layui-input">
+                    </div><button class="layui-btn" id="btnSearch"><i class="layui-icon layui-icon-search"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>查询结果</legend>
+        </fieldset>
+            <div id="datalist" class="layui-col-space10 "  style="height:600px;;background: #F1F2F7;padding: 10px;">
+          
+            </div>
+    </div>
+
+<script type="text/javascript" src="~/Views/SrSearch/JS/SearchItem.js?2019"></script>
+
+<script id="fileItem" type="text/html">  
+    {{#  layui.each(d.list, function(index, item){ console.log(item)}}  
+    <div class="layui-col-md12" >
+        <div class="layui-card">
+            <div class="layui-card-header">          
+                <a onclick="openWindows('{{item.URL}}')"><b style="font-size: 16px;">{{item.NAME}}</b></a>
+            </div>
+            <div class="layui-card-body">           
+                <span class="layui-badge layui-bg-blue">{{item.SOURCE}}</span>
+                <p>说明：{{item.CONTENT}}</p>
+                
+            </div>
+            <div class="layui-card-header">  
+                创建人：{{item.FULL_NAME}} 创建时间：{{item.CREATE_TIME}}
+            </div>
+        </div>  
+    </div>
+    {{#  }); }}
+</script>
+
+<script>
+    function openWindows(url){
+        layer.open({
+            type: 2,
+            shade: true,
+            offset: ['5%', '10%'],
+            shade: [0.1, '#fff'],
+            area: ['1100px', '550px'],
+            title: '详情', //不显示标题
+            content: url 
+
+        });
+    }
+	
+
+</script>
+
+
+
+

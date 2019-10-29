@@ -5,7 +5,7 @@
         var phonenum = $("#key").val();
         if (!phonenum)
         {
-            alert("请输入相关文件名称！");
+            alert("请输入关键字！");
             $("#key").focus();
             return;
         }
@@ -13,7 +13,6 @@
         data.GetList(phonenum);
     });
 });
-
 var DataList = function ()
 {
     this.GetList = function (phone)
@@ -26,19 +25,19 @@ var DataList = function ()
                 async: true,
                 dataType: "json",
                 data: { key: phone },
-                url: "../SrSearch/DoSearch",
+                url: "../SrSearch/DoSearchItem",
                 beforeSend: function(XMLHttpRequest) {
                     $("#datalist").html(common.loading);
                 },
                 success: function(res) {
                     if (res.Type) {
-                        var data = res.Files;
+                        var data = res.res;
                         if (data.length == 0) {
                             $("#datalist").html(common.none);
                             return;
                         }
                         var data = { //数据
-                            "list": res.Files
+                            "list": res.res
                         }
                         var getTpl = fileItem.innerHTML
                             , view = document.getElementById('datalist');
