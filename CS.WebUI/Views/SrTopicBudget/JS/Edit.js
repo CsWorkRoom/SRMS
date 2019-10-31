@@ -21,7 +21,25 @@ layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function (
     budget.budgetArr = budget.getBudgetArr();
     budget.budgetRender();
 });
-
+function SaveFlowForm()
+{
+    var url = "../SrTopicBudget/Edit";
+    $("#Budgets").val(JSON.stringify(budget.budgetArr));
+    var data = $("#form").serialize();
+    
+    var resData = "";
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        async: false,
+        success: function (res)
+        {
+            resData = res;
+        }
+    });
+    return resData;
+}
 
 //#region 参与单位信息
 var budget = {

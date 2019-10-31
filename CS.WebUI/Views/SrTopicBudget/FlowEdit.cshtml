@@ -1,0 +1,47 @@
+﻿@using System.Web.Mvc.Html
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_TOPIC_BUDGET.Entity
+
+<!--预算类型-->
+<script type="text/html" id="selectBudgetType">
+    <select name="BUDGET_TYPE_ID" onchange="budget.changeBudgetType({{d.LAY_TABLE_INDEX}}, this);" lay-ignore>
+        {{# for(var i=0; i< budgetTypeArr.length; i++) { }}
+        <option value="{{ budgetTypeArr[i]['Key'] }}" {{ d.DATA_TYPE == budgetTypeArr[i]['Key'] ? 'selected' : '' }}>{{ budgetTypeArr[i]['Value'] }}</option>
+        {{# } }}
+    </select>
+</script>
+@Html.Raw(ViewBag.BudgetTypeArr)
+
+<!--预算项目增删-->
+<script type="text/html" id="addDelBudget">
+    <span class="layui-badge layui-bg-green" href="#" onclick="budget.addBudget({{d.LAY_TABLE_INDEX + 1}});">+</span>
+    <span class="layui-badge layui-bg-green" href="#" onclick="budget.deleteBudget({{d.LAY_TABLE_INDEX}});">-</span>
+</script>
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="TOPIC_ID" name="TOPIC_ID" value="@ViewBag.TOPIC_ID" /><!--课题编号ID-->
+    <div class="form-top-content">
+        <div class="layui-tab-content">
+            <!--此处放置课题基础信息-->
+            <fieldset class="layui-elem-field  layui-field-title">
+                <legend>课题预算清单</legend>
+            </fieldset>
+            <blockquote class="layui-elem-quote">
+                提示：当前预算总额为 <span id="tipFee" style="font-size:18px;color:red;font-weight:bold">0</span> 元。
+            </blockquote>
+            <b>@ViewBag.TOPIC_NAME</b>
+            <table id="tbBudget" class="layui-table" lay-size="sm" lay-filter="tbBudget"></table><!--参与单位信息-->
+            <input type="hidden" id="Budgets" name="Budgets" value="@ViewBag.Budgets" /> <!--预算列表-->
+        </div>
+    </div>
+    <div class="form-bottom-submit" style="display: none;">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/SrTopicBudget/JS/Edit.js?v=20190604"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>

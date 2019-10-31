@@ -20,7 +20,29 @@ namespace CS.WebUI.Controllers.FW
     public class SrTopicBudgetController : ABaseController
     {
         public string Modular = "课题预算信息";
+        public ActionResult FlowEdit(int Id = 0)
+        {
+            var main = SR_TOPIC_BUDGET_MAIN.Instance.GetEntityByKey<SR_TOPIC_BUDGET_MAIN.Entity>(Id);
+            #region 01.课题基础信息（暂未实现）
 
+            var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(main.TOPIC_ID);
+            ViewBag.TOPIC_NAME = topic.NAME;
+            #endregion
+
+            #region 02.预算列表信息
+            var budgetList = SR_TOPIC_BUDGET.Instance.GetList<SR_TOPIC_BUDGET.Entity>("TOPIC_ID=?", main.TOPIC_ID);
+            ViewBag.Budgets = SerializeObject(budgetList);//预算列表
+            #endregion
+
+            #region 03.预算类型(非html标记)
+            ViewBag.BudgetTypeArr = GetBudgetTypeArr();
+            #endregion
+
+            ViewBag.TOPIC_ID = main.TOPIC_ID;//课题编号
+
+
+            return View(new CS.BLL.SR.SR_TOPIC_BUDGET.Entity());
+        }
         /// <summary>
         /// 编辑及新增
         /// </summary>
