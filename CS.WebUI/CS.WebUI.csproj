@@ -2040,6 +2040,7 @@
     <Content Include="Echart\vendors\echarts-stat\ecStat.min.js" />
     <Content Include="Echart\vendors\echarts\echarts-all-3.js" />
     <Content Include="Echart\vendors\echarts\echarts.js" />
+    <Content Include="Echart\vendors\echarts\echarts3.js" />
     <Content Include="Echart\vendors\echarts\extension\bmap.js" />
     <Content Include="Echart\vendors\echarts\extension\bmap.min.js" />
     <Content Include="Echart\vendors\echarts\extension\dataTool.js" />
@@ -2428,7 +2429,7 @@
     <Content Include="Content\zTree_v3\css\awesomeStyle\awesome.less" />
     <Content Include="Content\zTree_v3\css\awesomeStyle\fa.less" />
     <Content Include="Content\zTree_v3\README.md" />
-    <Content Include="Content\layui\font\iconfont.woff2" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\QSS.pubxml" />
     <Content Include="Views\Shared\PVUpFile.cshtml" />
     <Content Include="Views\Shared\PVTree.cshtml" />
