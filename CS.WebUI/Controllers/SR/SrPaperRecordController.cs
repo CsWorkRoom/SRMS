@@ -25,6 +25,35 @@ namespace CS.WebUI.Controllers.FW
         public string Modular = "论文备案";
 
         #region 论文备案管理
+        public ActionResult FlowEdit(int id = 0)
+        {
+            SR_PAPER_RECORD.Entity paper = new SR_PAPER_RECORD.Entity();
+
+            #region 01.论文备案主体
+            if (id > 0)
+            {
+                paper = SR_PAPER_RECORD.Instance.GetEntityByKey<SR_PAPER_RECORD.Entity>(id);
+            }
+            #endregion
+
+            #region 02.课题下拉(树状结构) 考虑：显示属于当前人员的课题
+            //课题下拉树
+            var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(paper.TOPIC_ID);
+            ViewBag.TopicName = topic.NAME;
+            #endregion
+
+            #region 03.学科
+            var sub = SR_SUBJECT.Instance.GetEntityByKey<SR_SUBJECT.Entity>(paper.SUBJECT_ID);
+            ViewBag.SubjectName = sub.NAME;
+            #endregion
+
+            #region 04.文章类型
+            var artype = SR_ARTICLE_TYPE.Instance.GetEntityByKey<SR_ARTICLE_TYPE.Entity>(paper.ARTICLE_TYPE_ID);
+            ViewBag.ArticleName = artype.NAME;
+            #endregion
+
+            return View(paper);
+        }
         /// <summary>
         /// 编辑及新增
         /// </summary>
@@ -116,11 +145,12 @@ namespace CS.WebUI.Controllers.FW
                 #endregion
 
                 #region 01.保存论文备案
+                int entId = ent.ID;
                 ent.UPDATE_TIME = DateTime.Now;
                 ent.UPDATE_UID = SystemSession.UserID;
                 if (ent.ID == 0)
                 {
-                    var entId = SR_PAPER_RECORD.Instance.GetNextValueFromSeqDef();
+                    entId = SR_PAPER_RECORD.Instance.GetNextValueFromSeqDef();
                     ent.CREATE_TIME = DateTime.Now;
                     ent.CREATE_UID = SystemSession.UserID;
                     ent.ID = entId;
@@ -136,6 +166,7 @@ namespace CS.WebUI.Controllers.FW
                 #endregion
 
                 result.IsSuccess = true;
+                result.Result = entId.ToString();
                 result.Message = string.Format(@"论文备案上报成功!");
             }
             catch (Exception ex)
@@ -152,6 +183,25 @@ namespace CS.WebUI.Controllers.FW
 
 
         #region 版面费报销
+        public ActionResult FeeFlowEdit(int Id = 0)
+        {
+            var pageRecord = SR_PAPER_RECORD.Instance.GetEntityByKey<SR_PAPER_RECORD.Entity>(Id);
+            SR_PAPER_RECORD_FUNDS.Entity funds = new SR_PAPER_RECORD_FUNDS.Entity();
+            funds.TOTAL_FEE = 0;//设置默认报销总额为0
+            funds.PAPER_RECORD_ID = Id;
+            var paperRecordFund = SR_PAPER_RECORD_FUNDS.Instance.GetList<SR_PAPER_RECORD_FUNDS.Entity>("PAPER_RECORD_ID=?", Id);
+            #region 01.经费总表信息
+            if (paperRecordFund != null && paperRecordFund.Count > 0)
+            {
+                funds = paperRecordFund.FirstOrDefault();
+            }
+            #endregion
+         
+            #region 论文信息
+            ViewBag.PAPER_RECORD_NAME = pageRecord.NAME;
+            #endregion
+            return View(funds);
+        }
         /// <summary>
         /// 编辑及新增
         /// </summary>

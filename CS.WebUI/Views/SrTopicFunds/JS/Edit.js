@@ -8,6 +8,41 @@ function save() {
     });
 }
 
+function SaveFlowForm()
+{
+    var url = "../SrTopicFunds/Edit";
+    $("#FundsDetails").val(JSON.stringify(funds.fundsDetailArr));
+
+    $("#IS_DEFAULT_BANK").val(0);
+    $("#DefaultCk:checked").each(function ()
+    { // 遍历指标维度多选框
+        $("#IS_DEFAULT_BANK").val(1);//1为选中
+    });
+    //#region 验证报销清单金额之和是否等于总报销金额
+    var calTotalFee = funds.getTotalFee();
+    var totalFee = $("#TOTAL_FEE").val();
+    if (calTotalFee == Number(totalFee))
+    { }
+    else
+    {
+        layer.alert('提示：报销总金额【' + totalFee + '】不等于报销清单金额之和【' + calTotalFee + '】');
+        return;
+    }
+    var data = $("#form").serialize();
+
+    var resData = "";
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        async: false,
+        success: function (res)
+        {
+            resData = res;
+        }
+    });
+    return resData;
+}
 //#region 基础信息-
 layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function () {
     var form = layui.form, layer = layui.layer, laydate = layui.laydate, $ = layui.jquery, table = layui.table, element = layui.element;

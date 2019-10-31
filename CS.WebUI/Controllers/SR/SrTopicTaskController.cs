@@ -126,6 +126,43 @@ namespace CS.WebUI.Controllers.FW
         #endregion
 
         #region 任务执行
+        public ActionResult FlowEdit(int Id = 0)
+        {
+            var done = SR_TOPIC_TASK_DONE.Instance.GetEntityByKey<SR_TOPIC_TASK_DONE.Entity>(Id);
+
+            ViewBag.Task = null;
+
+            #region 01.任务主体
+            ViewBag.BeginEndData = "";
+            if (Id > 0)
+            {
+                SR_TOPIC_TASK.Entity task = SR_TOPIC_TASK.Instance.GetEntityByKey<SR_TOPIC_TASK.Entity>(done.TOPIC_TASK_ID);
+                if (task.BEGIN_TIME != null)
+                {
+                    //时间范围
+                    ViewBag.BeginEndData = task.BEGIN_TIME.Value.ToString("yyyy-MM-dd") + " - " + task.END_TIME.Value.ToString("yyyy-MM-dd");
+                }
+                done.TOPIC_TASK_ID =done.TOPIC_TASK_ID;
+                done.TOPIC_ID = task.TOPIC_ID;
+                ViewBag.Task = task;
+            }
+            #endregion
+
+            #region 02.课题下拉(树状结构)
+            var list = SR_TOPIC.Instance.GetTopicTree();
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    item.icon = ApplicationPath + item.icon;
+                }
+            }
+            //课题下拉树
+            ViewBag.TopicSelect = SerializeObject(list);
+            #endregion
+
+            return View(done);
+        }
         /// <summary>
         /// 编辑及新增
         /// </summary>
@@ -135,14 +172,20 @@ namespace CS.WebUI.Controllers.FW
         {
             #region 00.校验任务是否已处理
             string msg = "";
-            if (IsDoneTask(Id, out msg))
-            {
-                //ShowAlert(msg);
-                return Content("<script>alert('" + msg + "');window.location.href='about:blank';window.close();</script>");
-            }
+            //if (IsDoneTask(Id, out msg))
+            //{
+            //    //ShowAlert(msg);
+            //    return Content("<script>alert('" + msg + "');window.location.href='about:blank';window.close();</script>");
+            //}
             #endregion
 
             SR_TOPIC_TASK_DONE.Entity done = new SR_TOPIC_TASK_DONE.Entity();
+            var tdone = SR_TOPIC_TASK_DONE.Instance.GetList<SR_TOPIC_TASK_DONE.Entity>("TOPIC_TASK_ID=?", Id).FirstOrDefault();
+            if (tdone != null)
+            {
+                done = tdone;
+            }
+
             ViewBag.Task = null;
 
             #region 01.任务主体
@@ -191,11 +234,11 @@ namespace CS.WebUI.Controllers.FW
             {
                 #region 00.校验任务是否已处理
                 string msg = "";
-                if (IsDoneTask(ent.TOPIC_TASK_ID, out msg))
-                {
-                    result.IsSuccess = false;
-                    throw new Exception(msg);
-                }
+                //if (IsDoneTask(ent.TOPIC_TASK_ID, out msg))
+                //{
+                //    result.IsSuccess = false;
+                //    throw new Exception(msg);
+                //}
                 #endregion
 
                 #region 01.保存任务执行

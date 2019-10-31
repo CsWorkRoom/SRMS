@@ -1,0 +1,90 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_TOPIC_TASK_DONE.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <input type="hidden" id="TopicSelect" value="@ViewBag.TopicSelect" /> <!--课题下拉项-->
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
+    <div class="form-top-content">
+        <div class="layui-tab-content">
+            <div class="layui-collapse" lay-accordion>
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">课题中期任务下达信息</h2>
+                    <div class="layui-colla-content">
+                        @if (ViewBag.Task != null)
+                        {
+                            var task = ViewBag.Task as CS.BLL.SR.SR_TOPIC_TASK.Entity;
+                            <div class="layui-form-item">
+                                <div>
+                                    <label class="layui-form-label">检查任务名<span class="imust">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="NAME" id="NAME" readonly value="@task.NAME" placeholder="请填写检查任务名" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">课题<span class="imust">*</span></label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="TASK_TOPIC_ID" readonly id="TASK_TOPIC_ID" value="@task.TOPIC_ID">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">时间范围</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="beginEndData" name="beginEndData" readonly  value="@ViewBag.BeginEndData" placeholder="开始结束时间" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">任务执行内容<span class="imust">*</span></label>
+                                <div class="layui-input-block">
+                                    <textarea name="TASK_REMARK" readonly class="layui-input reportH" placeholder="请填写具体的任务执行内容">@task.REMARK</textarea>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">课题中期任务执行上报</h2>
+                    <div class="layui-colla-content layui-show">
+                        <input type="hidden" id="TOPIC_TASK_ID" name="TOPIC_TASK_ID" value="@Model.TOPIC_TASK_ID" />
+                        <input type="hidden" id="TOPIC_ID" name="TOPIC_ID" value="@Model.TOPIC_ID" />
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">任务执行内容<span class="imust">*</span></label>
+                            <div class="layui-input-block">
+                                <textarea name="REMARK" class="layui-input reportH" lay-verify="required" placeholder="请填写具体的任务执行内容">@Model.REMARK</textarea>
+                            </div>
+                        </div>
+                        <fieldset class="layui-elem-field  layui-field-title">
+                            <legend>任务执行资料上传</legend>
+                        </fieldset>
+                        <!--引入外导文件视图-->
+                        @Html.Partial("PVUpFile",
+                       new CS.WebUI.Models.FileMsg
+                       {
+                           PathName = "TopicTaskDonePath",//存放文件的目录名.在web.config中配置
+                           FILES = Model.FILES,
+                           IsEnbale = false,
+                           IsRequire = true//是否必填项（true=必填，false=非必填）,默认非必填
+                       })
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    <div class="form-bottom-submit"  style="display: none">
+        <div class="layui-inline">
+            <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="CloseForm();">关闭</button>
+        </div>
+    </div>
+</form>
+<script src="~/Views/SrTopicTask/JS/Done.js?v=20190605"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>

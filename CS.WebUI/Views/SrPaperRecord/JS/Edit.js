@@ -8,6 +8,34 @@ function save() {
     });
 }
 
+function SaveFlowForm()
+{
+    var url = "../SrPaperRecord/Edit";
+    var content = $(".simditor-body").html();
+    if (isEmpty(content) || content == "<p><br></p>")
+    {
+        layer.alert("论文内容不能为空！");
+        return;
+    }
+    else
+    {
+        $("#CONTENT").val(content);
+    }
+    var data = $("#form").serialize();
+
+    var resData = "";
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        async: false,
+        success: function (res)
+        {
+            resData = res;
+        }
+    });
+    return resData;
+}
 //#region 基础信息-
 layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function () {
     var form = layui.form, layer = layui.layer, $ = layui.jquery, table = layui.table, element = layui.element;

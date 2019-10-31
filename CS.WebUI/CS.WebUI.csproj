@@ -2462,6 +2462,9 @@
     <Content Include="Views\SrSearch\SearchInfo.cshtml" />
     <Content Include="Views\SrSearch\SearchItem.cshtml" />
     <Content Include="Views\SrTopicBudget\FlowEdit.cshtml" />
+    <Content Include="Views\SrTopicTask\FlowEdit.cshtml" />
+    <Content Include="Views\SrPaperRecord\FlowEdit.cshtml" />
+    <Content Include="Views\SrPaperRecord\FeeFlowEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

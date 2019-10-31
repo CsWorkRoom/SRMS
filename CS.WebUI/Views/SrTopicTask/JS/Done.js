@@ -8,6 +8,25 @@ function save() {
     });
 }
 
+function SaveFlowForm()
+{
+    var url = "../SrTopicTask/Done";
+
+    var data = $("#form").serialize();
+
+    var resData = "";
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        async: false,
+        success: function (res)
+        {
+            resData = res;
+        }
+    });
+    return resData;
+}
 //#region 基础信息-
 layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function () {
     var form = layui.form, layer = layui.layer, laydate = layui.laydate, $ = layui.jquery, table = layui.table, element = layui.element;

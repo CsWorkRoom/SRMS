@@ -1,0 +1,115 @@
+﻿@using System.Web.Mvc.Html
+@using CS.Base.Config
+@{
+    Layout = "~/Views/Shared/_Content.cshtml";
+}
+@model CS.BLL.SR.SR_PAPER_RECORD_FUNDS.Entity
+
+<form id="form" class="layui-form" action="" method="post">
+    <div class="form-top-content">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>论文成果基础信息</legend>
+    </fieldset>
+    <div class="layui-collapse" lay-filter="test">
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">@ViewBag.PAPER_RECORD_NAME</h2>
+            <div class="layui-colla-content">
+           
+				 <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">论文名称<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="PAPER_RECORD_NAME" readonly="readonly" value="@ViewBag.PAPER_RECORD_NAME" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">报销总额<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <div class="layui-col-xs10">
+                            <input type="text" id="TOTAL_FEE" lay-verify="totalFeeMust" placeholder="请填写报销总金额" value="@Model.TOTAL_FEE" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-col-xs2">
+                            <span>元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">银行帐号<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <div class="layui-row">
+                            <div class="layui-col-md12">
+                                <input type="text" id="BANK_NO" placeholder="请填写银行帐号" lay-verify="required" value="@Model.BANK_NO" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开户行<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="BANK_NAME" placeholder="请填写开户行" lay-verify="required" value="@Model.BANK_NAME" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">开户行地址<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="BANK_ADDRESS" placeholder="请填写开户行地址" lay-verify="required" value="@Model.BANK_ADDRESS" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否设为默认卡</label>
+                    <input type="checkbox" checked id="DefaultCk" name="DefaultCk" title="设置默认卡">
+                    <input type="hidden" name="IS_DEFAULT_BANK" value="@ViewBag.IS_DEFAULT_BANK"/><!--是否设为默认卡-->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系人姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="USER_NAME" placeholder="请填写银行帐号联系人" value="@Model.USER_NAME" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系人电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="USER_PHONE" placeholder="请填写银行帐号联系电话" value="@Model.USER_PHONE" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="REMARK" class="layui-input reportH" placeholder="请填写帐号备注信息">@Model.REMARK</textarea>
+                </div>
+            </div>
+            <!--引入外导文件视图-->
+            @Html.Partial("PVUpFile",
+                new CS.WebUI.Models.FileMsg
+                {
+                    PathName = "PaperRecordFundsPath", //存放文件的目录名.在web.config中配置
+                    FILES = Model.FILES,
+                    IsEnbale = false,
+                    IsRequire = false //是否必填项（true=必填，false=非必填）,默认非必填
+                })	
+				
+
+            </div>
+        </div>
+    </div>
+	</div>
+</form>
+
+<script src="~/Content/FW/LayuiZtree.js?v=20181226"></script>
+<script>
+    layui.use(['form', 'layer', 'jquery', 
+        'element'], function () {
+        var form = layui.form, layer = layui.layer, 
+            $ = layui.jquery, 
+            element = layui.element;
+		})
+</script>
+
