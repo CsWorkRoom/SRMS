@@ -163,7 +163,8 @@ namespace CS.WebUI.Controllers.FW
             }
             #region 审核流转记录
             //获取流转flowcase集合，表示流转了几次
-            var allFlowCaseList = BF_FLOW_CASE.Instance.GetList<BF_FLOW_CASE.Entity>("FLOW_ID=? AND MAIN_PAGE=?", nodeCase.FLOW_ID, flowCase.MAIN_PAGE).OrderBy(p => p.ID);
+          //  var allFlowCaseList = BF_FLOW_CASE.Instance.GetList<BF_FLOW_CASE.Entity>("FLOW_ID=? AND MAIN_PAGE=?", nodeCase.FLOW_ID, flowCase.MAIN_PAGE).OrderBy(p => p.ID);
+            var allFlowCaseList = BF_FLOW_CASE.Instance.GetList<BF_FLOW_CASE.Entity>(" MAIN_TABLE=? AND PRIMARY_KEY=?", flowCase.MAIN_TABLE.ToUpper(), flowCase.PRIMARY_KEY).OrderBy(p => p.ID);
             var newFlowCaseList = allFlowCaseList.Select(e => new FlowCaseNewModel()
             {
                 ID = e.ID,

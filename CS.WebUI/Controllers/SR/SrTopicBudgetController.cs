@@ -24,9 +24,25 @@ namespace CS.WebUI.Controllers.FW
         {
             var main = SR_TOPIC_BUDGET_MAIN.Instance.GetEntityByKey<SR_TOPIC_BUDGET_MAIN.Entity>(Id);
             #region 01.课题基础信息（暂未实现）
-
             var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(main.TOPIC_ID);
+            IEnumerable<BLL.SR.SR_TOPIC.Entity> topics = new List<BLL.SR.SR_TOPIC.Entity>() { topic };
             ViewBag.TOPIC_NAME = topic.NAME;
+            BLL.SR.SR_TOPIC.Entity model = topic;
+            BLL.SR.SR_TOPIC_TYPE.Entity topicType = BLL.SR.SR_TOPIC_TYPE.Instance.GetEntityByKey<BLL.SR.SR_TOPIC_TYPE.Entity>(model.TOPIC_TYPE_ID);
+            ViewBag.TopicTypeName = topicType.NAME;
+            ViewBag.TOPIC = topics.ToList();
+            //参加的人员
+            List<BLL.SR.SR_TOPIC_USER.Entity> topicUsers = BLL.SR.SR_TOPIC_USER.Instance.GetTopicUserList(topic.ID);
+            var libaleList = topicUsers.Where(x => x.IS_PERSON_LIABLE == 1).Select(x => new TopicUser()
+            {
+                USER_NAME = BLL.FW.BF_USER.Instance.GetStringValueByKey(x.USER_ID, "FULL_NAME")
+            });
+            var libaleNoList = topicUsers.Where(x => x.IS_PERSON_LIABLE == 0).Select(x => new TopicUser()
+            {
+                USER_NAME = BLL.FW.BF_USER.Instance.GetStringValueByKey(x.USER_ID, "FULL_NAME")
+            });
+            ViewBag.SelectLibaleUsers = libaleList.ToList();
+            ViewBag.SelectNoLibaleUsers = libaleNoList.ToList();
             #endregion
 
             #region 02.预算列表信息
@@ -52,9 +68,25 @@ namespace CS.WebUI.Controllers.FW
         public ActionResult Edit(int Id=0)
         {
             #region 01.课题基础信息（暂未实现）
-
             var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(Id);
+            IEnumerable<BLL.SR.SR_TOPIC.Entity> topics =new List<BLL.SR.SR_TOPIC.Entity>(){ topic };
             ViewBag.TOPIC_NAME = topic.NAME;
+            BLL.SR.SR_TOPIC.Entity model = topic;
+            BLL.SR.SR_TOPIC_TYPE.Entity topicType = BLL.SR.SR_TOPIC_TYPE.Instance.GetEntityByKey<BLL.SR.SR_TOPIC_TYPE.Entity>(model.TOPIC_TYPE_ID);
+            ViewBag.TopicTypeName = topicType.NAME;
+            ViewBag.TOPIC = topics.ToList();
+            //参加的人员
+            List<BLL.SR.SR_TOPIC_USER.Entity> topicUsers = BLL.SR.SR_TOPIC_USER.Instance.GetTopicUserList(Id);
+            var libaleList = topicUsers.Where(x => x.IS_PERSON_LIABLE == 1).Select(x => new TopicUser()
+            {
+                USER_NAME = BLL.FW.BF_USER.Instance.GetStringValueByKey(x.USER_ID, "FULL_NAME")
+            });
+            var libaleNoList = topicUsers.Where(x => x.IS_PERSON_LIABLE == 0).Select(x => new TopicUser()
+            {
+                USER_NAME = BLL.FW.BF_USER.Instance.GetStringValueByKey(x.USER_ID, "FULL_NAME")
+            });
+            ViewBag.SelectLibaleUsers = libaleList.ToList();
+            ViewBag.SelectNoLibaleUsers = libaleNoList.ToList();
             #endregion
 
             #region 02.预算列表信息
