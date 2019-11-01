@@ -277,8 +277,10 @@ namespace CS.WebUI.Controllers.SR
             try
             {
                 string searchSql = string.Format(
-                    @"select * from (select  pr.name,to_char(pr.content) content,pr.create_time,u.full_name,'论文信息' source,'../SrPaperRecord/Edit?id='||pr.id url  from SR_PAPER_RECORD pr,bf_user u where PR.CREATE_UID=u.id
-                        union
+                    @"select * from (
+                        select ROWNUM AS rowno, name, content,create_time,full_name, source,url 
+                    from (select  pr.name,to_char(pr.content) content,pr.create_time,u.full_name,'论文信息' source,'../SrPaperRecord/Edit?id='||pr.id url  from SR_PAPER_RECORD pr,bf_user u where PR.CREATE_UID=u.id
+                          union
                         select  P.ACHIEVEMENTS_NAME,to_char(p.remark) content, p.create_time,u.full_name,'成果专利信息' source,'../SrPatent/FlowEdit?id='||p.id url  from SR_PATENT p,bf_user u where p.CREATE_User_ID=u.id
                         union
                         select  pr.name,to_char(pr.content) content,pr.create_time,u.full_name,'学习资料' source,'../SrSubjectArticle/Show?id='||pr.id url  from SR_SUBJECT_ARTICLE pr,bf_user u where PR.CREATE_UID=u.id
@@ -290,7 +292,7 @@ namespace CS.WebUI.Controllers.SR
                         select  pr.content name,pr.remark content,pr.create_time,u.full_name,'课题结题信息' source ,'../SrTopicEnd/Edit?id='||pr.id url from SR_TOPIC_END pr,bf_user u where PR.CREATE_UID=u.id
                         union
                         select  pr.name,pr.remark content,pr.create_time,u.full_name,'课题中期信息' source,'../SrTopicTask/Edit?id='||pr.id url from SR_TOPIC_TASK pr,bf_user u where PR.CREATE_UID=u.id
-                         ) t where t.name like '%{0}%' or t.content like '%{0}%'", key );
+                         ) t where t.name like '%{0}%' or t.content like '%{0}%') t  where rowno<10", key );
                 DataTable resDt = BF_DATABASE.Instance.ExecuteSelectSQL(0, searchSql, null);
                 var obj = new { Type = true, res = resDt };
                 return SerializeObject(obj);
