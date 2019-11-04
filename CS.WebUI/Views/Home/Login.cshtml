@@ -66,6 +66,7 @@
                         </div>
                         <div class="layui-form-item">
                             <button class="layui-btn" lay-submit="" lay-filter="login">登录</button>
+                            <button class="layui-btn" lay-submit="" onclick="GetJson()">json</button>
                         </div>
                     </form>
                 </div>
@@ -86,3 +87,114 @@
 </html>
 <script type="text/javascript" src="~/Content/layui/layui.js"></script>
 <script src="~/Views/Home/JS/Login.js?v=20180816"></script>
+<script>
+    function GetJson() {
+        var arr = {
+            "testData": {
+                "opass": 1,
+                "result": 2,
+                "testNo": "3",
+                "epass": 4,
+                "otestdate": "5",
+                "testType": 0,
+                "apass": 6,
+                "testDate": ""
+            },
+            "processData": {
+                "obd": 1,
+                "odo": 2.1,
+                "moduleData": [
+                    {
+                        "calID": "1",
+                        "cvn": "2",
+                        "moduleID": "3"
+                    },
+                    {
+                        "calID": "4",
+                        "cvn": "5",
+                        "moduleID": "6"
+                    }
+                ]
+            },
+            "resultData": {
+                "faData": {
+                    "rev": 1,
+                    "smokeKLimit": 2,
+                    "smokeAvg": 3,
+                    "smokeK3": 4,
+                    "rateRev": 5,
+                    "smokeK2": 6,
+                    "smokeK1": 7
+                },
+                "svmassData": {
+                    "vrhc": 1,
+                    "vlnox": 2,
+                    "vlco": 3,
+                    "vlhc": 4,
+                    "vrco": 5,
+                    "vrnox": 6
+                },
+                "lugdownData": {
+                    "rev100": 1,
+                    "rateRevUp": 2,
+                    "smokeLimit": 3,
+                    "nox": 4,
+                    "smoke100": 5,
+                    "rateRevDown": 6,
+                    "maxPowerLimit": 7,
+                    "smoke80": 8,
+                    "noxLimit": 9,
+                    "maxPower": 10
+                },
+                "sdsData": {
+                    "reac": 1,
+                    "lrco": 2,
+                    "hlco": 3,
+                    "lrhc": 4,
+                    "hrhc": 5,
+                    "hrco": 6,
+                    "leacmin": 7,
+                    "leacmax": 8,
+                    "llhc": 9,
+                    "llco": 10,
+                    "hlhc": 11
+                },
+                "vmassData": {
+                    "vlhcnox": 1,
+                    "vlco": 2,
+                    "vrco": 3,
+                    "vrhcnox": 4
+                },
+                "asmData": {
+                    "arhc2540": 1,
+                    "alhc2540": 2,
+                    "alco2540": 3,
+                    "alhc5025": 4,
+                    "alco5025": 5,
+                    "alnox5025": 6,
+                    "arhc5025": 7,
+                    "arco5025": 8,
+                    "arco2540": 9,
+                    "arnox2540": 10,
+                    "arnox5025": 11,
+                    "alnox2540": 12
+                }
+            },
+            "equipmentData": {
+                "analyModel": "analyModel",
+                "dynoModel": "dynoModel",
+                "analyManuf": "analyManuf",
+                "analyName": "analyName",
+                "dynoManuf": "dynoManuf",
+                "analyDate": "20190708"
+            },
+            "vin": "1",
+            "envData": {
+                "rh": 1,
+                "et": 2,
+                "ap": 3
+            }
+        };
+        var json= JSON.stringify(arr);
+    }
+    </script>

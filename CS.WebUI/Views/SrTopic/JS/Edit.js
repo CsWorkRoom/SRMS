@@ -163,11 +163,19 @@ layui.use(['form', 'layer', 'jquery', 'layedit', 'laydate'], function () {
                 return '课题类型不能为空';
             }
         }
+        ,subjectMust: function (value) {
+        if (Number(value) <= 0) {
+            return '请选择学科！';
+        }
+    },
     });
     //提交
     form.on('submit(submit)', function (data) {//验证提交
         save();//保存
     });
+
+    var subjectNodes = JSON.parse($("#SubjectSelect").val());
+    $.comboztree("SUBJECT_ID", { ztreenode: subjectNodes });
 
     bindUsers();
 });

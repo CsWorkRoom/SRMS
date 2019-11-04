@@ -78,7 +78,26 @@ namespace CS.WebUI.Controllers.SR
             ViewBag.TypeSelect = SerializeObject(obj);
             #endregion
 
-          
+            #region 学科下拉项:SubjectSelect
+            DataTable dtSubject = SR_SUBJECT.Instance.GetTable();
+            if (dtSubject != null && dtSubject.Rows.Count > 0)
+            {
+                var objSubject = new List<object>();
+                foreach (DataRow dr in dtSubject.Rows)
+                {
+                    objSubject.Add(
+                        new
+                        {
+                            id = Convert.ToInt32(dr["ID"]),
+                            pId = string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"],
+                            name = dr["NAME"].ToString(),
+                            value = Convert.ToInt32(dr["ID"])
+                        });
+                }
+                ViewBag.SubjectSelect = SerializeObject(objSubject);
+            }
+            #endregion
+
             ModelState.Clear();
             return View(model);
         }
@@ -821,7 +840,25 @@ namespace CS.WebUI.Controllers.SR
             });
             ViewBag.SelectLibaleUsers = libaleList.ToList();
             ViewBag.SelectNoLibaleUsers = libaleNoList.ToList();
-         
+            #region 学科下拉项:SubjectSelect
+            DataTable dtSubject = SR_SUBJECT.Instance.GetTable();
+            if (dtSubject != null && dtSubject.Rows.Count > 0)
+            {
+                var objSubject = new List<object>();
+                foreach (DataRow dr in dtSubject.Rows)
+                {
+                    objSubject.Add(
+                        new
+                        {
+                            id = Convert.ToInt32(dr["ID"]),
+                            pId = string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"],
+                            name = dr["NAME"].ToString(),
+                            value = Convert.ToInt32(dr["ID"])
+                        });
+                }
+                ViewBag.SubjectSelect = SerializeObject(objSubject);
+            }
+            #endregion
             ModelState.Clear();
             return View(model);
         }
