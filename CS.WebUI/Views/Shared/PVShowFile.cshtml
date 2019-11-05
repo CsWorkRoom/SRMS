@@ -1,4 +1,5 @@
-﻿@model  CS.WebUI.Models.FileMsg
+﻿@using CS.Base.DBHelper;
+@model  CS.WebUI.Models.FileMsg
 <input type="hidden" id="pathName" value="@Model.PathName" /> <!--文件所在目录-->
 @if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
 {
@@ -8,44 +9,32 @@
             <th>文件名</th>
             <th>上传者</th>
             <th>上传日期</th>
-            <th>文件大小</th>
-            <th>下载</th>
+            <th>文件大小(BK)</th>
+            <th>文件下载</th>
         </tr>
     </thead>
     <tbody>
         @if (!string.IsNullOrWhiteSpace(Model.FILES) && Model.FILES.Length > 0)
         {
-            var fileArr = Model.FILES.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            if (fileArr != null && fileArr.Length > 0)
+            using (BDBHelper db = new BDBHelper())
             {
-                foreach (var f in fileArr)
+                var dt = db.ExecuteDataTable(string.Format("SELECT A.*,B.FULL_NAME CREATE_USER FROM SR_FILES  A LEFT JOIN BF_USER B ON(A.CREATE_UID=B.ID) WHERE A.ID IN ({0})", Model.FILES.Substring(1)));
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    //"{0}-{1}-{2}_{3}"  样本：20181106-104216-admin-4286_&&_favicon.ico
-                    int index = Math.Max(0, f.IndexOf("_&&_"));
-                    string fileName = f.Substring(index + 4);
-                    string preStr = f.Substring(0, index);  //前缀串
-                    index = preStr.LastIndexOf('-');
-                    int fileLength = Convert.ToInt32(preStr.Substring(index + 1));
-                    string userName = preStr.Substring(16, (index - 16));
-                    string dateTime = preStr.Substring(0, 4) + "年" + preStr.Substring(4, 2) + "月" + preStr.Substring(6, 2) + "日";
-                    string fileSize = fileLength + "B";
-                    if (fileLength >= 1024 * 1024)
+                    for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        fileSize = (fileLength / 1024.0 / 1024).ToString("0.00") + "MB";
+                        var row = dt.Rows[i];
+                        var filePath = row["PATH"] + "\\" + row["REAL_NAME"];
+                        <tr>
+                            <td>@row["DISPLAY_NAME"]</td>
+                            <td>@row["CREATE_USER"]</td>
+                            <td>@row["CREATE_TIME"]</td>
+                            <td>@(Math.Round((Double)row["FILE_SIZE"] / 1024, 1))</td>
+                            <td>
+                                <a href="#" onclick="down('@row["ID"]');">下载</a>
+                            </td>
+                        </tr>
                     }
-                    else if (fileLength >= 1024)
-                    {
-                        fileSize = (fileLength / 1024.0).ToString("0.00") + "KB";
-                    }
-                    <tr>
-                        <td>@fileName</td>
-                        <td>@userName</td>
-                        <td>@dateTime</td>
-                        <td>@fileSize</td>
-                        <td>
-                            <a href="#" onclick="down('@f');">下载</a>
-                        </td>
-                    </tr>
                 }
             }
         }
@@ -55,9 +44,8 @@
 
 <script type="text/javascript">
     //下载文件
-    function down(fileName) {
-        var pathName = $("#pathName").val();
-        url = "../ShowFile/Download?pathName=" + encodeURI(pathName) + "&fileName=" + encodeURIComponent(fileName);
+    function down(fileId) {
+        url = "../ShowFile/Download?fileId=" + fileId;
         //window.location = url;
         window.open(url, "_blank");
     }

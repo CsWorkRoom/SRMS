@@ -41,7 +41,7 @@
                             {
                                 var row = dt.Rows[i];
                                 <tr>
-                                    <th><a href="@(row["PATH"])" download="">@(row["DISPLAY_NAME"])</a></th>
+                                    <th><a href="#" onclick="down('@row["ID"]');">@(row["DISPLAY_NAME"])</a></th>
                                     <th>
                                         @(Math.Round((Double) row["FILE_SIZE"] / 1024, 1))
                                         KB
@@ -176,5 +176,11 @@
         }
     }
     
+    //下载文件
+    function down(fileId) {
+        url = "../ShowFile/Download?fileId=" + fileId;
+        //window.location = url;
+        window.open(url, "_blank");
+    }
 
 </script>

@@ -67,8 +67,19 @@ namespace CS.WebUI.Controllers.FW
         /// <returns></returns>
         public ActionResult Edit(int Id=0)
         {
-            #region 01.课题基础信息（暂未实现）
+            #region 01.课题基础信息
             var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(Id);
+            #region 验证课题是否立项
+            if (topic == null)
+            {
+                return ShowAlert(string.Format("未找到编号为[{0}]的课题", Id));
+            }
+            else if (topic.IS_APPROVAL == 0)
+            {
+                return ShowAlert(string.Format("编号为[{0}]的课题[{1}]未立项，不能进行课题完善操作", Id, topic.NAME));
+            }
+            #endregion
+
             IEnumerable<BLL.SR.SR_TOPIC.Entity> topics =new List<BLL.SR.SR_TOPIC.Entity>(){ topic };
             ViewBag.TOPIC_NAME = topic.NAME;
             BLL.SR.SR_TOPIC.Entity model = topic;
@@ -116,11 +127,29 @@ namespace CS.WebUI.Controllers.FW
 
             try
             {
+                int topicId = Convert.ToInt32(collection["TOPIC_ID"].Trim());
+                #region 验证课题是否立项
+                var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(topicId);
+                if (topic == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message = string.Format("未找到编号为[{0}]的课题", topicId);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                else if (topic.IS_APPROVAL == 0)
+                {
+                    result.IsSuccess = false;
+                    result.Message = string.Format("编号为[{0}]的课题[{1}]未立项，不能进行课题完善操作", topicId, topic.NAME);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                #endregion
+
                 int addCount = 0, updateCount = 0, delCount = 0;
                 double totalFee = 0;//总预算金额
+
                 #region 01.遍历保存预算明细
                 var budgets = collection["Budgets"];
-                int topicId = Convert.ToInt32(collection["TOPIC_ID"].Trim());
+                //int topicId = Convert.ToInt32(collection["TOPIC_ID"].Trim());
                 if (!string.IsNullOrWhiteSpace(budgets) && budgets.Length > 0)
                 {
                     var budgetList = DeserializeObject<List<SR_TOPIC_BUDGET.Entity>>(budgets);
@@ -132,7 +161,7 @@ namespace CS.WebUI.Controllers.FW
                 int entId=SR_TOPIC_BUDGET_MAIN.Instance.SaveBudgetMain(topicId);
                 #endregion
                 #region 02.修改课题表的预算总金额
-                var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(topicId);
+                //var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(topicId);
                 if (topic != null && topic.ID > 0)
                 {
                     topic.TOTAL_FEE = totalFee;
