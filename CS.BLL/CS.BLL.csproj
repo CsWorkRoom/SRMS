@@ -115,6 +115,7 @@
     <Compile Include="FW\SystemSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SR\SR_ARTICLE_TYPE.cs" />
+    <Compile Include="SR\SR_PAPER_CONTRIBUTE.cs" />
     <Compile Include="SR\SR_PATENT.cs" />
     <Compile Include="SR\SR_SUBJECT_ARTICLE.cs" />
     <Compile Include="SR\SR_TITLE.cs" />
