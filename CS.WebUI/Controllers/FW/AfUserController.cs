@@ -197,7 +197,12 @@ namespace CS.WebUI.Controllers.FW
             obj2.Add(new { key="初级" });//添加根节点
             obj2.Add(new { key = "中级" });//添加根节点
             obj2.Add(new { key = "高级" });//添加根节点
-            ViewBag.LevelList = SerializeObject(obj2);
+
+            List<string> levelList = new List<string>
+            {
+                "初级","中级","高级"
+            };
+            ViewBag.LevelList = levelList;
             #endregion
 
             #region 加载下拉列表--2018/12/26作废

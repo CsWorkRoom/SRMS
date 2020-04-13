@@ -86,13 +86,13 @@
                     {
                         foreach (var item in ViewBag.LevelList)
                         {
-                            if (item.key.ToString() == Model.TEC_LEVEL.ToString())
+                            if (item == Model.TEC_LEVEL.ToString())
                             {
-                                <option value="@item.key" selected>@item.key</option>
+                                <option value="@item" selected>@item</option>
                             }
                             else
                             {
-                                <option value="@item.key">@item.key</option>
+                                <option value="@item">@item</option>
                             }
                         }
                     }
