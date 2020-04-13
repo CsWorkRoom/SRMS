@@ -22,6 +22,37 @@ function SaveFlowForm()
         $("#CONTENT").val(content);
     }
     var data = $("#form").serialize();
+    if (isEmpty($("#NAME").val())) {
+        layer.alert("请填写论文名！");
+        return;
+    }
+
+    if (isEmpty($("#TOPIC_ID").val()) || $("#TOPIC_ID").val() == "0")
+    {
+        layer.alert("请选择课题！");
+        return ;
+    }
+    if ($("#TOPIC_ID").val().indexOf("type_") != -1)
+    {
+        layer.alert("请选择课题(勿选择课题类型)");
+        return ;
+    }
+    if (isEmpty($("#ARTICLE_TYPE_ID").val()) || $("#ARTICLE_TYPE_ID").val() == "0")
+    {
+        layer.alert("请选择文章类型！");
+        return;
+    }
+    if (isEmpty($("#SUBJECT_ID").val()) || $("#SUBJECT_ID").val() == "0")
+    {
+        layer.alert("请选择学科！");
+        return ;
+    }
+    if (isEmpty($("#CONTRIBUTOR").val()))
+    {
+        layer.alert("请填写投稿人！");
+        return ;
+    }
+
 
     var resData = "";
     $.ajax({
@@ -36,6 +67,7 @@ function SaveFlowForm()
     });
     return resData;
 }
+
 //#region 基础信息-
 layui.use(['form', 'layer', 'jquery', 'laydate', 'table', 'element'], function () {
     var form = layui.form, layer = layui.layer, $ = layui.jquery, table = layui.table, element = layui.element;

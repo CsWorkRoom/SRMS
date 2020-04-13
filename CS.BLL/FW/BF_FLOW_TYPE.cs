@@ -24,7 +24,7 @@ namespace CS.BLL.FW
         /// </summary>
         public BF_FLOW_TYPE()
         {
-            this.IsAddIntoCache = true;
+            this.IsAddIntoCache = false;
             this.TableName = "BF_FLOW_TYPE";
             this.ItemName = "流程类型";
             this.KeyField = "ID";

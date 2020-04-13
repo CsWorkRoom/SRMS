@@ -29,7 +29,7 @@ namespace CS.BLL.FW
         /// </summary>
         public BF_USER()
         {
-            this.IsAddIntoCache = true;
+            this.IsAddIntoCache = false;
             this.TableName = "BF_USER";
             this.ItemName = "用户管理";
             this.KeyField = "ID";

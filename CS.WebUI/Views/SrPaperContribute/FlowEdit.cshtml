@@ -3,100 +3,90 @@
 @{
     Layout = "~/Views/Shared/_Content.cshtml";
 }
-@model CS.BLL.SR.SR_PAPER_RECORD.Entity
+@model CS.BLL.SR.SR_PAPER_CONTRIBUTE.Entity
 <link href="~/Content/simditor/styles/simditor.css" rel="stylesheet" />
 
 <form id="form" class="layui-form" action="" method="post">
+   <input type="hidden" id="TopicSelect" value="@ViewBag.TopicSelect" /> <!--课题下拉项-->
+    <input type="hidden" id="SubjectSelect" value="@ViewBag.SubjectSelect" /> <!--学科下拉项-->
+    <input type="hidden" id="ArticleTypeSelect" value="@ViewBag.ArticleTypeSelect" /> <!--文章类型下拉项-->
+    <input type="hidden" id="ID" name="ID" value="@Model.ID" />
     <div class="form-top-content">
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-        <legend>论文成果基础信息</legend>
-    </fieldset>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>论文投稿基础信息</legend>
+        </fieldset>
     <div class="layui-collapse" lay-filter="test">
-        <div class="layui-colla-item">
-            <h2 class="layui-colla-title">@Model.NAME</h2>
-            <div class="layui-colla-content">
-                <div class="layui-form-item">
-                    <div>
-                        <label class="layui-form-label">论文名<span class="imust">*</span></label>
-                        <div class="layui-input-block">
-                            <input type="text" name="NAME" id="NAME" lay-verify="nameVer" value="@Model.NAME" placeholder="请填写论文名" autocomplete="off" class="layui-input">
-                        </div>
+    <div class="layui-colla-item">
+    <h2 class="layui-colla-title">@Model.NAME</h2>
+    <div class="layui-colla-content">
+        <div class="layui-tab-content">
+            <div class="layui-form-item">
+                <div>
+                    <label class="layui-form-label">论文名<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="NAME" id="NAME" lay-verify="nameVer" value="@Model.NAME" placeholder="请填写论文名" autocomplete="off" class="layui-input">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">期刊名称<span class="imust">*</span></label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="JOURNAL_NAME" lay-verify="journalNameVer" value="@Model.JOURNAL_NAME" placeholder="请填写期刊名" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">期刊号<span class="imust">*</span></label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="JOURNAL_NO" lay-verify="journalNoVer" value="@Model.JOURNAL_NO" placeholder="请填写期刊号" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">课题<span class="imust">*</span></label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="TOPIC_ID" lay-verify="topicVer" value="@ViewBag.TopicName" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">文章类型<span class="imust">*</span></label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="ARTICLE_TYPE_ID" lay-verify="articleTypeVer" value="@ViewBag.ArticleName" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">学科<span class="imust">*</span></label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="SUBJECT_ID" lay-verify="subjectVer" value="@ViewBag.SubjectName" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">第一作者<span class="imust">*</span></label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="FIRST_AUTHOR" lay-verify="firstAuthorVer" value="@Model.FIRST_AUTHOR" placeholder="请填第一作者" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">版面费<span class="imust">*</span></label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="PAGE_FEE" lay-verify="feeVer" value="@Model.PAGE_FEE" placeholder="请填写版面费用" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">论文内容<span class="imust">*</span></label>
-                    <div class="layui-input-block" id="contentDiv">
-                        <textarea id="editor" class="layui-textarea" lay-verify="content" placeholder="请输入论文内容...">@Model.CONTENT</textarea>
-                    </div>
-                </div>
-
-                <fieldset class="layui-elem-field  layui-field-title">
-                    <legend>论文资料</legend>
-                </fieldset>
-                <!--引入外导文件视图-->
-                @Html.Partial("PVUpFile",
-                    new CS.WebUI.Models.FileMsg
-                    {
-                        PathName = "PaperPath", //存放文件的目录名.在web.config中配置
-                        FILES = Model.FILES,
-                        IsEnbale = false,
-                        IsRequire = false //是否必填项（true=必填，false=非必填）,默认非必填
-                    })
             </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">课题<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="TOPIC_ID" id="TOPIC_ID" lay-verify="topicVer" value="@Model.TOPIC_ID">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">文章类型<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="ARTICLE_TYPE_ID" id="ARTICLE_TYPE_ID" lay-verify="articleTypeVer" value="@Model.ARTICLE_TYPE_ID">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">学科<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="SUBJECT_ID" id="SUBJECT_ID" lay-verify="subjectVer" value="@Model.SUBJECT_ID">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">投稿人<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="CONTRIBUTOR" id="CONTRIBUTOR" lay-verify="firstAuthorVer" value="@Model.CONTRIBUTOR" placeholder="请填投稿人" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">联系电话<span class="imust">*</span></label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="PHONE" id="PHONE" value="@Model.PHONE" placeholder="请填写联系电话" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">论文内容<span class="imust">*</span></label>
+                <div class="layui-input-block" id="contentDiv">
+                    <textarea id="editor" class="layui-textarea" lay-verify="content" placeholder="请输入论文内容...">@Model.CONTENT</textarea>
+                </div>
+            </div>
+
+            <fieldset class="layui-elem-field  layui-field-title">
+                <legend>论文投稿资料</legend>
+            </fieldset>
+            <!--引入外导文件视图-->
+            @Html.Partial("PVUpFile",
+                new CS.WebUI.Models.FileMsg
+                {
+                    PathName = "PaperPath", //存放文件的目录名.在web.config中配置
+                    FILES = Model.FILES,
+                    IsEnbale = false,
+                    IsRequire = false //是否必填项（true=必填，false=非必填）,默认非必填
+                })
         </div>
     </div>
-	</div>
+    </div>    </div>    </div>
     <div class="form-bottom-submit" style="display: none">
         <div class="layui-inline">
             <button type="button" class="layui-btn" lay-submit lay-filter="submit">确定</button>
@@ -109,5 +99,5 @@
 <script src="~/Content/simditor/scripts/hotkeys.js"></script>
 <script src="~/Content/simditor/scripts/uploader.js"></script>
 <script src="~/Content/simditor/scripts/simditor.js"></script>
-<script src="~/Views/SrPaperRecord/JS/Edit.js?v=20190902"></script>
+<script src="~/Views/SrPaperContribute/JS/Edit.js?v=20190902"></script>
 

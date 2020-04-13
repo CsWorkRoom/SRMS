@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web.Mvc;
+using NPOI.SS.Formula.Functions;
 
 namespace CS.WebUI.Controllers.FW
 {
@@ -128,6 +129,7 @@ namespace CS.WebUI.Controllers.FW
         #region 流程流转
         public ActionResult Deal(int flowNodeCaseId)
         {
+            JsonResultData result = new JsonResultData();
             //当前待办节点实例
             var nodeCase = BF_FLOW_NODE_CASE.Instance.GetEntityByKey<BF_FLOW_NODE_CASE.Entity>(flowNodeCaseId);
             //当前流程实例
@@ -174,8 +176,6 @@ namespace CS.WebUI.Controllers.FW
             });
             ViewBag.dealNodeCaseAllList = newFlowCaseList.ToList();
             #endregion
-
-
 
             return View(record);
         }
@@ -308,6 +308,8 @@ namespace CS.WebUI.Controllers.FW
                     var resBool = BF_FLOW_CASE.Instance.CreateNextNodesCase(flow, currFlowNode, record.FLOW_CASE_ID);      
                 }
                 #endregion
+
+                result.Message = "流程处理成功！";
             }
             catch (Exception ex)
             {

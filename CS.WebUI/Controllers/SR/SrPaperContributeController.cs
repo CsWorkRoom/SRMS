@@ -29,7 +29,7 @@ namespace CS.WebUI.Controllers.FW
         {
             SR_PAPER_CONTRIBUTE.Entity paper = new SR_PAPER_CONTRIBUTE.Entity();
 
-            #region 01.论文备案主体
+            #region 01.论文投稿主体
             if (id > 0)
             {
                 paper = SR_PAPER_CONTRIBUTE.Instance.GetEntityByKey<SR_PAPER_CONTRIBUTE.Entity>(id);
@@ -37,19 +37,56 @@ namespace CS.WebUI.Controllers.FW
             #endregion
 
             #region 02.课题下拉(树状结构) 考虑：显示属于当前人员的课题
+            var list = SR_TOPIC.Instance.GetTopicTree();
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    item.icon = ApplicationPath + item.icon;
+                }
+            }
             //课题下拉树
-            var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(paper.TOPIC_ID);
-            ViewBag.TopicName = topic.NAME;
+            ViewBag.TopicSelect = SerializeObject(list);
             #endregion
 
             #region 03.学科
-            var sub = SR_SUBJECT.Instance.GetEntityByKey<SR_SUBJECT.Entity>(paper.SUBJECT_ID);
-            ViewBag.SubjectName = sub.NAME;
+            DataTable dt = SR_SUBJECT.Instance.GetTable();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                var obj = new List<object>();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    obj.Add(
+                        new
+                        {
+                            id = Convert.ToInt32(dr["ID"]),
+                            pId = string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"],
+                            name = dr["NAME"].ToString(),
+                            value = Convert.ToInt32(dr["ID"])
+                        });
+                }
+                ViewBag.SubjectSelect = SerializeObject(obj);
+            }
             #endregion
 
             #region 04.文章类型
-            var artype = SR_ARTICLE_TYPE.Instance.GetEntityByKey<SR_ARTICLE_TYPE.Entity>(paper.ARTICLE_TYPE_ID);
-            ViewBag.ArticleName = artype.NAME;
+            DataTable dtArticleType = SR_ARTICLE_TYPE.Instance.GetTable();
+            if (dtArticleType != null && dtArticleType.Rows.Count > 0)
+            {
+                var obj = new List<object>();
+                foreach (DataRow dr in dtArticleType.Rows)
+                {
+                    obj.Add(
+                        new
+                        {
+                            id = Convert.ToInt32(dr["ID"]),
+                            pId = string.IsNullOrWhiteSpace(dr["PARENT_ID"].ToString()) ? "" : dr["PARENT_ID"],
+                            name = dr["NAME"].ToString(),
+                            value = Convert.ToInt32(dr["ID"])
+                        });
+                }
+                ViewBag.ArticleTypeSelect = SerializeObject(obj);
+            }
             #endregion
 
             return View(paper);
