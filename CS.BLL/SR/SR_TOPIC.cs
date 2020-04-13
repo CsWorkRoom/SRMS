@@ -156,6 +156,12 @@ namespace CS.BLL.SR
             [Field(IsNotNull = false, DefaultValue = "0", Comment = "课题总预算")]
             public double TOTAL_FEE { get; set; }
             #endregion
+
+            /// <summary>
+            /// 学科ID
+            /// </summary>
+            [Field(Comment = "学科ID")]
+            public int SUBJECT_ID { get; set; }
         }
 
         #endregion

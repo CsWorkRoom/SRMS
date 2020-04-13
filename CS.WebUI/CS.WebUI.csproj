@@ -2089,7 +2089,6 @@
     <Content Include="Echart\vendors\lodash.js" />
     <Content Include="Echart\vendors\waypoint.js" />
     <Content Include="Echart\view.html" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Views\AfBulletin\JS\Edit.js" />
     <Content Include="Views\AfBulletin\JS\Index.js" />
@@ -2182,6 +2181,7 @@
     <Content Include="Views\Home\JS\Login.js" />
     <Content Include="Views\Home\JS\manager.js" />
     <Content Include="Views\ImportApproval\JS\Approval.js" />
+    <Content Include="Views\SrPaperContribute\JS\Edit.js" />
     <Content Include="Views\SrSearch\JS\SearchItem.js" />
     <Content Include="Views\SrSearch\JS\SearchInfo.js" />
     <Content Include="Views\SrSubjectArticle\JS\Edit.js" />
@@ -2203,7 +2203,9 @@
     <Content Include="Views\SrTopic\JS\ExpertScore.js" />
     <Content Include="Views\SrTopic\JS\Set.js" />
     <Content Include="Views\SrTopic\JS\Edit.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -2211,6 +2213,7 @@
     <Compile Include="Controllers\FW\AfFlowController.cs" />
     <Compile Include="Controllers\ImportApprovalController.cs" />
     <Compile Include="Controllers\ShowFileController.cs" />
+    <Compile Include="Controllers\SR\SrPaperContributeController.cs" />
     <Compile Include="Controllers\SR\SrSearchController.cs" />
     <Compile Include="Controllers\SR\SrSubjectArticleController.cs" />
     <Compile Include="Controllers\SR\SrPatentController.cs" />
@@ -2466,6 +2469,9 @@
     <Content Include="Views\SrTopicTask\FlowEdit.cshtml" />
     <Content Include="Views\SrPaperRecord\FlowEdit.cshtml" />
     <Content Include="Views\SrPaperRecord\FeeFlowEdit.cshtml" />
+    <None Include="Properties\PublishProfiles\SRMS.pubxml" />
+    <Content Include="Views\SrPaperContribute\Edit.cshtml" />
+    <Content Include="Views\SrPaperContribute\FlowEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

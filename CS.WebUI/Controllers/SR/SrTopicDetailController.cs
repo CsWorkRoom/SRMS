@@ -26,23 +26,35 @@ namespace CS.WebUI.Controllers.FW
         /// <param name="id"></param>
         /// <param name="topicId">课题编号</param>
         /// <returns></returns>
-        public ActionResult Edit(int topicId=0)
+        public ActionResult Edit(int topicId = 0)
         {
             if (topicId <= 0)
             {
-                ShowAlert(string.Format("课题编号[{0}]应大于0", topicId));
+                return ShowAlert(string.Format("课题编号[{0}]应大于0", topicId));
             }
+            #region 验证课题是否立项
+            var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(topicId);
+            if (topic == null)
+            {
+                return ShowAlert(string.Format("未找到编号为[{0}]的课题", topicId));
+            }
+            else if (topic.IS_APPROVAL == 0)
+            {
+                return ShowAlert(string.Format("编号为[{0}]的课题[{1}]未立项，不能进行课题完善操作", topicId, topic.NAME));
+            }
+            #endregion
+
             ViewBag.Companys = "[]";//参与单位值初始化
             var ent = SR_TOPIC_DETAIL.Instance.GetEntity<SR_TOPIC_DETAIL.Entity>("TOPIC_ID=?", topicId);
-            if(ent==null||ent.ID<1)
+            if (ent == null || ent.ID < 1)
             {
                 ent = new SR_TOPIC_DETAIL.Entity();
             }
             else
             {
                 //课题完善信息和合作单位集合
-                var companyList= SR_TOPIC_DETAIL_COMPANY.Instance.GetList<SR_TOPIC_DETAIL_COMPANY.Entity>("TOPIC_DETAIL_ID=?", ent.ID);
-                if(companyList!=null&&companyList.Count>0)
+                var companyList = SR_TOPIC_DETAIL_COMPANY.Instance.GetList<SR_TOPIC_DETAIL_COMPANY.Entity>("TOPIC_DETAIL_ID=?", ent.ID);
+                if (companyList != null && companyList.Count > 0)
                 {
                     ViewBag.Companys = SerializeObject(companyList);
                 }
@@ -130,9 +142,26 @@ namespace CS.WebUI.Controllers.FW
             {
                 if (entity.TOPIC_ID <= 0)
                 {
+                    result.IsSuccess = false;
                     result.Message = "未找到课题";
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
+
+                #region 验证课题是否立项
+                var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(entity.TOPIC_ID);
+                if (topic == null)
+                {
+                    result.IsSuccess = false;
+                    result.Message= string.Format("未找到编号为[{0}]的课题", entity.TOPIC_ID);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                else if (topic.IS_APPROVAL == 0)
+                {
+                    result.IsSuccess = false;
+                    result.Message = string.Format("编号为[{0}]的课题[{1}]未立项，不能进行课题完善操作", entity.TOPIC_ID, topic.NAME);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
+                #endregion
 
                 entity.UPDATE_UID = SystemSession.UserID;
                 entity.UPDATE_TIME = DateTime.Now;
@@ -160,6 +189,12 @@ namespace CS.WebUI.Controllers.FW
                 string companys = collection["Companys"];
                 int delCount = 0, addCount = 0,updateCount = 0;
                 SR_TOPIC_DETAIL_COMPANY.Instance.SaveCompanys(entity.ID, companys, out addCount, out updateCount, out delCount);
+                #endregion
+
+                #region 修改课题的学科归属
+                Dictionary<string, object> dic = new Dictionary<string, object>();
+                dic.Add("SUBJECT_ID",entity.SUBJECT_ID);
+                SR_TOPIC.Instance.UpdateByKey(dic, entity.TOPIC_ID);
                 #endregion
 
                 result.IsSuccess = true;

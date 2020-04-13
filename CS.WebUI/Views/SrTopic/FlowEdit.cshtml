@@ -6,6 +6,7 @@
 <form id="form" class="layui-form" action="" method="post">
     <input type="hidden" id="ID" name="ID" value="@Model.ID"/>
     <input type="hidden" id="Subitems"  value=""/>
+    <input type="hidden" id="SubjectSelect" value="@ViewBag.SubjectSelect" /> <!--学科下拉项-->
     <div class="form-top-content">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
             <legend>课题基础信息</legend>
@@ -32,6 +33,16 @@
                 </div>
             </div>
         </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-xs6">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属学科<span class="imust">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="SUBJECT_ID" id="SUBJECT_ID" readonly="readonly"  lay-verify="subjectMust" value="@Model.SUBJECT_ID">
+                            </div>
+                        </div>
+                    </div>
+                </div>
         <div class="layui-row">
             <div class="layui-col-xs6">
                 <div class="layui-form-item">
@@ -89,9 +100,8 @@
 		</div>
     </div>
 </form>
-
-
-
+<script src="~/Views/SrTopic/JS/FlowEdit.js?v=20190603"></script>
+<script src="~/Content/FW/LayuiZtree.js?v=20180927"></script>
 <script>
     var tree,laytpl;
     var data;

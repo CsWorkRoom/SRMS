@@ -5,6 +5,7 @@
 <form id="form" class="layui-form" action="" method="post" >
     <input type="hidden" id="TypeSelect"  value="@ViewBag.TypeSelect"/>
     <input type="hidden" id="ID" name="ID" value="@Model.ID"/>
+    <input type="hidden" id="SubjectSelect" value="@ViewBag.SubjectSelect" /> <!--学科下拉项-->
     <input type="hidden" id="CREATE_USER_ID" name="CREATE_USER_ID" value="@Model.CREATE_USER_ID"/>
     <input type="hidden" id="CREATE_TIME" name="CREATE_TIME" value="@Model.CREATE_TIME"/>
     <div class="form-top-content">
@@ -29,7 +30,16 @@
                 </div>
             </div>
         </div>
-       
+        <div class="layui-form-item">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属学科<span class="imust">*</span></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="SUBJECT_ID" id="SUBJECT_ID" lay-verify="subjectMust" value="@Model.SUBJECT_ID">
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="layui-row">
             <div class="layui-col-xs6">
                 <div class="layui-form-item">

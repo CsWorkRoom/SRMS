@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.BLL", "CS.BLL\CS.BLL.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.WebUI", "CS.WebUI\CS.WebUI.csproj", "{F4C482C0-FF41-44C1-BEEB-AB8D4DAB7C23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS.ScriptService", "CS.ScriptService\CS.ScriptService.csproj", "{C2A06B08-A4EC-43DA-AFD3-33DD5EE29D88}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{F4C482C0-FF41-44C1-BEEB-AB8D4DAB7C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4C482C0-FF41-44C1-BEEB-AB8D4DAB7C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4C482C0-FF41-44C1-BEEB-AB8D4DAB7C23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C2A06B08-A4EC-43DA-AFD3-33DD5EE29D88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C2A06B08-A4EC-43DA-AFD3-33DD5EE29D88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C2A06B08-A4EC-43DA-AFD3-33DD5EE29D88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C2A06B08-A4EC-43DA-AFD3-33DD5EE29D88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
