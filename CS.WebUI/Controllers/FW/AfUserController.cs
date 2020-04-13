@@ -156,6 +156,8 @@ namespace CS.WebUI.Controllers.FW
                     model.EXTEND_1 = entity.EXTEND_1;
                     model.EXTEND_2 = entity.EXTEND_2;
                     model.EXTEND_3 = entity.EXTEND_3;
+                    model.TEC_LEVEL = entity.TEC_LEVEL;
+                    model.TITLE_ID = entity.TITLE_ID;
                 }
                 else
                 {
@@ -188,6 +190,14 @@ namespace CS.WebUI.Controllers.FW
             }
             ViewBag.DepartmentSelect = SerializeObject(obj);
 
+            #endregion
+
+            #region 级别
+            var obj2 = new List<object>();
+            obj2.Add(new { key="初级" });//添加根节点
+            obj2.Add(new { key = "中级" });//添加根节点
+            obj2.Add(new { key = "高级" });//添加根节点
+            ViewBag.LevelList = SerializeObject(obj2);
             #endregion
 
             #region 加载下拉列表--2018/12/26作废

@@ -82,9 +82,20 @@
             <div class="layui-input-inline">
                 <select id="TEC_LEVEL" name="TEC_LEVEL">
                     <option value="无">--请选择--</option>
-                    <option value="初级">初级</option>
-                    <option value="中级">中级</option>
-                    <option value="高级">高级</option>
+                    @if (ViewBag.LevelList != null)
+                    {
+                        foreach (var item in ViewBag.LevelList)
+                        {
+                            if (item.key.ToString() == Model.TEC_LEVEL.ToString())
+                            {
+                                <option value="@item.key" selected>@item.key</option>
+                            }
+                            else
+                            {
+                                <option value="@item.key">@item.key</option>
+                            }
+                        }
+                    }
                 </select>
             </div>
             <label class="layui-form-label">职称</label>
