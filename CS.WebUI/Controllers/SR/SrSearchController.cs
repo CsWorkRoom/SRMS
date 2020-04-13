@@ -279,13 +279,13 @@ namespace CS.WebUI.Controllers.SR
                 string searchSql = string.Format(
                     @"select * from (
                         select ROWNUM AS rowno, name, content,create_time,full_name, source,url 
-                    from (select  pr.name,to_char(pr.content) content,pr.create_time,u.full_name,'论文信息' source,'../SrPaperRecord/Edit?id='||pr.id url  from SR_PAPER_RECORD pr,bf_user u where PR.CREATE_UID=u.id
+                    from (select  pr.name,to_char(substr(pr.content,1,200)) content,pr.create_time,u.full_name,'论文信息' source,'../SrPaperRecord/Edit?id='||pr.id url  from SR_PAPER_RECORD pr,bf_user u where PR.CREATE_UID=u.id
                           union
-                        select  P.ACHIEVEMENTS_NAME,to_char(p.remark) content, p.create_time,u.full_name,'成果专利信息' source,'../SrPatent/FlowEdit?id='||p.id url  from SR_PATENT p,bf_user u where p.CREATE_User_ID=u.id
+                        select  P.ACHIEVEMENTS_NAME,to_char(substr(p.remark,1,200)) content, p.create_time,u.full_name,'成果专利信息' source,'../SrPatent/FlowEdit?id='||p.id url  from SR_PATENT p,bf_user u where p.CREATE_User_ID=u.id
                         union
-                        select  pr.name,to_char(pr.content) content,pr.create_time,u.full_name,'学习资料' source,'../SrSubjectArticle/Show?id='||pr.id url  from SR_SUBJECT_ARTICLE pr,bf_user u where PR.CREATE_UID=u.id
+                        select  pr.name,to_char(substr(pr.content,1,200)) content,pr.create_time,u.full_name,'学习资料' source,'../SrSubjectArticle/Show?id='||pr.id url  from SR_SUBJECT_ARTICLE pr,bf_user u where PR.CREATE_UID=u.id
                         union
-                        select  P.NAME,to_char(p.remark) content, p.create_time,u.full_name,'课题信息' source,'../SrTopic/FlowEdit?id='||p.id url from SR_TOPIC p,bf_user u where p.CREATE_User_ID=u.id
+                        select  P.NAME,to_char(substr(p.remark,1,200)) content, p.create_time,u.full_name,'课题信息' source,'../SrTopic/FlowEdit?id='||p.id url from SR_TOPIC p,bf_user u where p.CREATE_User_ID=u.id
                         union
                         select  pr.name,pr.remark content,pr.create_time,u.full_name,'课题预算' source,'../SrTopicBudget/Edit?id='||pr.id url from SR_TOPIC_BUDGET pr,bf_user u where PR.CREATE_UID=u.id
                         union
