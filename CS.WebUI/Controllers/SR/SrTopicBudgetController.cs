@@ -169,6 +169,7 @@ namespace CS.WebUI.Controllers.FW
                 }
                 result.IsSuccess = true;
                 result.Result = entId.ToString();
+                result.FlowCaseName = topic.NAME+"预算申请-"+ entId.ToString();
                 result.Message = string.Format(@"保存预算清单成功：新增【{0}】,修改【{1}】,删除【{2}】", addCount, updateCount, delCount);
                 #endregion
             }

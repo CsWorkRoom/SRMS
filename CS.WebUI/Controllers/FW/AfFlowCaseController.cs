@@ -57,7 +57,7 @@ namespace CS.WebUI.Controllers.FW
         }
 
         [HttpPost]
-        public ActionResult Create(int SysCsFlowID, int sysCsMainTableKey)
+        public ActionResult Create(int SysCsFlowID, int sysCsMainTableKey,string flowCaseName,string k="")
         {
             //考虑限定开始节点是主节点，并且只能有一个？
 
@@ -83,6 +83,7 @@ namespace CS.WebUI.Controllers.FW
                     MAIN_PAGE = ((flow.MAIN_PAGE.IndexOf('?') >= 0) ? (flow.MAIN_PAGE + "&id=" + sysCsMainTableKey) : (flow.MAIN_PAGE + "?id=" + sysCsMainTableKey)).Replace("id=0&", ""),
                     MAIN_TABLE = flow.MAIN_TABLE,
                     PRIMARY_KEY = sysCsMainTableKey,
+                    FLOW_CASE_NAME = flowCaseName,
                     NAME = flow.NAME
                 };
                 BF_FLOW_CASE.Instance.Add(flowCase);

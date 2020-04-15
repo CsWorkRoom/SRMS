@@ -204,6 +204,7 @@ namespace CS.WebUI.Controllers.FW
 
                 result.IsSuccess = true;
                 result.Result = entId.ToString();
+                result.FlowCaseName = ent.NAME;
                 result.Message = string.Format(@"论文投稿上报成功!");
             }
             catch (Exception ex)

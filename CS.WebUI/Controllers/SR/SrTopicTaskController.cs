@@ -262,6 +262,8 @@ namespace CS.WebUI.Controllers.FW
 
                 result.IsSuccess = true;
                 result.Result = entId.ToString();
+                var task = SR_TOPIC_TASK.Instance.GetEntityByKey<SR_TOPIC_TASK.Entity>(ent.TOPIC_TASK_ID);
+                result.FlowCaseName = task.NAME;
                 result.Message = string.Format(@"中期检查任务处理成功!");
             }
             catch (Exception ex)

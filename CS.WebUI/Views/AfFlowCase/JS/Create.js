@@ -1,11 +1,13 @@
 ﻿//流程的数据提交
-function sysCsFlowSave(mainTableKey) {
+function sysCsFlowSave(mainTableKey,flowCaseName) {
     layui.use(['form', 'layer', 'jquery'], function () {
         var form = layui.form, layer = layui.layer, $ = layui.$;
        
         var formFd = {
             SysCsFlowID: $("#SysCsFlowID").val(),
-            sysCsMainTableKey: mainTableKey
+            sysCsMainTableKey: mainTableKey,
+            flowCaseName: flowCaseName,
+            k:""
         }
         var url = "../AfFlowCase/Create";
 
@@ -51,7 +53,7 @@ function FlowSubmit() {
         if (data.IsSuccess)
         {
             //保存流程流转信息
-            sysCsFlowSave(data.Result);//保存外部流程信息
+            sysCsFlowSave(data.Result, data.FlowCaseName);//保存外部流程信息
         }
         else//保存失败
         {

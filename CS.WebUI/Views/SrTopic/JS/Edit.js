@@ -17,14 +17,20 @@ function SaveFlowForm() {
     var nodes = getNodeUsers();
     $("#SelectUser").val(nodes);
     var data = $("#form").serialize();
+
     var stopicName = $("#NAME").val();
     if (stopicName.length == 0) {
         layer.alert("课题名称不能为空", { icon: 2 });
         return;
     }
-    var stopicUser=$("#SelectUser").val();
-    if (stopicUser.length == 0) {
-        layer.alert("课题参与人员不能为空", { icon: 2 });
+    if (isEmpty($("#TOPIC_TYPE_ID").val()) || $("#TOPIC_TYPE_ID").val() == "0")
+    {
+        layer.alert("请选择课题类型！");
+        return;
+    }
+    if (isEmpty($("#SUBJECT_ID").val()) || $("#SUBJECT_ID").val() == "0")
+    {
+        layer.alert("请选择学科！");
         return;
     }
     var startTime = $("#START_TIME").val()
@@ -37,17 +43,13 @@ function SaveFlowForm() {
         layer.alert("课题参结束时间不能为空", { icon: 2 });
         return;
     }
-    //var data = {
-    //    ID: $("#ID").val(),
-    //    CREATE_USER_ID: $("#CREATE_USER_ID").val(),
-    //    CREATE_TIME: $("#CREATE_TIME").val(),
-    //    NAME: $("#NAME").val(),
-    //    TOPIC_TYPE_ID: $("#TOPIC_TYPE_ID").val(),
-    //    START_TIME: $("#START_TIME").val(),
-    //    END_TIME: $("#END_TIME").val(),
-    //    REMARK: $("#REMARK").val(),
-    //    SelectUser: $("#SelectUser").val()
-    //};
+    var stopicUser = $("#SelectUser").val();
+    if (JSON.parse(stopicUser).length == 0)
+    {
+        layer.alert("课题参与人员不能为空", { icon: 2 });
+        return;
+    }
+ 
 
     var resData = "";
     $.ajax({

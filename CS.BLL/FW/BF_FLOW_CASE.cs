@@ -57,6 +57,13 @@ namespace CS.BLL.FW
             public string NAME { get; set; }
 
             /// <summary>
+            /// 对应的信息名称
+            /// </summary>
+            [Field(IsNotNull = true, Length = 128, IsIndex = true, IsIndexUnique = true, Comment = "对应的信息名称")]
+            public string FLOW_CASE_NAME { get; set; }
+
+            
+            /// <summary>
             /// 流程类型
             /// </summary>
             [Field(IsNotNull = true, DefaultValue = "0", Comment = "流程类型")]

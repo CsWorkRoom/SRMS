@@ -35,6 +35,7 @@ namespace CS.WebUI.Controllers.FW
             /// 返回结果详情（一般可以不使用）
             /// </summary>
             public string Result { get; set; }
+            public string FlowCaseName { get; set; }
         }
 
         /// <summary>

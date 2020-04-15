@@ -97,6 +97,8 @@ namespace CS.WebUI.Controllers.FW
 
                 result.IsSuccess = true;
                 result.Result = entId.ToString();
+                var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(ent.TOPIC_ID);
+                result.FlowCaseName = topic.NAME + "结题申请-"+ entId.ToString();
                 result.Message = "填报结题申请信息成功！";
             }
             catch (Exception ex)

@@ -179,6 +179,8 @@ namespace CS.WebUI.Controllers.FW
 
                 result.IsSuccess = true;
                 result.Result = fundsId.ToString();
+                var topic = SR_TOPIC.Instance.GetEntityByKey<SR_TOPIC.Entity>(ent.TOPIC_ID);
+                result.FlowCaseName = topic.NAME + "经费报销-" + fundsId.ToString();
                 result.Message =string.Format(@"填报经费报销信息成功：新增【{0}】,修改【{1}】,删除【{2}】",addCount,updateCount,delCount);
             }
             catch (Exception ex)

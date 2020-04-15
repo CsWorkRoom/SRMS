@@ -167,6 +167,7 @@ namespace CS.WebUI.Controllers.FW
 
                 result.IsSuccess = true;
                 result.Result = entId.ToString();
+                result.FlowCaseName = ent.NAME;
                 result.Message = string.Format(@"论文备案上报成功!");
             }
             catch (Exception ex)
@@ -319,6 +320,8 @@ namespace CS.WebUI.Controllers.FW
                 result.IsSuccess = true;
                 result.Message = string.Format(@"填报经费报销信息成功");
                 result.Result = fundsId.ToString();
+                var paperRecord = SR_PAPER_RECORD.Instance.GetEntityByKey<SR_PAPER_RECORD.Entity>(ent.PAPER_RECORD_ID);
+                result.FlowCaseName = paperRecord.NAME;
             }
             catch (Exception ex)
             {

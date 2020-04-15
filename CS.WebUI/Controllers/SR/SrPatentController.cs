@@ -129,6 +129,7 @@ namespace CS.WebUI.Controllers.SR
                 result.IsSuccess = true;
                 result.Message = "保存成功";
                 result.Result = topicId.ToString();
+                result.FlowCaseName = entity.ACHIEVEMENTS_NAME;
                 WriteOperationLog(BLog.LogLevel.INFO, true, Modular, (entity.ID > 0 ? "修改" : "添加"), "", (entity.ID > 0 ? "修改" : "添加") + "ID为" + entity.ID + "的成果专利成功！");
             }
             catch (Exception ex)
