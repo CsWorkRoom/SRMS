@@ -158,15 +158,15 @@ namespace CS.WebUI.Controllers.FW
             string[] pages = flowCase.MAIN_PAGE.Split(';');
             if (pages.Length > 1)
             {
-                ViewBag.MainFormPage = pages[1];//表单页面
+                ViewBag.MainFormPage = ApplicationPath + pages[1];//表单页面
             }
             else
             {
-                ViewBag.MainFormPage = pages[0];//表单页面  
+                ViewBag.MainFormPage = ApplicationPath + pages[0];//表单页面  
             }
             #region 审核流转记录
             //获取流转flowcase集合，表示流转了几次
-          //  var allFlowCaseList = BF_FLOW_CASE.Instance.GetList<BF_FLOW_CASE.Entity>("FLOW_ID=? AND MAIN_PAGE=?", nodeCase.FLOW_ID, flowCase.MAIN_PAGE).OrderBy(p => p.ID);
+            //  var allFlowCaseList = BF_FLOW_CASE.Instance.GetList<BF_FLOW_CASE.Entity>("FLOW_ID=? AND MAIN_PAGE=?", nodeCase.FLOW_ID, flowCase.MAIN_PAGE).OrderBy(p => p.ID);
             var allFlowCaseList = BF_FLOW_CASE.Instance.GetList<BF_FLOW_CASE.Entity>(" MAIN_TABLE=? AND PRIMARY_KEY=?", flowCase.MAIN_TABLE.ToUpper(), flowCase.PRIMARY_KEY).OrderBy(p => p.ID);
             var newFlowCaseList = allFlowCaseList.Select(e => new FlowCaseNewModel()
             {
