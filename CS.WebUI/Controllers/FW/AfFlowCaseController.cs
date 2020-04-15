@@ -43,7 +43,7 @@ namespace CS.WebUI.Controllers.FW
                     sysFlow.SysCsFlowName = flow.NAME;
                     string mainPage = flow.MAIN_PAGE.Split(';')[0];
                     mainPage = mainPage.Replace("=0", "=" + Id);
-                    sysFlow.SysCsMainPage = mainPage;
+                    sysFlow.SysCsMainPage = ApplicationPath + mainPage;
                     sysFlow.SysCsMainTable = flow.MAIN_TABLE;
                     sysFlow.SysCsRemark = flow.REMARK;
                     sysFlow.sysCsIsEnable = flow.IS_ENABLE;
