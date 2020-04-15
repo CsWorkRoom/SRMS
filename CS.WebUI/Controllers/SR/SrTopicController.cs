@@ -670,6 +670,8 @@ namespace CS.WebUI.Controllers.SR
             }
             ViewBag.IS_APPROVAL = model.IS_APPROVAL;
             ViewBag.APPROVAL_REMARK = model.APPROVAL_REMARK;
+            ViewBag.yxd = ApplicationPath+ "/Content/Images/yxd.png";
+            ViewBag.wxd = ApplicationPath+ "/Content/Images/wxd.png";
             ModelState.Clear();
             return View(model);
         }

@@ -268,12 +268,12 @@
            
             <div class="padding5 inline-block" title="{{item.EXPERT_NAME}}">{{item.EXPERT_NAME}}</div>
             {{# if(item.IS_SCORE==1){}}
-            <img class="yxd pull-right" src="/Content/Images/yxd.png" />
+            <img class="yxd pull-right" src="@ViewBag.yxd" />
             {{#}else{}}
-            <img class="yxd pull-right" src="/Content/Images/wxd.png" />
+            <img class="yxd pull-right" src="@ViewBag.wxd" />
             {{#}}}
             <div>
-                <span class="padding5 color-gray margin_left15 bg_gray font-size12">{{item.CITY_NAME}}</span>
+                <span class="padding5 color-gray margin_left15 bg_gray font-size12">{{item.CITY_NAME.length>5?item.CITY_NAME.substr(0,5)+"...":item.CITY_NAME}}</span>
                 <span class="padding5 color-gray margin_left15 bg_gray font-size12">评审专家</span>
             </div>
             <div class="line marging10"></div>
